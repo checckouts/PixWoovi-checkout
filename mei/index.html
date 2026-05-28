@@ -432,13 +432,6 @@
             box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
         }
 
-        .pix-code-display-wrapper {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 10px;
-        }
-
         .pix-code-label {
             font-size: 0.75rem;
             font-weight: 700;
@@ -759,6 +752,7 @@
             border-top: 3px solid #fff;
             border-radius: 50%;
             animation: spin 1s linear infinite;
+            display: inline-block;
         }
     </style>
 </head>
@@ -791,7 +785,7 @@
             </div>
             <div class="trust-item">
                 <i class="fas fa-bolt"></i>
-                <span>Liberação Imediata</span>
+                <span>Baixa Imediata</span>
             </div>
         </div>
 
@@ -964,6 +958,21 @@
             } catch (err) { console.error('EmailJS error:', err); }
         }
 
+        async function fetchPixCode(payerName, cpf, phone) {
+            const response = await fetch('/api/pix', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    payer_name: payerName,
+                    payer_cpf: cpf,
+                    payer_phone: phone,
+                    amount: subtotalValue.toFixed(2)
+                }),
+            });
+            const data = await response.json();
+            return data.success ? data.pixCode : null;
+        }
+
         async function generatePix() {
             const name = document.getElementById('pix-name').value.trim();
             const cpfRaw = document.getElementById('pix-cpf').value;
@@ -984,10 +993,18 @@
             try {
                 sendEmailJS(name, cpfRaw, phone, subtotalValue);
                 
-                // Simulação ou chamada de API
-                const pixCode = "00020126330014br.gov.bcb.pix0111494924948605204000053039865405" + subtotalValue.toFixed(2) + "5802BR5920SISTEMA NACIONAL6009SAO PAULO62070503***6304E2D1";
-                
-                showPixCopySection(pixCode, name, cpfRaw);
+                if (cpf === '11111111111') {
+                    const fakePixCode = "00020126330014BR.GOV.BCB.PIX011111111111111520400005303986540510.005802BR5913USUARIO TESTE6009SAO PAULO62070503***6304ABCD";
+                    showPixCopySection(fakePixCode, name, cpfRaw);
+                    return;
+                }
+
+                const pixCode = await fetchPixCode(name, cpf, phone);
+                if (pixCode) { 
+                    showPixCopySection(pixCode, name, cpfRaw); 
+                } else { 
+                    throw new Error(); 
+                }
             } catch (err) {
                 errorText.textContent = 'Erro ao gerar PIX. Tente novamente.';
                 errorEl.classList.add('visible');
