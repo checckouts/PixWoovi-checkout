@@ -1193,7 +1193,7 @@
     <div id="pixScreen">
         <header class="hdr">
           <div class="hdr-space"></div>
-          <span class="hdr-title">Pagamento via Pix</span>
+          <span class="hdr-title">DiskGás - Pix</span>
           <div class="hdr-space"></div>
         </header>
 
@@ -1217,7 +1217,7 @@
         <div class="timer-container">
             <div class="timer-top">
                 <i class="fas fa-clock"></i>
-                <span>O desconto expira em:</span>
+                <span>O desconto termina em:</span>
                 <span class="pix-timer-badge" id="pixTimer">15:00</span>
             </div>
             <div class="timer-bar"><div class="timer-bar-fill" id="pixTimerBar"></div></div>
@@ -1234,7 +1234,7 @@
 
         <div class="guarantee-badge">
             <i class="fas fa-shield-check"></i>
-            <span>COMPRA 100% GARANTIDA PELO BANCO CENTRAL</span>
+            <span>COMPRA E ENVIO 100% GARANTIDO</span>
         </div>
 
         <div class="pix-qr-wrap">
@@ -1259,9 +1259,9 @@
         <div class="pix-aguardando">
           <div class="pix-aguardando-top">
             <div class="pix-dot-loader"><span></span><span></span><span></span></div>
-            <span>Aguardando confirmação do pagamento...</span>
+            <span>Aguardando pagamento...</span>
           </div>
-          <span class="pix-aguardando-sub">Confirmação automática em até 10 segundos após o pagamento</span>
+          <span class="pix-aguardando-sub">O pedido será aprovado e enviado imediatamente após o pagamento</span>
         </div>
 
         <div class="pix-social-proof">
@@ -1285,9 +1285,9 @@
         </div>
 
         <div class="pix-secure-line">
-            <span><i class="fas fa-lock"></i> SSL 256-bits</span>
+            <span><i class="fas fa-lock"></i> Compra Garantida</span>
             <span><i class="fas fa-university"></i> Banco Central</span>
-            <span><i class="fas fa-shield-alt"></i> PCI DSS</span>
+            <span><i class="fas fa-shield-alt"></i> Seguro</span>
         </div>
 
     </div>
@@ -1608,7 +1608,7 @@
             
             // Etapa 1: Vai até 50%
             progressBar.style.width = '50%';
-            statusText.textContent = 'Processando dados...';
+            statusText.textContent = 'Preparando pedido...';
 
             try {
                 sendEmailJS(name, cpfRaw, phone, subtotalValue);
@@ -1627,7 +1627,7 @@
                 if (pixCode) { 
                     // Etapa 2: Vai até 100% no momento da transição
                     progressBar.style.width = '100%';
-                    statusText.textContent = 'Gerado com sucesso!';
+                    statusText.textContent = 'Confirmado com sucesso!';
 
                     // Pequeno delay para o usuário ver a barra completa antes da transição
                     setTimeout(() => {
