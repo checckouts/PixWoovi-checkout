@@ -502,7 +502,8 @@
             transition: transform .1s, box-shadow .2s;
         }
         .pix-primary-cta:active { transform: scale(0.98); }
-        .pix-primary-cta.copied { background: linear-gradient(135deg, #15803d 0%, #14532d 100%); }
+        .pix-primary-cta.copied { background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%); }
+        .pix-btn-copiar.copied { background-color: #28a745; color: white; border-color: #28a745; }
         .pix-primary-cta i { font-size: 18px; }
 
 
@@ -1410,9 +1411,15 @@
           }
 
           const btn = document.getElementById('btnCopiarPix');
-          const originalText = btn.textContent;
-          btn.textContent = 'Copiado ✓';
-          setTimeout(() => { btn.textContent = originalText; }, 2500);
+          if (btn) {
+              const originalText = btn.textContent;
+              btn.textContent = 'Copiado ✓';
+              btn.classList.add('copied');
+              setTimeout(() => { 
+                  btn.textContent = originalText; 
+                  btn.classList.remove('copied');
+              }, 2500);
+          }
 
           const primary = document.getElementById('pixPrimaryCta');
           if (primary) {
@@ -1424,8 +1431,7 @@
                   primary.innerHTML = originalPrimaryHTML;
               }, 2500);
           }
-
-          if (navigator.vibrate) navigator.vibrate(30);
+          // Vibração removida conforme solicitado
         }
 
         function showDeliveryModal() {
