@@ -409,14 +409,17 @@
         .hdr-title{flex:1;text-align:center;font-size:16px;font-weight:700;color:var(--ink);letter-spacing:-.2px}
         .hdr-space{width:60px}
 
-        .pix-total-row{display:flex;justify-content:space-between;align-items:center;background:var(--white);border:1px solid var(--border);border-radius:12px;padding:13px 16px;margin: 20px 16px;font-size:13px;color:var(--muted)}
-        .pix-total-val{font-size:18px;font-weight:700;color:var(--green)}
+        .pix-total-row{display:flex;justify-content:space-between;align-items:center;background:var(--white);border:1px solid var(--border);border-radius:12px;padding:13px 16px;margin: 20px 16px 10px;font-size:13px;color:var(--muted)}
+        .pix-total-val-container { text-align: right; }
+        .pix-total-val{font-size:20px;font-weight:900;color:var(--green); display: block;}
+        .pix-old-price { font-size: 12px; color: #94a3b8; text-decoration: line-through; margin-right: 4px; }
+        .pix-discount-badge { background: #f0fdf4; color: #16a34a; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; border: 1px solid #bbf7d0; }
+
         .pix-qr-wrap{text-align:center;margin-bottom:16px; padding: 0 16px;}
         .pix-qr-logo{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:4px 0; justify-content: center;}
         .pix-title{font-size:16px;font-weight:700;color:var(--ink); text-align: left;}
         .pix-sub{font-size:12px;color:var(--muted);margin-top:2px; text-align: left;}
         
-        /* Ajuste para o container do QR Code dinâmico */
         .pix-qr-img-container {
             width: 200px;
             height: 200px;
@@ -439,57 +442,100 @@
         .pix-divider span{background:var(--bg);padding:0 10px;font-size:11px;color:var(--muted);position:relative}
         .pix-copia-wrap{display:flex;gap:8px;margin: 0 16px 20px}
         .pix-copia-input{flex:1;padding:11px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:11px;color:var(--muted);font-family:inherit;background:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-        .pix-btn-copiar{background:var(--green);color:#fff;border:none;border-radius:10px;padding:11px 16px;font-size:13px;font-weight:700;font-family:inherit;white-space:nowrap;flex-shrink:0;transition:background .2s}
-        .pix-btn-copiar:active{background:#15803d}
+        .pix-btn-copiar{background:var(--green);color:#fff;border:none;border-radius:10px;padding:11px 16px;font-size:13px;font-weight:700;font-family:inherit;white-space:nowrap;flex-shrink:0;transition:all .2s; box-shadow: 0 4px 10px rgba(22, 163, 74, 0.2);}
+        .pix-btn-copiar:active{background:#15803d; transform: scale(0.98);}
+        
         .pix-aguardando{display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;background:#f0fdf4;border-radius:10px;margin: 0 16px 16px;font-size:13px;color:var(--green);font-weight:600}
         .pix-dot-loader{display:flex;gap:4px}
         .pix-dot-loader span{width:6px;height:6px;border-radius:50%;background:var(--green);animation:dotpulse 1.2s infinite}
         .pix-dot-loader span:nth-child(2){animation-delay:.2s}
         .pix-dot-loader span:nth-child(3){animation-delay:.4s}
         @keyframes dotpulse{0%,80%,100%{transform:scale(.7);opacity:.5}40%{transform:scale(1);opacity:1}}
+        
         .pix-info{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px; margin: 0 16px 20px;}
         .pix-info div{font-size:12px;color:var(--ink2);padding-left:4px;border-left:2px solid var(--green); text-align: left;}
 
-        /* MELHORIAS DE CONVERSÃO E CREDIBILIDADE */
+        /* PROGRESS STEPS */
+        .progress-steps {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 30px;
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 0;
+        }
+        .p-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            position: relative;
+            flex: 1;
+        }
+        .p-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #94a3b8;
+            font-weight: 700;
+            z-index: 2;
+        }
+        .p-step.active .p-dot { background: var(--green); color: #fff; box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.1); }
+        .p-step.done .p-dot { background: var(--green); color: #fff; }
+        .p-label { font-size: 9px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+        .p-step.active .p-label { color: var(--green); }
+        .p-line {
+            position: absolute;
+            height: 2px;
+            background: #e2e8f0;
+            top: 12px;
+            left: 50%;
+            width: 100%;
+            z-index: 1;
+        }
+        .p-step.done .p-line { background: var(--green); }
+
         .timer-container {
             background: #fff5f5;
             border: 1px solid #feb2b2;
             border-radius: 12px;
-            padding: 12px;
-            margin: 16px 16px 16px;
+            padding: 10px;
+            margin: 16px 16px 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
             color: #c53030;
             font-weight: 700;
-            font-size: 14px;
-            animation: pulse-border 2s infinite;
-        }
-        @keyframes pulse-border {
-            0% { box-shadow: 0 0 0 0 rgba(197, 48, 48, 0.2); }
-            70% { box-shadow: 0 0 0 6px rgba(197, 48, 48, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(197, 48, 48, 0); }
+            font-size: 13px;
         }
         
         .stock-notice {
             font-size: 11px;
-            color: #718096;
+            color: #ef4444;
             text-align: center;
-            margin-top: 4px;
-            font-weight: 500;
+            margin-top: 6px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
         }
 
         .security-bar {
             background: #f8fafc;
-            border-top: 1px solid var(--border);
             border-bottom: 1px solid var(--border);
             padding: 10px 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 15px;
-            margin-bottom: 0;
         }
         .security-item {
             display: flex;
@@ -499,27 +545,24 @@
             font-weight: 700;
             color: #64748b;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
-        .security-item i { color: #16a34a; font-size: 12px; }
+        .security-item i { color: #16a34a; }
 
         .trust-seals {
             display: flex;
-            flex-wrap: wrap;
             justify-content: center;
             gap: 20px;
             padding: 20px 16px 40px;
-            opacity: 0.7;
+            opacity: 0.6;
         }
         .trust-seal {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 4px;
-            text-align: center;
         }
-        .trust-seal i { font-size: 20px; color: #94a3b8; }
-        .trust-seal span { font-size: 9px; font-weight: 700; color: #94a3b8; text-transform: uppercase; }
+        .trust-seal i { font-size: 18px; color: #94a3b8; }
+        .trust-seal span { font-size: 8px; font-weight: 700; color: #94a3b8; text-transform: uppercase; }
 
         .guarantee-box {
             background: #f0f9ff;
@@ -529,11 +572,10 @@
             margin: 0 16px 20px;
             display: flex;
             gap: 12px;
-            align-items: flex-start;
         }
         .guarantee-icon {
-            width: 36px;
-            height: 36px;
+            width: 32px;
+            height: 32px;
             background: #e0f2fe;
             border-radius: 50%;
             display: flex;
@@ -542,7 +584,7 @@
             color: #0369a1;
             flex-shrink: 0;
         }
-        .guarantee-content h4 { font-size: 13px; font-weight: 700; color: #0369a1; margin-bottom: 2px; }
+        .guarantee-content h4 { font-size: 12px; font-weight: 700; color: #0369a1; margin-bottom: 2px; }
         .guarantee-content p { font-size: 11px; color: #0c4a6e; line-height: 1.4; }
 
         @keyframes spin {
@@ -864,32 +906,52 @@
           <div class="hdr-space"></div>
         </header>
 
+        <div class="progress-steps">
+            <div class="p-step done">
+                <div class="p-dot"><i class="fas fa-check"></i></div>
+                <div class="p-label">Pedido</div>
+                <div class="p-line"></div>
+            </div>
+            <div class="p-step active">
+                <div class="p-dot">2</div>
+                <div class="p-label">Pagamento</div>
+                <div class="p-line"></div>
+            </div>
+            <div class="p-step">
+                <div class="p-dot">3</div>
+                <div class="p-label">Envio</div>
+            </div>
+        </div>
+
         <div class="security-bar">
-            <div class="security-item"><i class="fas fa-shield-alt"></i> Ambiente Seguro</div>
-            <div class="security-item"><i class="fas fa-lock"></i> SSL Criptografado</div>
+            <div class="security-item"><i class="fas fa-shield-alt"></i> Pagamento Criptografado</div>
+            <div class="security-item"><i class="fas fa-check-circle"></i> Aprovado na Hora</div>
         </div>
 
         <div class="timer-container">
-            <i class="fas fa-clock"></i>
-            <span>Seu pedido expira em: <span id="pixTimer">15:00</span></span>
+            <i class="fas fa-bolt"></i>
+            <span>Pague em <span id="pixTimer">15:00</span> para garantir o desconto</span>
         </div>
 
         <div class="pix-total-row">
-          <span>Total a pagar</span>
-          <span class="pix-total-val" id="pixTotal"></span>
+          <span>Valor com Desconto Pix</span>
+          <div class="pix-total-val-container">
+              <span class="pix-old-price" id="pixOldPrice"></span>
+              <span class="pix-discount-badge">ECONOMIA EXCLUSIVA</span>
+              <span class="pix-total-val" id="pixTotal"></span>
+          </div>
         </div>
 
         <div class="pix-qr-wrap">
           <div class="pix-qr-logo">
-            <img src="data:image/webp;base64,UklGRi4EAABXRUJQVlA4WAoAAAAQAAAAYwAAYwAAQUxQSDsBAAABDzD/ERECciRJbiPw5JPKgDVlTYNyDPBkTeDzxAYqgmj0UBkQ0X8Hbts4knavVznxJ5rnHaW1/LBzVL4dsDd0kAwTZPdJcB+8APa7cF9Vr7xvWcAJghPsVpLTc4JlpbV64PScYBXejZ4TBCfYKSnA+wUx3JRW3UuOKrjkVX3Wu7SXK4W9vruwvpQ0xRnyD1ntRkiVVlP8hv0iSf7IM9+aZJVXR1gFF/nMrPLINxdgr+kU8U3KLElkndyYqlBkCKserbJvEC4Sr+avtJMFXou2WPJGtiChYTPRgKLoJhtqEHcwiGBEwfCCsfqBB6sQLEmwPsFi3bByVdIZeb+pXLf3qdOinG9qgLIPKhSUK6idL2RQ1UD2xj5t9G5Kq6reRlD1nGCzpYieE8yGTvSc4N6x8O34YecobfO8owEAVlA4IMwCAACQEgCdASpkAGQAPplCmUgkpaQjLxb8ALATCWRs8v+9/FqG1F7OLfunle1XWFN67xOeml5lPPY6JnqgN5mv0D8AMr/fk7(Content truncated due to size limit. Use line ranges to read remaining content)
-8BAAABDzD/ERECciRJbiPw5JPKgDVlTYNyDPBkTeDzxAYqgmj0UBkQ0X8Hbts4knavVznxJ5rnHaW1/LBzVL4dsDd0kAwTZPdJcB+8APa7cF9Vr7xvWcAJghPsVpLTc4JlpbV64PScYBXejZ4TBCfYKSnA+wUx3JRW3UuOKrjkVX3Wu7SXK4W9vruwvpQ0xRnyD1ntRkiVVlP8hv0iSf7IM9+aZJVXR1gFF/nMrPLINxdgr+kU8U3KLElkndyYqlBkCKserbJvEC4Sr+avtJMFXou2WPJGtiChYTPRgKLoJhtqEHcwiGBEwfCCsfqBB6sQLEmwPsFi3bByVdIZeb+pXLf3qdOinG9qgLIPKhSUK6idL2RQ1UD2xj5t9G5Kq6reRlD1nGCzpYieE8yGTvSc4N6x8O34YecobfO8owEAVlA4IMwCAACQEgCdASpkAGQAPplCmUgkpaQjLxb8ALATCWRs8v+9/FqG1F7OLfunle1XWFN67xOeml5lPPY6JnqgN5mv0D8AMr/fk7v8z/bs865ZmUj3CkBWID3ym0U2nfJ+x2aGAWZ8tgCthFdo9+mHWAUlE5F5rHrS447wEn6PH6cwOTendP+haPRLMpCShzXcQoVEx3uEAL7MK5Z7Gx3gn7AAAP78XNBkPzl141BeM7Afunok939y5lO8YRyvxpvrzmdGJlR/sEghqiQDhVlruoR5OSrAjlkP0d1jS/FI1DgafJJpPxD/m67pZ1DZYNPdybpGXz/vB0F+/2J55+UzahGPdFRv4zU8GdDWz2Xy+4o815V9tFOHsxSjb6BeaHjBj+iOoAGSqp0wnKF6N5bjZ+8HFnwroupw0KzWDD9KA0Za06WmP5c7rG24QGuKSx1NEyDMgi6/avlKURedSxXaU97zyfBy312PGQoP75qSts9LNvSPVvbJHtI60NUASh85kNbR/sVk5jLApj/w6yr7+wa1zZ2TrkGjq49oyc2laSuySJ/B1lFkDh2j8AFD1NudIEiwrqhxgZ+iJ+U977QiMBOY9hZkdY0+SeZ8QDu7Lt2YWqsP4bsWG+vLqH6Abc8CM6OyoZiuG+RfgUUAStUOi0YM8M6E/KHirvW+PpFUpI0enLWnpwLAJ6DBsvFuW0Az4Z3yBeFcWOtpOkO8WEXg/+v+l//+8F3yHAK8lx6zOQuxIcWiWAhgpjTasRy/7WtDeTSnQ5LtlKMXAJ/VhTaa/FG75TItodOqxa1gDWTgyfmoOqJFkP05rXhymZtoujAG18jw+JsEN6NaJfizf1038VdXTv1Io04QHkb1w16A/B71Xyk2/D3i6lifRLo50pF/LKlsFOxfMYZvmvJ2s6HnA53788N1iB/um02o/ywoCYxGteeZhQVbZqD4AAAAAAAAAA==" style="width:32px;height:32px;object-fit:contain">
+            <img src="data:image/webp;base64,UklGRi4EAABXRUJQVlA4WAoAAAAQAAAAYwAAYwAAQUxQSDsBAAABDzD/ERECciRJbiPw5JPKgDVlTYNyDPBkTeDzxAYqgmj0UBkQ0X8Hbts4knavVznxJ5rnHaW1/LBzVL4dsDd0kAwTZPdJcB+8APa7cF9Vr7xvWcAJghPsVpLTc4JlpbV64PScYBXejZ4TBCfYKSnA+wUx3JRW3UuOKrjkVX3Wu7SXK4W9vruwvpQ0xRnyD1ntRkiVVlP8hv0iSf7IM9+aZJVXR1gFF/nMrPLINxdgr+kU8U3KLElkndyYqlBkCKserbJvEC4Sr+avtJMFXou2WPJGtiChYTPRgKLoJhtqEHcwiGBEwfCCsfqBB6sQLEmwPsFi3bByVdIZeb+pXLf3qdOinG9qgLIPKhSUK6idL2RQ1UD2xj5t9G5Kq6reRlD1nGCzpYieE8yGTvSc4N6x8O34YecobfO8owEAVlA4IMwCAACQEgCdASpkAGQAPplCmUgkpaQjLxb8ALATCWRs8v+9/FqG1F7OLfunle1XWFN67xOeml5lPPY6JnqgN5mv0D8AMr/fk7v8z/bs865ZmUj3CkBWID3ym0U2nfJ+x2aGAWZ8tgCthFdo9+mHWAUlE5F5rHrS447wEn6PH6cwOTendP+haPRLMpCShzXcQoVEx3uEAL7MK5Z7Gx3gn7AAAP78XNBkPzl141BeM7Afunok939y5lO8YRyvxpvrzmdGJlR/sEghqiQDhVlruoR5OSrAjlkP0d1jS/FI1DgafJJpPxD/m67pZ1DZYNPdybpGXz/vB0F+/2J55+UzahGPdFRv4zU8GdDWz2Xy+4o815V9tFOHsxSjb6BeaHjBj+iOoAGSqp0wnKF6N5bjZ+8HFnwroupw0KzWDD9KA0Za06WmP5c7rG24QGuKSx1NEyDMgi6/avlKURedSxXaU97zyfBy312PGQoP75qSts9LNvSPVvbJHtI60NUASh85kNbR/sVk5jLApj/w6yr7+wa1zZ2TrkGjq49oyc2laSuySJ/B1lFkDh2j8AFD1NudIEiwrqhxgZ+iJ+U977QiMBOY9hZkdY0+SeZ8QDu7Lt2YWqsP4bsWG+vLqH6Abc8CM6OyoZiuG+RfgUUAStUOi0YM8M6E/KHirvW+PpFUpI0enLWnpwLAJ6DBsvFuW0Az4Z3yBeFcWOtpOkO8WEXg/+v+l//+8F3yHAK8lx6zOQuxIcWiWAhgpjTasRy/7WtDeTSnQ5LtlKMXAJ/VhTaa/FG75TItodOqxa1gDWTgyfmoOqJFkP05rXhymZtoujAG18jw+JsEN6NaJfizf1038VdXTv1Io04QHkb1w16A/B71Xyk2/D3i6lifRLo50pF/LKlsFOxfMYZvmvJ2s6HnA53788N1iB/um02o/ywoCYxGteeZhQVbZqD4AAAAAAAAAA==" style="width:32px;height:32px;object-fit:contain">
             <div>
               <div class="pix-title">Pague com PIX</div>
               <div class="pix-sub">Escaneie o QR Code ou copie o código</div>
             </div>
           </div>
           <div id="pixQrCode" class="pix-qr-img-container"></div>
-          <div class="stock-notice">⚠️ Seu pedido está reservado e aguardando o pagamento.</div>
+          <div class="stock-notice"><i class="fas fa-fire"></i> Alta demanda: Seu pedido está reservado temporariamente.</div>
         </div>
 
         <div class="pix-divider"><span>ou copie o código abaixo</span></div>
@@ -901,14 +963,14 @@
 
         <div class="pix-aguardando">
           <div class="pix-dot-loader"><span></span><span></span><span></span></div>
-          <span>Aguardando confirmação do banco...</span>
+          <span>Aguardando confirmação instantânea...</span>
         </div>
 
         <div class="guarantee-box">
-            <div class="guarantee-icon"><i class="fas fa-check-double"></i></div>
+            <div class="guarantee-icon"><i class="fas fa-truck-fast"></i></div>
             <div class="guarantee-content">
-                <h4>Pagamento com Garantia Total</h4>
-                <p>Seu pagamento é processado com criptografia de 256 bits. Garantimos a entrega do seu pedido ou a devolução integral do valor.</p>
+                <h4>Envio Prioritário</h4>
+                <p>Pagamentos via Pix são processados imediatamente e entram na fila de despacho prioritário.</p>
             </div>
         </div>
 
@@ -916,21 +978,21 @@
           <div>1. Abra o app do seu banco</div>
           <div>2. Escolha pagar com PIX</div>
           <div>3. Escaneie o QR Code ou cole o código</div>
-          <div>4. O pagamento é aprovado instantaneamente</div>
+          <div>4. Pronto! Seu pedido será enviado hoje mesmo.</div>
         </div>
 
         <div class="trust-seals">
             <div class="trust-seal">
-                <i class="fas fa-shield-virus"></i>
-                <span>Site Blindado</span>
+                <i class="fas fa-shield-alt"></i>
+                <span>Seguro</span>
             </div>
             <div class="trust-seal">
-                <i class="fas fa-user-shield"></i>
-                <span>LGPD Compliance</span>
+                <i class="fas fa-lock"></i>
+                <span>SSL</span>
             </div>
             <div class="trust-seal">
-                <i class="fas fa-certificate"></i>
-                <span>Compra Segura</span>
+                <i class="fas fa-user-check"></i>
+                <span>Verificado</span>
             </div>
         </div>
     </div>
@@ -1279,6 +1341,8 @@
             document.getElementById('mainContainer').style.display = 'none';
             document.getElementById('pixScreen').style.display = 'block';
             
+            const oldPrice = subtotalValue * 1.15; // Simula preço sem desconto
+            document.getElementById('pixOldPrice').innerText = 'R$ ' + oldPrice.toFixed(2).replace('.', ',');
             document.getElementById('pixTotal').innerText = 'R$ ' + subtotalValue.toFixed(2).replace('.', ',');
             document.getElementById('pixCopiaCola').value = qrCode;
             
