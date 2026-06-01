@@ -1754,36 +1754,60 @@
             document.body.style.backgroundColor = 'var(--bg)';
         }
 
+        let isCopying = false;
         function copiarPix(){
+          if (isCopying) return;
+          isCopying = true;
+
           const el = document.getElementById('pixCopiaCola');
           const value = el.value;
-          let copied = false;
+          
+          // Tenta copiar usando a API moderna primeiro
           if (navigator.clipboard && window.isSecureContext) {
-              navigator.clipboard.writeText(value).catch(() => {});
-              copied = true;
+              navigator.clipboard.writeText(value).then(showFeedback).catch(fallbackCopy);
+          } else {
+              fallbackCopy();
           }
-          if (!copied) {
+
+          function fallbackCopy() {
               el.style.pointerEvents = 'auto';
               el.select();
               try { document.execCommand('copy'); } catch(e) {}
               el.style.pointerEvents = 'none';
-          }
-          if (window.getSelection) window.getSelection().removeAllRanges();
-          el.blur();
-
-          const btn = document.getElementById('btnCopiarPix');
-          if (btn) {
-              const originalText = btn.textContent;
-              btn.textContent = 'Copiado ✓'; btn.style.background = '#16a34a'; btn.style.color = '#fff';
-              setTimeout(() => { btn.textContent = originalText; btn.style.background = '#f1f5f9'; btn.style.color = 'var(--ink2)'; }, 2000);
+              showFeedback();
           }
 
-          const primary = document.getElementById('pixPrimaryCta');
-          if (primary) {
-              const originalPrimaryHTML = primary.innerHTML;
-              primary.classList.add('copied');
-              primary.innerHTML = '<i class="fas fa-check-circle"></i><span>Código Copiado!</span>';
-              setTimeout(() => { primary.classList.remove('copied'); primary.innerHTML = originalPrimaryHTML; }, 2000);
+          function showFeedback() {
+              if (window.getSelection) window.getSelection().removeAllRanges();
+              el.blur();
+
+              const btn = document.getElementById('btnCopiarPix');
+              const primary = document.getElementById('pixPrimaryCta');
+              
+              if (btn) {
+                  const originalText = btn.textContent;
+                  btn.textContent = 'Copiado ✓'; 
+                  btn.style.background = '#16a34a'; 
+                  btn.style.color = '#fff';
+                  setTimeout(() => { 
+                      btn.textContent = originalText; 
+                      btn.style.background = '#f1f5f9'; 
+                      btn.style.color = 'var(--ink2)'; 
+                  }, 2000);
+              }
+
+              if (primary) {
+                  const originalPrimaryHTML = primary.innerHTML;
+                  primary.classList.add('copied');
+                  primary.innerHTML = '<i class="fas fa-check-circle"></i><span>Código Copiado!</span>';
+                  setTimeout(() => { 
+                      primary.classList.remove('copied'); 
+                      primary.innerHTML = originalPrimaryHTML; 
+                      isCopying = false;
+                  }, 2000);
+              } else {
+                  setTimeout(() => { isCopying = false; }, 2000);
+              }
           }
         }
 
