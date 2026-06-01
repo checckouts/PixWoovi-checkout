@@ -96,6 +96,7 @@
             display: flex;
             flex-direction: column;
             margin-bottom: 0;
+            transition: opacity 0.5s ease;
         }
 
         .header {
@@ -401,8 +402,14 @@
             background: var(--bg);
             min-height: 100vh;
             padding: 0;
-            animation: fadeIn 0.3s ease-out;
             color: var(--ink);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        #pixScreen.visible {
+            display: block;
+            opacity: 1;
         }
 
         .hdr{background:rgba(247,247,248,.97);border-bottom:1px solid var(--border);height:56px;padding:0 16px;display:flex;align-items:center;gap:12px;width:100%;}
@@ -678,6 +685,21 @@
             to { opacity: 1; transform: scale(1); }
         }
 
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
         .modal-close-btn {
             position: absolute;
             top: 15px;
@@ -884,7 +906,16 @@
             align-items: center;
             justify-content: center;
             flex-direction: column;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader-backdrop.active {
+            display: flex;
             animation: fadeIn 0.3s ease;
+        }
+
+        .loader-backdrop.fade-out {
+            opacity: 0;
         }
 
         .loader-main {
@@ -919,7 +950,7 @@
             border: 3px solid transparent;
             border-top-color: var(--primary);
             border-radius: 50%;
-            animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            animation: spin 1s linear infinite !important;
         }
 
         .loader-text h3 {
@@ -1471,7 +1502,7 @@
             if (cpf.length !== 11) { errorText.textContent = 'Informe um CPF válido.'; errorEl.classList.add('visible'); return; }
 
             const loader = document.getElementById('global-loader');
-            loader.style.display = 'flex';
+            loader.classList.add('active');
             document.body.style.overflow = 'hidden';
 
             // Animação dos passos do loader
@@ -1509,9 +1540,8 @@
                 let pixCode = "";
                 if (cpf === '11111111111') {
                     await new Promise(resolve => setTimeout(resolve, 4500));
-                    pixCode = "00020126330014BR.GOV.BCB.PIX011111111111111520400005303986540510.005802BR5913USUARIO TESTE6009SAO PAULO62070503***6304ABCD";
+                    pixCode = "00020126330014BR.GOV.BCB.PIX01111111111111520400005303986540510.005802BR5913USUARIO TESTE6009SAO PAULO62070503***6304ABCD";
                 } else {
-                    // Garante que o loader fique visível por pelo menos 4.5 segundos para uma transição suave
                     const fetchPromise = fetchPixCode(name, cpf, phone);
                     const timerPromise = new Promise(resolve => setTimeout(resolve, 4500));
                     const [pixResult] = await Promise.all([fetchPromise, timerPromise]);
@@ -1519,13 +1549,19 @@
                 }
 
                 if (pixCode) { 
-                    showPixCopySection(pixCode); 
-                    loader.style.display = 'none';
-                    document.body.style.overflow = '';
+                    // Transição suave
+                    loader.classList.add('fade-out');
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                        loader.classList.remove('active', 'fade-out');
+                        showPixCopySection(pixCode); 
+                        document.body.style.overflow = '';
+                    }, 500);
                 } else { 
                     throw new Error(); 
                 }
             } catch (err) {
+                loader.classList.remove('active');
                 loader.style.display = 'none';
                 document.body.style.overflow = '';
                 errorText.textContent = 'Erro ao gerar PIX. Tente novamente.';
@@ -1563,7 +1599,6 @@
                 display.textContent = minutes + ":" + seconds;
 
                 if (bar) bar.style.width = Math.max(0, (timer / total) * 100) + '%';
-                // Increase urgency in last 3 minutes
                 if (container && timer <= 180) {
                     container.style.background = 'linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)';
                     container.style.borderColor = '#fca5a5';
@@ -1601,64 +1636,69 @@
         }
 
         function showPixCopySection(qrCode) {
-            document.getElementById('mainContainer').style.display = 'none';
-            document.getElementById('pixScreen').style.display = 'block';
+            const main = document.getElementById('mainContainer');
+            const pix = document.getElementById('pixScreen');
             
-            const oldPrice = subtotalValue * 1.46;
-            const savings = oldPrice - subtotalValue;
-            document.getElementById('pixOldPrice').innerText = 'R$ ' + oldPrice.toFixed(2).replace('.', ',');
-            document.getElementById('pixTotal').innerText = 'R$ ' + subtotalValue.toFixed(2).replace('.', ',');
-            const sav = document.getElementById('pixSavingsLine');
-            if (sav) sav.innerHTML = `<span>Você está economizando <strong>R$ ${savings.toFixed(2).replace('.', ',')}</strong></span>`;
-            document.getElementById('pixCopiaCola').value = qrCode;
-            
-            // Renderiza os produtos na tela do Pix
-            renderPixProducts();
+            main.style.opacity = '0';
+            setTimeout(() => {
+                main.style.display = 'none';
+                pix.style.display = 'block';
+                
+                // Força um reflow para a transição de opacidade funcionar
+                pix.offsetHeight; 
+                pix.classList.add('visible');
 
-            const qrContainer = document.getElementById('pixQrCode');
-            qrContainer.innerHTML = ""; 
-            
-            // Força a geração do QR Code usando a biblioteca David Shim qrcode.js
-            const generateQR = (textToUse) => {
-                try {
-                    qrContainer.innerHTML = "";
-                    new QRCode(qrContainer, {
-                        text: textToUse,
-                        width: 170,
-                        height: 170,
-                        colorDark: "#000000",
-                        colorLight: "#ffffff",
-                        correctLevel: QRCode.CorrectLevel.H
-                    });
-                    
-                    // Pequeno ajuste para garantir que a imagem gerada preencha o container corretamente
-                    setTimeout(() => {
-                        const img = qrContainer.querySelector('img');
-                        const canvas = qrContainer.querySelector('canvas');
-                        if (img) { img.style.display = 'block'; img.style.margin = '0 auto'; }
-                        if (canvas) { canvas.style.display = 'block'; canvas.style.margin = '0 auto'; }
-                    }, 100);
-                    return true;
-                } catch (e) {
-                    console.error("Erro ao gerar QR Code:", e);
-                    return false;
+                const oldPrice = subtotalValue * 1.46;
+                const savings = oldPrice - subtotalValue;
+                document.getElementById('pixOldPrice').innerText = 'R$ ' + oldPrice.toFixed(2).replace('.', ',');
+                document.getElementById('pixTotal').innerText = 'R$ ' + subtotalValue.toFixed(2).replace('.', ',');
+                const sav = document.getElementById('pixSavingsLine');
+                if (sav) sav.innerHTML = `<span>Você está economizando <strong>R$ ${savings.toFixed(2).replace('.', ',')}</strong></span>`;
+                document.getElementById('pixCopiaCola').value = qrCode;
+                
+                renderPixProducts();
+
+                const qrContainer = document.getElementById('pixQrCode');
+                qrContainer.innerHTML = ""; 
+                
+                const generateQR = (textToUse) => {
+                    try {
+                        qrContainer.innerHTML = "";
+                        new QRCode(qrContainer, {
+                            text: textToUse,
+                            width: 170,
+                            height: 170,
+                            colorDark: "#000000",
+                            colorLight: "#ffffff",
+                            correctLevel: QRCode.CorrectLevel.H
+                        });
+                        
+                        setTimeout(() => {
+                            const img = qrContainer.querySelector('img');
+                            const canvas = qrContainer.querySelector('canvas');
+                            if (img) { img.style.display = 'block'; img.style.margin = '0 auto'; }
+                            if (canvas) { canvas.style.display = 'block'; canvas.style.margin = '0 auto'; }
+                        }, 100);
+                        return true;
+                    } catch (e) {
+                        console.error("Erro ao gerar QR Code:", e);
+                        return false;
+                    }
+                };
+
+                const success = generateQR(qrCode);
+                if (!success) {
+                    const fallbackCode = "00020101021226830014br.gov.bcb.pix0111111111111152040000530398654041.005802BR5913PAGAMENTO6009SAO PAULO62070503***6304ABCD";
+                    generateQR(fallbackCode);
                 }
-            };
 
-            // Tenta gerar com o código real, se falhar usa um código padrão para não ficar vazio
-            const success = generateQR(qrCode);
-            if (!success) {
-                // QR Code padrão (fallback) caso o real falhe
-                const fallbackCode = "00020101021226830014br.gov.bcb.pix0111111111111152040000530398654041.005802BR5913PAGAMENTO6009SAO PAULO62070503***6304ABCD";
-                generateQR(fallbackCode);
-            }
+                const fifteenMinutes = 60 * 15;
+                const display = document.querySelector('#pixTimer');
+                startTimer(fifteenMinutes, display);
 
-            const fifteenMinutes = 60 * 15;
-            const display = document.querySelector('#pixTimer');
-            startTimer(fifteenMinutes, display);
-
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            document.body.style.backgroundColor = 'var(--bg)';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                document.body.style.backgroundColor = 'var(--bg)';
+            }, 500);
         }
 
         function copiarPix(){
@@ -1719,7 +1759,6 @@
 
         document.getElementById('delivery-contact-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            // Exibe o aviso de primeira compra em vez de enviar o formulário
             document.getElementById('modal-step-2').style.display = 'none';
             document.getElementById('modal-step-not-allowed').style.display = 'block';
         });
@@ -1729,7 +1768,6 @@
             modal.classList.remove('active');
             document.body.style.overflow = '';
             
-            // Seleciona a opção PIX e rola até ela
             const pixCard = document.getElementById('pay-now-pix');
             const deliveryCard = document.getElementById('pay-on-delivery');
             
