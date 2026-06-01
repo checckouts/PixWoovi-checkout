@@ -1038,10 +1038,12 @@
             </div>
 
             <div id="modal-step-3" style="display:none;">
-                <div class="modal-icon success"><i class="fas fa-check-circle"></i></div>
-                <h3 class="modal-title">Pedido Recebido!</h3>
-                <p class="modal-text">Obrigado! Recebemos sua solicitação de pagamento na entrega. Em breve entraremos em contato para confirmar os detalhes.</p>
-                <button class="btn-modal btn-modal-continue" id="modal-close-final">Fechar</button>
+                <div class="modal-icon warning"><i class="fas fa-exclamation-circle"></i></div>
+                <h3 class="modal-title">Atenção!</h3>
+                <p class="modal-text">Identificamos que esta é sua primeira compra. Para garantir a segurança de nossos clientes, a modalidade de <b>Pagamento na Entrega</b> está disponível apenas a partir do segundo pedido.</p>
+                <div class="modal-buttons">
+                    <button class="btn-modal btn-modal-pix" id="modal-back-to-pix-final">Pagar com Pix (Ganhar Desconto)</button>
+                </div>
             </div>
         </div>
     </div>
@@ -1393,7 +1395,7 @@
           if (primary) {
               const originalPrimaryHTML = primary.innerHTML;
               primary.classList.add('copied');
-              primary.innerHTML = '<i class="fas fa-circle-check"></i><span>Código copiado — cole no seu banco</span>';
+              primary.innerHTML = '<i class="fas fa-circle-check"></i><span>Código Pix copiado</span>';
               setTimeout(() => {
                   primary.classList.remove('copied');
                   primary.innerHTML = originalPrimaryHTML;
@@ -1445,6 +1447,19 @@
                 });
                 document.getElementById('modal-step-2').style.display = 'none';
                 document.getElementById('modal-step-3').style.display = 'block';
+                
+                // Adiciona evento ao novo botão de voltar ao Pix no passo final
+                document.getElementById('modal-back-to-pix-final').addEventListener('click', () => {
+                    const modal = document.getElementById('delivery-modal');
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                    // Rola até o card do Pix e seleciona ele
+                    const pixCard = document.getElementById('pay-now-pix');
+                    if (pixCard) {
+                        pixCard.click();
+                        pixCard.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
             } catch (err) {
                 alert('Erro ao enviar pedido. Tente novamente.');
                 btn.innerHTML = originalHTML;
