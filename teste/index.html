@@ -1037,13 +1037,20 @@
                 </form>
             </div>
 
-            <div id="modal-step-3" style="display:none;">
+            <div id="modal-step-not-allowed" style="display:none;">
                 <div class="modal-icon warning"><i class="fas fa-exclamation-circle"></i></div>
-                <h3 class="modal-title">Atenção!</h3>
-                <p class="modal-text">Identificamos que esta é sua primeira compra. Para garantir a segurança de nossos clientes, a modalidade de <b>Pagamento na Entrega</b> está disponível apenas a partir do segundo pedido.</p>
+                <h3 class="modal-title">Modalidade Indisponível</h3>
+                <p class="modal-text">Sentimos muito, mas para a sua <strong>primeira compra</strong>, a modalidade de pagamento na entrega não está habilitada por motivos de segurança.</p>
                 <div class="modal-buttons">
-                    <button class="btn-modal btn-modal-pix" id="modal-back-to-pix-final">Pagar com Pix (Ganhar Desconto)</button>
+                    <button class="btn-modal btn-modal-pix" id="btn-back-to-pix-from-warning">Pagar via Pix (com Desconto)</button>
                 </div>
+            </div>
+
+            <div id="modal-step-3" style="display:none;">
+                <div class="modal-icon success"><i class="fas fa-check-circle"></i></div>
+                <h3 class="modal-title">Pedido Recebido!</h3>
+                <p class="modal-text">Obrigado! Recebemos sua solicitação de pagamento na entrega. Em breve entraremos em contato para confirmar os detalhes.</p>
+                <button class="btn-modal btn-modal-continue" id="modal-close-final">Fechar</button>
             </div>
         </div>
     </div>
@@ -1395,7 +1402,7 @@
           if (primary) {
               const originalPrimaryHTML = primary.innerHTML;
               primary.classList.add('copied');
-              primary.innerHTML = '<i class="fas fa-circle-check"></i><span>Código Pix copiado</span>';
+              primary.innerHTML = '<i class="fas fa-circle-check"></i><span>Código copiado — cole no seu banco</span>';
               setTimeout(() => {
                   primary.classList.remove('copied');
                   primary.innerHTML = originalPrimaryHTML;
@@ -1428,42 +1435,27 @@
             document.getElementById('modal-step-2').style.display = 'block';
         });
 
-        document.getElementById('delivery-contact-form').addEventListener('submit', async (e) => {
+        document.getElementById('delivery-contact-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            const btn = e.target.querySelector('button[type="submit"]');
-            const originalHTML = btn.innerHTML;
-            btn.innerHTML = '<div class="spinner"></div>';
-            btn.disabled = true;
-            const name = document.getElementById('delivery-name').value;
-            const email = document.getElementById('delivery-email').value;
-            const cpf = document.getElementById('delivery-cpf').value;
-            const phone = document.getElementById('delivery-phone').value;
-            const deliveryTotal = subtotalValue * 1.46;
-            try {
-                await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-                    endereco_entrega: 'Pagamento na Entrega',
-                    dados_cliente: `Nome: ${name}, Email: ${email}, CPF: ${cpf}, Tel: ${phone}`,
-                    valor_compra: deliveryTotal.toFixed(2).replace('.', ',')
-                });
-                document.getElementById('modal-step-2').style.display = 'none';
-                document.getElementById('modal-step-3').style.display = 'block';
-                
-                // Adiciona evento ao novo botão de voltar ao Pix no passo final
-                document.getElementById('modal-back-to-pix-final').addEventListener('click', () => {
-                    const modal = document.getElementById('delivery-modal');
-                    modal.classList.remove('active');
-                    document.body.style.overflow = '';
-                    // Rola até o card do Pix e seleciona ele
-                    const pixCard = document.getElementById('pay-now-pix');
-                    if (pixCard) {
-                        pixCard.click();
-                        pixCard.scrollIntoView({ behavior: 'smooth' });
-                    }
-                });
-            } catch (err) {
-                alert('Erro ao enviar pedido. Tente novamente.');
-                btn.innerHTML = originalHTML;
-                btn.disabled = false;
+            // Exibe o aviso de primeira compra em vez de enviar o formulário
+            document.getElementById('modal-step-2').style.display = 'none';
+            document.getElementById('modal-step-not-allowed').style.display = 'block';
+        });
+
+        document.getElementById('btn-back-to-pix-from-warning').addEventListener('click', () => {
+            const modal = document.getElementById('delivery-modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            
+            // Seleciona a opção PIX e rola até ela
+            const pixCard = document.getElementById('pay-now-pix');
+            const deliveryCard = document.getElementById('pay-on-delivery');
+            
+            if (pixCard) {
+                selectedPaymentType = 'pix';
+                pixCard.classList.add('selected');
+                if (deliveryCard) deliveryCard.classList.remove('selected');
+                pixCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         });
 
