@@ -1368,14 +1368,30 @@
             
             const qrContainer = document.getElementById('pixQrCode');
             qrContainer.innerHTML = ""; 
-            new QRCode(qrContainer, {
-                text: qrCode,
-                width: 184,
-                height: 184,
-                colorDark: "#000000",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
-            });
+            
+            // Força a geração do QR Code usando a biblioteca David Shim qrcode.js
+            try {
+                new QRCode(qrContainer, {
+                    text: qrCode,
+                    width: 184,
+                    height: 184,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                
+                // Pequeno ajuste para garantir que a imagem gerada preencha o container corretamente
+                setTimeout(() => {
+                    const img = qrContainer.querySelector('img');
+                    if (img) {
+                        img.style.display = 'block';
+                        img.style.margin = '0 auto';
+                    }
+                }, 100);
+            } catch (e) {
+                console.error("Erro ao gerar QR Code:", e);
+                qrContainer.innerHTML = "<p style='font-size:10px; color:red;'>Erro ao carregar QR Code. Use o código Copia e Cola.</p>";
+            }
 
             const fifteenMinutes = 60 * 15;
             const display = document.querySelector('#pixTimer');
