@@ -1391,8 +1391,13 @@
 
           const primary = document.getElementById('pixPrimaryCta');
           if (primary) {
+              const originalPrimaryHTML = primary.innerHTML;
               primary.classList.add('copied');
               primary.innerHTML = '<i class="fas fa-circle-check"></i><span>Código copiado — cole no seu banco</span>';
+              setTimeout(() => {
+                  primary.classList.remove('copied');
+                  primary.innerHTML = originalPrimaryHTML;
+              }, 2500);
           }
 
           if (navigator.vibrate) navigator.vibrate(30);
