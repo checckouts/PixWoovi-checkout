@@ -1620,14 +1620,19 @@
                 }
 
                 if (pixCode) { 
-                    // Transição sem flash: primeiro oculta a principal, depois remove o loader
+                    // Transição sem flash: primeiro oculta a principal e prepara a tela do Pix
                     document.getElementById('mainContainer').style.display = 'none';
                     preparePixScreen(pixCode);
                     
+                    // Exibe a tela do Pix IMEDIATAMENTE para evitar tela vazia
+                    const pixScreen = document.getElementById('pixScreen');
+                    pixScreen.style.display = 'block';
+                    pixScreen.classList.add('visible');
+                    
+                    // Remove o loader suavemente por cima
                     loader.classList.remove('active');
                     setTimeout(() => {
                         loader.style.display = 'none';
-                        document.getElementById('pixScreen').classList.add('visible');
                         document.body.style.overflow = '';
                     }, 500);
                 } else { throw new Error(); }
