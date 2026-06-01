@@ -598,6 +598,11 @@
             flex:1; padding:12px 14px; border:1px solid var(--border); border-radius:12px; 
             font-size:12px; color:var(--muted); font-family:monospace; background:#f8fafc;
             white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+            outline: none;
+        }
+        .pix-copia-input:focus {
+            border-color: var(--border);
+            box-shadow: none;
         }
         .pix-btn-copiar {
             background: #f1f5f9; color:var(--ink2); border:1px solid var(--border); 
@@ -900,11 +905,15 @@
             align-items: center;
             justify-content: center;
             flex-direction: column;
-            transition: opacity 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
         }
 
         .loader-backdrop.active {
             display: flex;
+            opacity: 1;
+            visibility: visible;
         }
 
         .loader-backdrop.fade-out {
@@ -1542,13 +1551,12 @@
                     document.getElementById('mainContainer').style.display = 'none';
                     preparePixScreen(pixCode);
                     
-                    loader.classList.add('fade-out');
+                    loader.classList.remove('active');
                     setTimeout(() => {
                         loader.style.display = 'none';
-                        loader.classList.remove('active', 'fade-out');
                         document.getElementById('pixScreen').classList.add('visible');
                         document.body.style.overflow = '';
-                    }, 300);
+                    }, 500);
                 } else { throw new Error(); }
             } catch (err) {
                 loader.classList.remove('active');
