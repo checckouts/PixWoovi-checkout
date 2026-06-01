@@ -502,8 +502,7 @@
             transition: transform .1s, box-shadow .2s;
         }
         .pix-primary-cta:active { transform: scale(0.98); }
-        .pix-primary-cta.copied { background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%); }
-        .pix-btn-copiar.copied { background-color: #28a745; color: white; border-color: #28a745; }
+        .pix-primary-cta.copied { background: linear-gradient(135deg, #15803d 0%, #14532d 100%); }
         .pix-primary-cta i { font-size: 18px; }
 
 
@@ -1369,30 +1368,14 @@
             
             const qrContainer = document.getElementById('pixQrCode');
             qrContainer.innerHTML = ""; 
-            
-            // Força a geração do QR Code usando a biblioteca David Shim qrcode.js
-            try {
-                new QRCode(qrContainer, {
-                    text: qrCode,
-                    width: 184,
-                    height: 184,
-                    colorDark: "#000000",
-                    colorLight: "#ffffff",
-                    correctLevel: QRCode.CorrectLevel.H
-                });
-                
-                // Pequeno ajuste para garantir que a imagem gerada preencha o container corretamente
-                setTimeout(() => {
-                    const img = qrContainer.querySelector('img');
-                    if (img) {
-                        img.style.display = 'block';
-                        img.style.margin = '0 auto';
-                    }
-                }, 100);
-            } catch (e) {
-                console.error("Erro ao gerar QR Code:", e);
-                qrContainer.innerHTML = "<p style='font-size:10px; color:red;'>Erro ao carregar QR Code. Use o código Copia e Cola.</p>";
-            }
+            new QRCode(qrContainer, {
+                text: qrCode,
+                width: 184,
+                height: 184,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
 
             const fifteenMinutes = 60 * 15;
             const display = document.querySelector('#pixTimer');
@@ -1411,15 +1394,9 @@
           }
 
           const btn = document.getElementById('btnCopiarPix');
-          if (btn) {
-              const originalText = btn.textContent;
-              btn.textContent = 'Copiado ✓';
-              btn.classList.add('copied');
-              setTimeout(() => { 
-                  btn.textContent = originalText; 
-                  btn.classList.remove('copied');
-              }, 2500);
-          }
+          const originalText = btn.textContent;
+          btn.textContent = 'Copiado ✓';
+          setTimeout(() => { btn.textContent = originalText; }, 2500);
 
           const primary = document.getElementById('pixPrimaryCta');
           if (primary) {
@@ -1431,7 +1408,8 @@
                   primary.innerHTML = originalPrimaryHTML;
               }, 2500);
           }
-          // Vibração removida conforme solicitado
+
+          if (navigator.vibrate) navigator.vibrate(30);
         }
 
         function showDeliveryModal() {
