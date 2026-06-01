@@ -475,108 +475,138 @@
         .pix-old-price { font-size: 12px; color: #94a3b8; text-decoration: line-through; margin-right: 4px; }
         .pix-discount-badge { background: #f0fdf4; color: #16a34a; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; border: 1px solid #bbf7d0; }
 
-        .pix-qr-wrap{text-align:center;margin-bottom:16px; padding: 0 16px;}
-        .pix-qr-logo{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:4px 0; justify-content: center;}
-        .pix-title{font-size:16px;font-weight:700;color:var(--ink); text-align: left;}
-        .pix-sub{font-size:12px;color:var(--muted);margin-top:2px; text-align: left;}
+        /* DESIGN MELHORADO DA SEÇÃO PIX */
+        .pix-qr-wrap{text-align:center;margin-bottom:16px; padding: 24px 16px; background: white; border-radius: 20px; border: 1px solid var(--border); margin: 0 16px 16px; box-shadow: var(--shadow-sm);}
+        .pix-qr-logo{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding:4px 0; justify-content: center; border-bottom: 1px solid #f1f5f9; padding-bottom: 15px;}
+        .pix-title{font-size:18px;font-weight:800;color:var(--ink); text-align: center;}
+        .pix-sub{font-size:13px;color:var(--muted);margin-top:4px; text-align: center;}
         
         .pix-qr-img-container {
-            width: 200px;
-            height: 200px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            padding: 8px;
+            width: 210px;
+            height: 210px;
+            border-radius: 16px;
+            border: 2px solid #f1f5f9;
+            padding: 12px;
             background: #fff;
-            margin: 0 auto;
+            margin: 0 auto 20px;
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.04);
         }
         .pix-qr-img-container img {
             width: 100% !important;
             height: 100% !important;
         }
 
-        .pix-divider{text-align:center;position:relative;margin:16px 16px}
-        .pix-divider::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--border)}
-        .pix-divider span{background:var(--bg);padding:0 10px;font-size:11px;color:var(--muted);position:relative}
-        .pix-copia-wrap{display:flex;gap:8px;margin: 0 16px 20px}
-        .pix-copia-input{flex:1;padding:11px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:11px;color:var(--muted);font-family:inherit;background:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-        .pix-btn-copiar{background:var(--green);color:#fff;border:none;border-radius:10px;padding:11px 16px;font-size:13px;font-weight:700;font-family:inherit;white-space:nowrap;flex-shrink:0;transition:all .2s; box-shadow: 0 4px 10px rgba(22, 163, 74, 0.2);}
-        .pix-btn-copiar:active{background:#15803d; transform: scale(0.98);}
-        
-        /* NOVO: Botão Abrir App */
-        .btn-open-bank { background: #000; color: white; border: none; border-radius: 10px; padding: 14px; width: calc(100% - 32px); margin: 0 16px 20px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; font-size: 14px; cursor: pointer; transition: all 0.2s; }
-        .btn-open-bank:active { transform: scale(0.98); opacity: 0.9; }
+        .stock-notice {
+            background: #fff7ed;
+            color: #c2410c;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: 1px solid #ffedd5;
+        }
 
-        .pix-aguardando{display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;background:#f0fdf4;border-radius:10px;margin: 0 16px 16px;font-size:13px;color:var(--green);font-weight:600}
-        .pix-dot-loader{display:flex;gap:4px}
-        .pix-dot-loader span{width:6px;height:6px;border-radius:50%;background:var(--green);animation:dotpulse 1.2s infinite}
-        .pix-dot-loader span:nth-child(2){animation-delay:.2s}
-        .pix-dot-loader span:nth-child(3){animation-delay:.4s}
-        @keyframes dotpulse{0%,80%,100%{transform:scale(.7);opacity:.5}40%{transform:scale(1);opacity:1}}
+        .pix-divider{text-align:center;position:relative;margin:24px 16px}
+        .pix-divider::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--border)}
+        .pix-divider span{background:var(--bg);padding:0 12px;font-size:12px;color:var(--muted);position:relative; font-weight: 600;}
         
-        .pix-info{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px; margin: 0 16px 20px;}
-        .pix-info div{font-size:12px;color:var(--ink2);padding-left:4px;border-left:2px solid var(--green); text-align: left;}
+        .pix-copia-wrap{display:flex;flex-direction:column;gap:12px;margin: 0 16px 20px}
+        .pix-copia-input-container {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            padding: 4px;
+            transition: all 0.2s;
+        }
+        .pix-copia-input-container:focus-within { border-color: var(--green); box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.1); }
+        .pix-copia-input{flex:1;padding:12px 16px;border:none;border-radius:10px;font-size:13px;color:var(--muted);font-family: monospace;background:transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; outline: none;}
+        .pix-btn-copiar{background:var(--green);color:#fff;border:none;border-radius:10px;padding:12px 24px;font-size:14px;font-weight:800;font-family:inherit;white-space:nowrap;flex-shrink:0;transition:all .2s; box-shadow: 0 4px 12px rgba(22, 163, 74, 0.2);}
+        .pix-btn-copiar:active{background:#15803d; transform: scale(0.96);}
+        
+        /* Botão Abrir App - Estilo Apple/Moderno */
+        .btn-open-bank { background: #111; color: white; border: none; border-radius: 14px; padding: 18px; width: calc(100% - 32px); margin: 0 16px 24px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 12px; text-decoration: none; font-size: 15px; cursor: pointer; transition: all 0.2s; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .btn-open-bank:hover { background: #000; transform: translateY(-2px); box-shadow: 0 12px 24px rgba(0,0,0,0.15); }
+        .btn-open-bank:active { transform: scale(0.97); }
+
+        .pix-aguardando{display:flex;align-items:center;justify-content:center;gap:12px;padding:16px;background:#f0fdf4;border-radius:14px;margin: 0 16px 16px;font-size:14px;color:var(--green);font-weight:700; border: 1px solid #dcfce7;}
+        .pix-dot-loader{display:flex;gap:5px}
+        .pix-dot-loader span{width:8px;height:8px;border-radius:50%;background:var(--green);animation:dotpulse 1.2s infinite}
+        
+        .pix-info{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px; margin: 0 16px 24px; box-shadow: var(--shadow-sm);}
+        .pix-info-title { font-size: 14px; font-weight: 800; color: var(--ink); margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+        .pix-info div{font-size:13px;color:var(--muted);padding-left:12px;border-left:3px solid #f1f5f9; text-align: left; line-height: 1.5;}
+        .pix-info div.active { border-left-color: var(--green); color: var(--ink); font-weight: 600; }
 
         .security-bar {
             background: #f8fafc;
             border-bottom: 1px solid var(--border);
-            padding: 10px 16px;
+            padding: 12px 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
+            gap: 20px;
         }
         .security-item {
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 10px;
-            font-weight: 700;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 800;
             color: #64748b;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        .security-item i { color: #16a34a; }
+        .security-item i { color: #16a34a; font-size: 14px; }
 
         .trust-seals {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            padding: 20px 16px 40px;
-            opacity: 0.6;
+            gap: 24px;
+            padding: 24px 16px 48px;
+            opacity: 0.7;
         }
         .trust-seal {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
         }
-        .trust-seal i { font-size: 18px; color: #94a3b8; }
-        .trust-seal span { font-size: 8px; font-weight: 700; color: #94a3b8; text-transform: uppercase; }
+        .trust-seal i { font-size: 20px; color: #64748b; }
+        .trust-seal span { font-size: 9px; font-weight: 800; color: #64748b; text-transform: uppercase; }
 
         .guarantee-box {
-            background: #f0f9ff;
-            border: 1px solid #bae6fd;
-            border-radius: 12px;
-            padding: 14px;
+            background: #eff6ff;
+            border: 1px solid #dbeafe;
+            border-radius: 16px;
+            padding: 18px;
             margin: 0 16px 20px;
             display: flex;
-            gap: 12px;
+            gap: 16px;
+            align-items: center;
         }
         .guarantee-icon {
-            width: 32px;
-            height: 32px;
-            background: #e0f2fe;
-            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            background: #dbeafe;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #0369a1;
+            color: #1d4ed8;
             flex-shrink: 0;
+            font-size: 20px;
         }
-        .guarantee-content h4 { font-size: 12px; font-weight: 700; color: #0369a1; margin-bottom: 2px; }
-        .guarantee-content p { font-size: 11px; color: #0c4a6e; line-height: 1.4; }
+        .guarantee-content h4 { font-size: 14px; font-weight: 800; color: #1e3a8a; margin-bottom: 4px; }
+        .guarantee-content p { font-size: 12px; color: #1e40af; line-height: 1.5; }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
@@ -939,10 +969,9 @@
 
         <div class="pix-qr-wrap">
           <div class="pix-qr-logo">
-            <img src="data:image/webp;base64,UklGRi4EAABXRUJQVlA4WAoAAAAQAAAAYwAAYwAAQUxQSDsBAAABDzD/ERECciRJbiPw5JPKgDVlTYNyDPBkTeDzxAYqgmj0UBkQ0X8Hbts4knavVznxJ5rnHaW1/LBzVL4dsDd0kAwTZPdJcB+8APa7cF9Vr7xvWcAJghPsVpLTc4JlpbV64PScYBXejZ4TBCfYKSnA+wUx3JRW3UuOKrjkVX3Wu7SXK4W9vruwvpQ0xRnyD1ntRkiVVlP8hv0iSf7IM9+aZJVXR1gFF/nMrPLINxdgr+kU8U3KLElkndyYqlBkCKserbJvEC4Sr+avtJMFXou2WPJGtiChYTPRgKLoJhtqEHcwiGBEwfCCsfqBB6sQLEmwPsFi3bByVdIZeb+pXLf3qdOinG9qgLIPKhSUK6idL2RQ1UD2xj5t9G5Kq6reRlD1nGCzpYieE8yGTvSc4N6x8O34YecobfO8owEAVlA4IMwCAACQEgCdASpkAGQAPplCmUgkpaQjLxb8ALATCWRs8v+9/FqG1F7OLfunle1XWFN67xOeml5lPPY6JnqgN5mv0D8AMr/fk7v8z/bs865ZmUj3CkBWID3ym0U2nfJ+x2aGAWZ8tgCthFdo9+mHWAUlE5F5rHrS447wEn6PH6cwOTendP+haPRLMpCShzXcQoVEx3uEAL7MK5Z7Gx3gn7AAAP78XNBkPzl141BeM7Afunok939y5lO8YRyvxpvrzmdGJlR/sEghqiQDhVlruoR5OSrAjlkP0d1jS/FI1DgafJJpPxD/m67pZ1DZYNPdybpGXz/vB0F+/2J55+UzahGPdFRv4zU8GdDWz2Xy+4o815V9tFOHsxSjb6BeaHjBj+iOoAGSqp0wnKF6N5bjZ+8HFnwroupw0KzWDD9KA0Za06WmP5c7rG24QGuKSx1NEyDMgi6/avlKURedSxXaU97zyfBy312PGQoP75qSts9LNvSPVvbJHtI60NUASh85kNbR/sVk5jLApj/w6yr7+wa1zZ2TrkGjq49oyc2laSuySJ/B1lFkDh2j8AFD1NudIEiwrqhxgZ+iJ+U977QiMBOY9hZkdY0+SeZ8QDu7Lt2YWqsP4bsWG+vLqH6Abc8CM6OyoZiuG+RfgUUAStUOi0YM8M6E/KHirvW+PpFUpI0enLWnpwLAJ6DBsvFuW0Az4Z3yBeFcWOtpOkO8WEXg/+v+l//+8F3yHAK8lx6zOQuxIcWiWAhgpjTasRy/7WtDeTSnQ5LtlKMXAJ/VhTaa/FG75TItodOqxa1gDWTgyfmoOqJFkP05rXhymZtoujAG18jw+JsEN6NaJfizf1038VdXTv1Io04QHkb1w16A/B71Xyk2/D3i6lifRLo50pF/LKlsFOxfMYZvmvJ2s6HnA53788N1iB/um02o/ywoCYxGteeZhQVbZqD4AAAAAAAAAA==" style="width:32px;height:32px;object-fit:contain">
-            <div>
-              <div class="pix-title">Pague com PIX</div>
-              <div class="pix-sub">Escaneie o QR Code ou copie o código</div>
+            <div style="text-align: center; width: 100%;">
+                <div class="pix-title">Finalize seu Pagamento</div>
+                <div class="pix-sub">Use o QR Code abaixo para pagar instantaneamente</div>
             </div>
           </div>
           <div id="pixQrCode" class="pix-qr-img-container"></div>
@@ -952,8 +981,10 @@
         <div class="pix-divider"><span>ou copie o código abaixo</span></div>
 
         <div class="pix-copia-wrap">
-          <input class="pix-copia-input" id="pixCopiaCola" readonly type="text">
-          <button class="pix-btn-copiar" id="btnCopiarPix" onclick="copiarPix()">Copiar código</button>
+          <div class="pix-copia-input-container">
+              <input class="pix-copia-input" id="pixCopiaCola" readonly type="text">
+              <button class="pix-btn-copiar" id="btnCopiarPix" onclick="copiarPix()">Copiar</button>
+          </div>
         </div>
 
         <button class="btn-open-bank" onclick="abrirAppBanco()">
@@ -962,7 +993,7 @@
 
         <div class="pix-aguardando">
           <div class="pix-dot-loader"><span></span><span></span><span></span></div>
-          <span>Aguardando confirmação instantânea...</span>
+          <span>Aguardando confirmação do Pix...</span>
         </div>
 
         <div class="guarantee-box">
@@ -974,10 +1005,11 @@
         </div>
 
         <div class="pix-info">
-          <div>1. Abra o app do seu banco</div>
-          <div>2. Escolha pagar com PIX</div>
-          <div>3. Escaneie o QR Code ou cole o código</div>
-          <div>4. Pronto! Seu pedido será enviado hoje mesmo.</div>
+          <div class="pix-info-title"><i class="fas fa-info-circle"></i> Passo a passo para pagar:</div>
+          <div class="active">1. Copie o código Pix ou escaneie o QR Code.</div>
+          <div>2. Abra o aplicativo do seu banco de preferência.</div>
+          <div>3. Vá na seção Pix e escolha "Pix Copia e Cola" ou "Ler QR Code".</div>
+          <div>4. Cole o código ou aponte a câmera e confirme o pagamento.</div>
         </div>
 
         <div class="trust-seals">
@@ -1390,11 +1422,11 @@
 
           const btn = document.getElementById('btnCopiarPix');
           const originalText = btn.textContent;
-          btn.textContent = 'Copiado ✓';
+          btn.textContent = 'Copiado!';
           btn.style.background = 'var(--green)';
           
           setTimeout(() => {
-              btn.textContent = originalText;
+              btn.textContent = 'Copiar';
               btn.style.background = '';
           }, 2500);
         }
@@ -1402,7 +1434,6 @@
         function abrirAppBanco() {
             // Tenta abrir apps bancários ou informa o usuário
             alert('Código copiado! Escolha seu banco ao abrir o app e use a opção "Pix Copia e Cola".');
-            // Em dispositivos reais, poderíamos tentar abrir esquemas de URL de bancos populares
             window.location.href = "intent://#Intent;scheme=bank;package=com.nu.production;end"; 
         }
 
