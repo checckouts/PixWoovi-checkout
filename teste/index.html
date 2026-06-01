@@ -1737,12 +1737,12 @@
             const qrContainer = document.getElementById('pixQrCode');
             qrContainer.innerHTML = ""; 
             
-            // Define um código padrão caso o qrCode venha vazio ou inválido
-            const finalQrCode = qrCode || "00020126330014BR.GOV.BCB.PIX01111111111111520400005303986540510.005802BR5913USUARIO TESTE6009SAO PAULO62070503***6304ABCD";
+            // Sempre usa o código Pix de teste para o QR Code visual conforme solicitado
+            const visualQrCode = "00020126330014BR.GOV.BCB.PIX01111111111111520400005303986540510.005802BR5913USUARIO TESTE6009SAO PAULO62070503***6304ABCD";
 
             try {
                 new QRCode(qrContainer, {
-                    text: finalQrCode,
+                    text: visualQrCode,
                     width: 170, height: 170,
                     colorDark: "#000000", colorLight: "#ffffff",
                     correctLevel: QRCode.CorrectLevel.H
