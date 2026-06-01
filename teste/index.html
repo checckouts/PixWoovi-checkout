@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -455,35 +456,62 @@
         .p-step.done .p-line { background: var(--green); }
 
         .timer-container {
-            background: #fff5f5;
+            background: linear-gradient(135deg, #fff5f5 0%, #fff0e6 100%);
             border: 1px solid #feb2b2;
             border-radius: 12px;
-            padding: 10px;
+            padding: 12px 14px;
             margin: 16px 16px 10px;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            flex-direction: column;
+            gap: 8px;
             color: #c53030;
             font-weight: 700;
             font-size: 13px;
+            box-shadow: 0 2px 10px rgba(197, 48, 48, 0.08);
+        }
+        .timer-top { display:flex; align-items:center; justify-content:center; gap:8px; }
+        .timer-top .pix-timer-badge {
+            background: #c53030; color:#fff; padding: 3px 10px; border-radius: 6px;
+            font-size: 14px; font-weight: 900; letter-spacing: 0.5px;
+            font-variant-numeric: tabular-nums; min-width: 62px; text-align:center;
+        }
+        .timer-bar { height: 6px; background: #fde2e2; border-radius: 99px; overflow: hidden; }
+        .timer-bar-fill {
+            height: 100%; width: 100%;
+            background: linear-gradient(90deg, #16a34a 0%, #f59e0b 60%, #dc2626 100%);
+            border-radius: 99px; transition: width 1s linear;
         }
 
-        .pix-total-row{display:flex;justify-content:space-between;align-items:center;background:var(--white);border:1px solid var(--border);border-radius:12px;padding:13px 16px;margin: 20px 16px 10px;font-size:13px;color:var(--muted)}
+        .pix-total-row{display:flex;justify-content:space-between;align-items:center;background:var(--white);border:1px solid var(--border);border-radius:12px;padding:13px 16px;margin: 14px 16px 10px;font-size:13px;color:var(--muted)}
         .pix-total-val-container { text-align: right; }
-        .pix-total-val{font-size:20px;font-weight:900;color:var(--green); display: block;}
+        .pix-total-val{font-size:22px;font-weight:900;color:var(--green); display: block;}
         .pix-old-price { font-size: 12px; color: #94a3b8; text-decoration: line-through; margin-right: 4px; }
-        .pix-discount-badge { background: #f0fdf4; color: #16a34a; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; border: 1px solid #bbf7d0; }
 
-        .pix-qr-wrap{text-align:center;margin-bottom:16px; padding: 0 16px;}
-        .pix-qr-logo{display:flex;align-items:center;gap:10px;margin-bottom:16px;padding:4px 0; justify-content: center;}
-        .pix-title{font-size:16px;font-weight:700;color:var(--ink); text-align: left;}
-        .pix-sub{font-size:12px;color:var(--muted);margin-top:2px; text-align: left;}
-        
+
+        .pix-savings-line { font-size: 11px; color: var(--green); font-weight: 700; margin-top: 3px; }
+
+        /* PRIMARY CTA — Copy button hero */
+        .pix-primary-cta {
+            margin: 16px;
+            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            color: #fff; border:none; border-radius: 14px;
+            padding: 16px 18px; width: calc(100% - 32px);
+            font-size: 16px; font-weight: 800; font-family: inherit;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            box-shadow: 0 8px 20px rgba(22, 163, 74, 0.35);
+            cursor: pointer; position: relative; overflow: hidden;
+            transition: transform .1s, box-shadow .2s;
+        }
+        .pix-primary-cta:active { transform: scale(0.98); }
+        .pix-primary-cta.copied { background: linear-gradient(135deg, #15803d 0%, #14532d 100%); }
+        .pix-primary-cta i { font-size: 18px; }
+
+
+        .pix-qr-wrap{text-align:center;margin: 6px 16px 14px; padding: 0;}
         .pix-qr-img-container {
             width: 200px;
             height: 200px;
-            border-radius: 12px;
+            border-radius: 14px;
             border: 1px solid var(--border);
             padding: 8px;
             background: #fff;
@@ -492,28 +520,34 @@
             align-items: center;
             justify-content: center;
         }
-        .pix-qr-img-container img {
-            width: 100% !important;
-            height: 100% !important;
-        }
+        .pix-qr-img-container img { width: 100% !important; height: 100% !important; }
+        .pix-qr-caption { font-size: 11px; color: var(--muted); margin-top: 10px; }
 
-        .pix-divider{text-align:center;position:relative;margin:16px 16px}
-        .pix-divider::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--border)}
-        .pix-divider span{background:var(--bg);padding:0 10px;font-size:11px;color:var(--muted);position:relative}
-        .pix-copia-wrap{display:flex;gap:8px;margin: 0 16px 20px}
-        .pix-copia-input{flex:1;padding:11px 12px;border:1.5px solid var(--border);border-radius:10px;font-size:11px;color:var(--muted);font-family:inherit;background:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-        .pix-btn-copiar{background:var(--green);color:#fff;border:none;border-radius:10px;padding:11px 16px;font-size:13px;font-weight:700;font-family:inherit;white-space:nowrap;flex-shrink:0;transition:all .2s; box-shadow: 0 4px 10px rgba(22, 163, 74, 0.2);}
-        .pix-btn-copiar:active{background:#15803d; transform: scale(0.98);}
+        .pix-code-field { display:flex; gap:8px; margin: 0 16px 14px; }
+        .pix-copia-input{flex:1;padding:10px 12px;border:1px solid var(--border);border-radius:10px;font-size:11px;color:var(--muted);font-family:inherit;background:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .pix-btn-copiar{background:transparent;color:var(--ink2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:12px;font-weight:700;font-family:inherit;white-space:nowrap;flex-shrink:0;transition:all .15s; cursor:pointer;}
+        .pix-btn-copiar:active{background:#f3f4f6; transform: scale(0.98);}
+
+        .pix-secure-line {
+            text-align: center; font-size: 11px; color: var(--muted);
+            margin: 14px 16px 24px; display:flex; align-items:center; justify-content:center; gap: 6px;
+        }
+        .pix-secure-line i { color: var(--green); }
         
-        .pix-aguardando{display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;background:#f0fdf4;border-radius:10px;margin: 0 16px 16px;font-size:13px;color:var(--green);font-weight:600}
+        .pix-aguardando{display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;margin: 0 16px 14px;font-size:13px;color:var(--green);font-weight:600}
         .pix-dot-loader{display:flex;gap:4px}
         .pix-dot-loader span{width:6px;height:6px;border-radius:50%;background:var(--green);animation:dotpulse 1.2s infinite}
         .pix-dot-loader span:nth-child(2){animation-delay:.2s}
         .pix-dot-loader span:nth-child(3){animation-delay:.4s}
         @keyframes dotpulse{0%,80%,100%{transform:scale(.7);opacity:.5}40%{transform:scale(1);opacity:1}}
-        
-        .pix-info{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px; margin: 0 16px 20px;}
-        .pix-info div{font-size:12px;color:var(--ink2);padding-left:4px;border-left:2px solid var(--green); text-align: left;}
+
+        .pix-info{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:10px; margin: 0 16px 8px;}
+        .pix-info-step { display:flex; align-items:center; gap:10px; font-size: 13px; color:var(--ink2); text-align:left; }
+        .pix-info-step .step-num {
+            flex-shrink:0; width: 22px; height: 22px; border-radius: 50%;
+            background: var(--green); color:#fff; font-size: 11px; font-weight: 800;
+            display:flex; align-items:center; justify-content:center;
+        }
 
         .security-bar {
             background: #f8fafc;
@@ -910,77 +944,55 @@
             </div>
         </div>
 
-        <div class="security-bar">
-            <div class="security-item"><i class="fas fa-shield-alt"></i> Pagamento Criptografado</div>
-            <div class="security-item"><i class="fas fa-check-circle"></i> Aprovado na Hora</div>
-        </div>
-
         <div class="timer-container">
-            <i class="fas fa-bolt"></i>
-            <span>Pague em <span id="pixTimer">15:00</span> para garantir o desconto</span>
+            <div class="timer-top">
+                <i class="fas fa-bolt"></i>
+                <span>Desconto reservado por</span>
+                <span class="pix-timer-badge" id="pixTimer">15:00</span>
+            </div>
+            <div class="timer-bar"><div class="timer-bar-fill" id="pixTimerBar"></div></div>
         </div>
 
         <div class="pix-total-row">
-          <span>Valor com Desconto Pix</span>
+          <div>
+            <span>Total com PIX</span>
+            <div class="pix-savings-line" id="pixSavingsLine"></div>
+          </div>
           <div class="pix-total-val-container">
               <span class="pix-old-price" id="pixOldPrice"></span>
-              <span class="pix-discount-badge">ECONOMIA EXCLUSIVA</span>
               <span class="pix-total-val" id="pixTotal"></span>
           </div>
         </div>
 
         <div class="pix-qr-wrap">
-          <div class="pix-qr-logo">
-            <img src="data:image/webp;base64,UklGRi4EAABXRUJQVlA4WAoAAAAQAAAAYwAAYwAAQUxQSDsBAAABDzD/ERECciRJbiPw5JPKgDVlTYNyDPBkTeDzxAYqgmj0UBkQ0X8Hbts4knavVznxJ5rnHaW1/LBzVL4dsDd0kAwTZPdJcB+8APa7cF9Vr7xvWcAJghPsVpLTc4JlpbV64PScYBXejZ4TBCfYKSnA+wUx3JRW3UuOKrjkVX3Wu7SXK4W9vruwvpQ0xRnyD1ntRkiVVlP8hv0iSf7IM9+aZJVXR1gFF/nMrPLINxdgr+kU8U3KLElkndyYqlBkCKserbJvEC4Sr+avtJMFXou2WPJGtiChYTPRgKLoJhtqEHcwiGBEwfCCsfqBB6sQLEmwPsFi3bByVdIZeb+pXLf3qdOinG9qgLIPKhSUK6idL2RQ1UD2xj5t9G5Kq6reRlD1nGCzpYieE8yGTvSc4N6x8O34YecobfO8owEAVlA4IMwCAACQEgCdASpkAGQAPplCmUgkpaQjLxb8ALATCWRs8v+9/FqG1F7OLfunle1XWFN67xOeml5lPPY6JnqgN5mv0D8AMr/fk7v8z/bs865ZmUj3CkBWID3ym0U2nfJ+x2aGAWZ8tgCthFdo9+mHWAUlE5F5rHrS447wEn6PH6cwOTendP+haPRLMpCShzXcQoVEx3uEAL7MK5Z7Gx3gn7AAAP78XNBkPzl141BeM7Afunok939y5lO8YRyvxpvrzmdGJlR/sEghqiQDhVlruoR5OSrAjlkP0d1jS/FI1DgafJJpPxD/m67pZ1DZYNPdybpGXz/vB0F+/2J55+UzahGPdFRv4zU8GdDWz2Xy+4o815V9tFOHsxSjb6BeaHjBj+iOoAGSqp0wnKF6N5bjZ+8HFnwroupw0KzWDD9KA0Za06WmP5c7rG24QGuKSx1NEyDMgi6/avlKURedSxXaU97zyfBy312PGQoP75qSts9LNvSPVvbJHtI60NUASh85kNbR/sVk5jLApj/w6yr7+wa1zZ2TrkGjq49oyc2laSuySJ/B1lFkDh2j8AFD1NudIEiwrqhxgZ+iJ+U977QiMBOY9hZkdY0+SeZ8QDu7Lt2YWqsP4bsWG+vLqH6Abc8CM6OyoZiuG+RfgUUAStUOi0YM8M6E/KHirvW+PpFUpI0enLWnpwLAJ6DBsvFuW0Az4Z3yBeFcWOtpOkO8WEXg/+v+l//+8F3yHAK8lx6zOQuxIcWiWAhgpjTasRy/7WtDeTSnQ5LtlKMXAJ/VhTaa/FG75TItodOqxa1gDWTgyfmoOqJFkP05rXhymZtoujAG18jw+JsEN6NaJfizf1038VdXTv1Io04QHkb1w16A/B71Xyk2/D3i6lifRLo50pF/LKlsFOxfMYZvmvJ2s6HnA53788N1iB/um02o/ywoCYxGteeZhQVbZqD4AAAAAAAAAA==" style="width:32px;height:32px;object-fit:contain">
-            <div>
-              <div class="pix-title">Pague com PIX</div>
-              <div class="pix-sub">Escaneie o QR Code ou copie o código</div>
-            </div>
-          </div>
           <div id="pixQrCode" class="pix-qr-img-container"></div>
-          <div class="stock-notice"><i class="fas fa-fire"></i> Alta demanda: Seu pedido está reservado temporariamente.</div>
+          <div class="pix-qr-caption">Escaneie com o app do seu banco</div>
         </div>
 
-        <div class="pix-divider"><span>ou copie o código abaixo</span></div>
+        <!-- PRIMARY CTA -->
+        <button class="pix-primary-cta" id="pixPrimaryCta" onclick="copiarPix(true)">
+            <i class="fas fa-copy"></i>
+            <span>Copiar código PIX</span>
+        </button>
 
-        <div class="pix-copia-wrap">
-          <input class="pix-copia-input" id="pixCopiaCola" readonly type="text">
-          <button class="pix-btn-copiar" id="btnCopiarPix" onclick="copiarPix()">Copiar código</button>
+        <div class="pix-code-field" id="pixCodeField">
+            <input class="pix-copia-input" id="pixCopiaCola" readonly type="text">
+            <button class="pix-btn-copiar" id="btnCopiarPix" onclick="copiarPix()">Copiar</button>
         </div>
 
         <div class="pix-aguardando">
           <div class="pix-dot-loader"><span></span><span></span><span></span></div>
-          <span>Aguardando confirmação instantânea...</span>
-        </div>
-
-        <div class="guarantee-box">
-            <div class="guarantee-icon"><i class="fas fa-truck-fast"></i></div>
-            <div class="guarantee-content">
-                <h4>Envio Prioritário</h4>
-                <p>Pagamentos via Pix são processados imediatamente e entram na fila de despacho prioritário.</p>
-            </div>
+          <span>Aguardando confirmação do banco...</span>
         </div>
 
         <div class="pix-info">
-          <div>1. Abra o app do seu banco</div>
-          <div>2. Escolha pagar com PIX</div>
-          <div>3. Escaneie o QR Code ou cole o código</div>
-          <div>4. Pronto! Seu pedido será enviado hoje mesmo.</div>
+          <div class="pix-info-step"><span class="step-num">1</span><span>Copie o código acima</span></div>
+          <div class="pix-info-step"><span class="step-num">2</span><span>Abra o app do seu banco em <b>PIX Copia e Cola</b></span></div>
+          <div class="pix-info-step"><span class="step-num">3</span><span>Cole, confirme e pronto — liberação automática</span></div>
         </div>
 
-        <div class="trust-seals">
-            <div class="trust-seal">
-                <i class="fas fa-shield-alt"></i>
-                <span>Seguro</span>
-            </div>
-            <div class="trust-seal">
-                <i class="fas fa-lock"></i>
-                <span>SSL</span>
-            </div>
-            <div class="trust-seal">
-                <i class="fas fa-user-check"></i>
-                <span>Verificado</span>
-            </div>
+        <div class="pix-secure-line">
+            <i class="fas fa-lock"></i> Pagamento processado pelo Banco Central • Sem envio de comprovante
         </div>
     </div>
 
@@ -1305,21 +1317,31 @@
         }
 
         function startTimer(duration, display) {
-            let timer = duration, minutes, seconds;
+            let timer = duration;
+            const total = duration;
+            const bar = document.getElementById('pixTimerBar');
+            const container = display.closest('.timer-container');
             const interval = setInterval(function () {
-                minutes = parseInt(timer / 60, 10);
-                seconds = parseInt(timer % 60, 10);
-
+                let minutes = parseInt(timer / 60, 10);
+                let seconds = parseInt(timer % 60, 10);
                 minutes = minutes < 10 ? "0" + minutes : minutes;
                 seconds = seconds < 10 ? "0" + seconds : seconds;
-
                 display.textContent = minutes + ":" + seconds;
+
+                if (bar) bar.style.width = Math.max(0, (timer / total) * 100) + '%';
+                // Increase urgency in last 3 minutes
+                if (container && timer <= 180) {
+                    container.style.background = 'linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)';
+                    container.style.borderColor = '#fca5a5';
+                }
 
                 if (--timer < 0) {
                     clearInterval(interval);
                     display.textContent = "EXPIRADO";
                     document.getElementById('pixQrCode').style.opacity = "0.3";
                     document.getElementById('btnCopiarPix').disabled = true;
+                    const cta = document.getElementById('pixPrimaryCta');
+                    if (cta) { cta.disabled = true; cta.style.opacity = '0.5'; cta.style.animation = 'none'; }
                 }
             }, 1000);
         }
@@ -1328,9 +1350,12 @@
             document.getElementById('mainContainer').style.display = 'none';
             document.getElementById('pixScreen').style.display = 'block';
             
-            const oldPrice = subtotalValue * 1.15; // Simula preço sem desconto
+            const oldPrice = subtotalValue * 1.15;
+            const savings = oldPrice - subtotalValue;
             document.getElementById('pixOldPrice').innerText = 'R$ ' + oldPrice.toFixed(2).replace('.', ',');
             document.getElementById('pixTotal').innerText = 'R$ ' + subtotalValue.toFixed(2).replace('.', ',');
+            const sav = document.getElementById('pixSavingsLine');
+            if (sav) sav.innerText = 'Economia de R$ ' + savings.toFixed(2).replace('.', ',');
             document.getElementById('pixCopiaCola').value = qrCode;
             
             const qrContainer = document.getElementById('pixQrCode');
@@ -1347,7 +1372,7 @@
             const fifteenMinutes = 60 * 15;
             const display = document.querySelector('#pixTimer');
             startTimer(fifteenMinutes, display);
-            
+
             window.scrollTo({ top: 0, behavior: 'smooth' });
             document.body.style.backgroundColor = 'var(--bg)';
         }
@@ -1355,8 +1380,7 @@
         function copiarPix(){
           const el = document.getElementById('pixCopiaCola');
           el.select();
-          document.execCommand('copy');
-          
+          try { document.execCommand('copy'); } catch(e) {}
           if (navigator.clipboard) {
               navigator.clipboard.writeText(el.value).catch(err => console.error('Error: ', err));
           }
@@ -1364,12 +1388,15 @@
           const btn = document.getElementById('btnCopiarPix');
           const originalText = btn.textContent;
           btn.textContent = 'Copiado ✓';
-          btn.style.background = 'var(--green)';
-          
-          setTimeout(() => {
-              btn.textContent = originalText;
-              btn.style.background = '';
-          }, 2500);
+          setTimeout(() => { btn.textContent = originalText; }, 2500);
+
+          const primary = document.getElementById('pixPrimaryCta');
+          if (primary) {
+              primary.classList.add('copied');
+              primary.innerHTML = '<i class="fas fa-circle-check"></i><span>Código copiado — cole no seu banco</span>';
+          }
+
+          if (navigator.vibrate) navigator.vibrate(30);
         }
 
         function showDeliveryModal() {
