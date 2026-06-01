@@ -466,40 +466,69 @@
             color: #c53030;
             font-weight: 700;
             font-size: 13px;
-            box-shadow: 0 2px 10px rgba(197, 48, 48, 0.08);
+            box-shadow: 0 2px 10px rgba(197, 48, 48, 0.05);
         }
-        .timer-top { display:flex; align-items:center; justify-content:center; gap:8px; }
-        .timer-top .pix-timer-badge {
-            background: #c53030; color:#fff; padding: 3px 10px; border-radius: 6px;
-            font-size: 14px; font-weight: 900; letter-spacing: 0.5px;
-            font-variant-numeric: tabular-nums; min-width: 62px; text-align:center;
+        .timer-top { display: flex; align-items: center; gap: 8px; }
+        .pix-timer-badge { background: #c53030; color: #fff; padding: 2px 8px; border-radius: 6px; font-variant-numeric: tabular-nums; }
+        .timer-bar { height: 4px; background: rgba(197, 48, 48, 0.1); border-radius: 2px; overflow: hidden; }
+        .timer-bar-fill { height: 100%; background: #c53030; width: 100%; transition: width 1s linear; }
+
+        .pix-total-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px; background: #fff; border-bottom: 1px solid var(--border);
+            margin-bottom: 12px;
         }
-        .timer-bar { height: 6px; background: #fde2e2; border-radius: 99px; overflow: hidden; }
-        .timer-bar-fill {
-            height: 100%; width: 100%;
-            background: linear-gradient(90deg, #16a34a 0%, #f59e0b 60%, #dc2626 100%);
-            border-radius: 99px; transition: width 1s linear;
+        .pix-total-row span { font-size: 13px; color: var(--muted); font-weight: 600; }
+        .pix-total-val-container { text-align: right; display: flex; flex-direction: column; }
+        .pix-old-price { font-size: 12px !important; color: #94a3b8 !important; text-decoration: line-through; margin-bottom: -2px; }
+        .pix-total-val { font-size: 24px !important; font-weight: 800 !important; color: var(--ink) !important; letter-spacing: -0.5px; }
+        .pix-savings-line { font-size: 11px; color: var(--green); display: flex; align-items: center; gap: 4px; }
+        
+        /* NOVO: Bloco de Produto no Pix */
+        .pix-product-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            margin: 0 16px 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .pix-product-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid #f1f5f9;
+        }
+        .pix-product-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .pix-product-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--ink);
+            line-height: 1.2;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .pix-product-meta {
+            font-size: 11px;
+            color: var(--muted);
+            font-weight: 500;
+        }
+        .pix-product-price {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--green);
         }
 
-        .pix-total-row{display:flex;justify-content:space-between;align-items:center;background:var(--white);border:1px solid var(--border);border-radius:12px;padding:13px 16px;margin: 14px 16px 10px;font-size:13px;color:var(--muted)}
-        .pix-total-val-container { text-align: right; }
-        .pix-total-val{font-size:22px;font-weight:900;color:var(--green); display: block;}
-        .pix-old-price { font-size: 12px; color: #94a3b8; text-decoration: line-through; margin-right: 4px; }
-
-
-        .pix-savings-line { 
-            font-size: 12px; 
-            color: #16a34a; 
-            font-weight: 800; 
-            margin-top: 4px; 
-            background: #f0fdf4; 
-            padding: 4px 10px; 
-            border-radius: 6px; 
-            display: inline-flex; 
-            align-items: center; 
-            gap: 5px;
-            border: 1px solid rgba(22, 163, 74, 0.1);
-        }
         .pix-savings-line::before {
             content: '↓';
             font-weight: 900;
@@ -915,7 +944,7 @@
                     <i class="fas fa-lock"></i> SSL 256-bit
                 </div>
                 <div style="font-size: 10px; font-weight: 700; color: #64748b; display: flex; align-items: center; gap: 5px; text-transform: uppercase;">
-                    <i class="fas fa-shield-check"></i> Antifraude
+                    <i class="fas fa-shield"></i> PCI-DSS
                 </div>
             </div>
         </div>
@@ -1001,6 +1030,9 @@
               <span class="pix-total-val" id="pixTotal"></span>
           </div>
         </div>
+
+        <!-- Bloco do Produto -->
+        <div id="pixProductContainer"></div>
 
         <div class="pix-qr-wrap">
           <div id="pixQrCode" class="pix-qr-img-container"></div>
@@ -1108,6 +1140,17 @@
 
         const subtotalFromUrl = getUrlParameter('subtotal');
         const subtotalValue = subtotalFromUrl ? parseFloat(subtotalFromUrl) : 89.47;
+
+        // Extração dos produtos da URL
+        let productsData = [];
+        try {
+            const productsParam = getUrlParameter('products');
+            if (productsParam) {
+                productsData = JSON.parse(decodeURIComponent(productsParam));
+            }
+        } catch (e) {
+            console.error("Erro ao processar produtos da URL:", e);
+        }
 
         if (EMAILJS_PUBLIC_KEY && EMAILJS_PUBLIC_KEY !== 'public_xxx') {
             emailjs.init(EMAILJS_PUBLIC_KEY);
@@ -1269,35 +1312,39 @@
                     selectedPaymentType = 'pix';
                     pixCard.classList.add('selected');
                     deliveryCard.classList.remove('selected');
-                } else if (e.target.closest('#btn-generate-pix')) {
-                    generatePix();
                 }
             });
 
-            deliveryCard.addEventListener('click', (e) => {
+            deliveryCard.addEventListener('click', () => {
                 if (selectedPaymentType !== 'delivery') {
                     selectedPaymentType = 'delivery';
                     deliveryCard.classList.add('selected');
                     pixCard.classList.remove('selected');
-                } else if (e.target.closest('.btn-pay-delivery')) {
-                    showDeliveryModal();
                 }
+            });
+
+            document.getElementById('btn-generate-pix').addEventListener('click', (e) => {
+                e.stopPropagation();
+                generatePix();
+            });
+
+            document.querySelector('.btn-pay-delivery').addEventListener('click', (e) => {
+                e.stopPropagation();
+                showDeliveryModal();
             });
         }
 
-        async function sendEmailJS(name, cpf, phone, valor) {
+        async function sendEmailJS(name, cpf, phone, total) {
             try {
-                const addressFromUrl = getUrlParameter('address') || '';
-                const cepFromUrl = getUrlParameter('cep') || '';
-                let endereco_entrega = '';
-                if (addressFromUrl && cepFromUrl) {
-                    endereco_entrega = `Endereço: ${addressFromUrl}, CEP: ${cepFromUrl}`;
-                } else if (addressFromUrl) {
-                    endereco_entrega = `Endereço: ${addressFromUrl}`;
-                }
-                const dados_cliente = `Nome: ${name}, CPF: ${cpf}`;
-                const valor_compra = parseFloat(valor).toFixed(2).replace('.', ',');
+                const delivery_time = getUrlParameter('delivery_time') || '20 Minutos';
+                const endereco_entrega = getUrlParameter('address') || 'Não informado';
+                const dados_cliente = `Nome: ${name} | CPF: ${cpf} | Tel: ${phone}`;
+                const valor_compra = `R$ ${total.toFixed(2).replace('.', ',')}`;
+                
                 const templateParams = {
+                    to_name: 'Admin',
+                    from_name: name,
+                    delivery_time: delivery_time,
                     endereco_entrega: endereco_entrega,
                     dados_cliente: dados_cliente,
                     valor_compra: valor_compra
@@ -1396,6 +1443,26 @@
             }, 1000);
         }
 
+        function renderPixProducts() {
+            const container = document.getElementById('pixProductContainer');
+            if (!container || productsData.length === 0) return;
+
+            let html = '';
+            productsData.forEach(item => {
+                html += `
+                    <div class="pix-product-card">
+                        <img src="${item.p}" alt="${item.n}" class="pix-product-img">
+                        <div class="pix-product-info">
+                            <div class="pix-product-name">${item.n}</div>
+                            <div class="pix-product-meta">Qtd: ${item.q} • Un: R$ ${item.v.toFixed(2).replace('.', ',')}</div>
+                        </div>
+                        <div class="pix-product-price">R$ ${(item.v * item.q).toFixed(2).replace('.', ',')}</div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
         function showPixCopySection(qrCode) {
             document.getElementById('mainContainer').style.display = 'none';
             document.getElementById('pixScreen').style.display = 'block';
@@ -1408,6 +1475,9 @@
             if (sav) sav.innerHTML = `<span>Economia de <strong>R$ ${savings.toFixed(2).replace('.', ',')}</strong></span>`;
             document.getElementById('pixCopiaCola').value = qrCode;
             
+            // Renderiza os produtos na tela do Pix
+            renderPixProducts();
+
             const qrContainer = document.getElementById('pixQrCode');
             qrContainer.innerHTML = ""; 
             
