@@ -1538,6 +1538,11 @@
                     selectedPaymentType = 'pix';
                     pixCard.classList.add('selected');
                     deliveryCard.classList.remove('selected');
+                    
+                    // Centraliza o bloco na tela ao abrir
+                    setTimeout(() => {
+                        pixCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 100);
                 }
             });
 
