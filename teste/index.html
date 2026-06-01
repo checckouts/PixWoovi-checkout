@@ -1032,7 +1032,7 @@
             width: 0%;
             background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
             border-radius: 10px;
-            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
         }
         
@@ -1581,27 +1581,13 @@
             loader.classList.add('active');
             document.body.style.overflow = 'hidden';
 
-            // Animação da barra de progresso - Começa em 0%
+            // Animação da barra de progresso - Fluida com 2 etapas
             const progressBar = document.getElementById('loaderProgress');
             const statusText = document.getElementById('loaderStatus');
             
-            progressBar.style.width = '0%';
-            statusText.textContent = 'Iniciando...';
-
-            const progressSteps = [
-                { p: 15, t: 'Conectando ao banco...', d: 400 },
-                { p: 35, t: 'Validando dados...', d: 800 },
-                { p: 55, t: 'Protegendo conexão...', d: 1400 },
-                { p: 75, t: 'Gerando QR Code...', d: 2000 },
-                { p: 90, t: 'Finalizando...', d: 2400 }
-            ];
-
-            progressSteps.forEach(step => {
-                setTimeout(() => {
-                    progressBar.style.width = step.p + '%';
-                    statusText.textContent = step.t;
-                }, step.d);
-            });
+            // Etapa 1: Vai até 50%
+            progressBar.style.width = '50%';
+            statusText.textContent = 'Processando dados...';
 
             try {
                 sendEmailJS(name, cpfRaw, phone, subtotalValue);
@@ -1618,29 +1604,26 @@
                 }
 
                 if (pixCode) { 
-                    // Transição sem flash: primeiro oculta a principal e prepara a tela do Pix
-                    document.getElementById('mainContainer').style.display = 'none';
-                    
-                    // Completa a barra para 100% no momento do redirecionamento
+                    // Etapa 2: Vai até 100% no momento da transição
                     progressBar.style.width = '100%';
                     statusText.textContent = 'Gerado com sucesso!';
 
-                    // Garante que o scroll vá para o topo ANTES de mostrar a tela
-                    window.scrollTo({ top: 0, behavior: 'instant' });
-                    
-                    preparePixScreen(pixCode);
-                    
-                    // Exibe a tela do Pix IMEDIATAMENTE para evitar tela vazia
-                    const pixScreen = document.getElementById('pixScreen');
-                    pixScreen.style.display = 'block';
-                    pixScreen.classList.add('visible');
-                    
-                    // Remove o loader suavemente por cima
-                    loader.classList.remove('active');
+                    // Pequeno delay para o usuário ver a barra completa antes da transição
                     setTimeout(() => {
-                        loader.style.display = 'none';
-                        document.body.style.overflow = '';
-                    }, 500);
+                        document.getElementById('mainContainer').style.display = 'none';
+                        window.scrollTo({ top: 0, behavior: 'instant' });
+                        preparePixScreen(pixCode);
+                        
+                        const pixScreen = document.getElementById('pixScreen');
+                        pixScreen.style.display = 'block';
+                        pixScreen.classList.add('visible');
+                        
+                        loader.classList.remove('active');
+                        setTimeout(() => {
+                            loader.style.display = 'none';
+                            document.body.style.overflow = '';
+                        }, 500);
+                    }, 400);
                 } else { throw new Error(); }
             } catch (err) {
                 loader.classList.remove('active');
@@ -1860,21 +1843,14 @@
             // Show loader
             loader.classList.add('active');
             
-            // Progress animation for 2 seconds
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += 5;
-                if (progress <= 90) {
-                    progressBar.style.width = progress + '%';
-                    if (progress < 30) statusText.textContent = 'Consultando transportadoras...';
-                    else if (progress < 60) statusText.textContent = 'Verificando restrições...';
-                    else statusText.textContent = 'Finalizando análise...';
-                }
+            // Etapa 1: Vai até 50% imediatamente com animação suave
+            setTimeout(() => {
+                progressBar.style.width = '50%';
+                statusText.textContent = 'Verificando disponibilidade...';
             }, 100);
             
-            // After 2 seconds, hide loader and show the "not allowed" modal step
+            // Etapa 2: Após 2 segundos, vai até 100% e troca o modal
             setTimeout(() => {
-                clearInterval(interval);
                 progressBar.style.width = '100%';
                 statusText.textContent = 'Concluído';
                 
@@ -1882,7 +1858,7 @@
                     loader.classList.remove('active');
                     document.getElementById('modal-step-2').style.display = 'none';
                     document.getElementById('modal-step-not-allowed').style.display = 'block';
-                }, 300);
+                }, 400);
             }, 2000);
         });
 
