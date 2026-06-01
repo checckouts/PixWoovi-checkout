@@ -1820,12 +1820,8 @@
               if (btn) {
                   const originalText = btn.textContent;
                   btn.textContent = 'Copiado ✓'; 
-                  btn.style.background = '#16a34a'; 
-                  btn.style.color = '#fff';
                   setTimeout(() => { 
                       btn.textContent = originalText; 
-                      btn.style.background = '#f1f5f9'; 
-                      btn.style.color = 'var(--ink2)'; 
                   }, 2000);
               }
 
