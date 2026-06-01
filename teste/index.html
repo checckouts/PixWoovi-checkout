@@ -369,6 +369,25 @@
             box-shadow: 0 0 0 4px rgba(0, 85, 255, 0.1);
         }
 
+        .pix-error-msg {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            background: #fff1f2;
+            color: #e11d48;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid #fecdd3;
+            margin-top: 5px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .pix-error-msg.visible {
+            display: flex;
+        }
+
         .payment-action-btn {
             background: var(--primary);
             color: white;
@@ -1019,20 +1038,20 @@
         }
 
         .loader-progress-bar {
-            height: 8px;
+            height: 10px;
             background: #f1f5f9;
-            border-radius: 10px;
+            border-radius: 12px;
             overflow: hidden;
             position: relative;
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
         }
 
         .loader-progress-fill {
             height: 100%;
             width: 0%;
             background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
-            border-radius: 10px;
-            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 12px;
+            transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);
             position: relative;
         }
         
@@ -1040,8 +1059,8 @@
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            animation: loaderShine 1.5s infinite;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: loaderShine 1.8s infinite;
         }
         
         @keyframes loaderShine {
@@ -1052,12 +1071,12 @@
         .loader-status-text {
             font-size: 0.85rem;
             color: var(--primary);
-            font-weight: 700;
-            margin-top: 12px;
+            font-weight: 800;
+            margin-top: 14px;
             display: block;
             min-height: 1.2em;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
         }
 
         .loader-trust {
@@ -1567,6 +1586,8 @@
             const cpf = cpfRaw.replace(/\D/g, '');
             const errorEl = document.getElementById('pix-error-msg');
             const errorText = document.getElementById('pix-error-text');
+            
+            // Garantir que o erro esteja oculto antes de validar
             errorEl.classList.remove('visible');
 
             if (name.length < 3) { errorText.textContent = 'Informe seu nome completo.'; errorEl.classList.add('visible'); return; }
