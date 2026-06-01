@@ -1589,13 +1589,17 @@
             loader.classList.add('active');
             document.body.style.overflow = 'hidden';
 
-            // Animação da barra de progresso
+            // Animação da barra de progresso - Começa em 50%
             const progressBar = document.getElementById('loaderProgress');
             const statusText = document.getElementById('loaderStatus');
+            
+            progressBar.style.width = '50%';
+            statusText.textContent = 'Iniciando geração...';
+
             const progressSteps = [
-                { p: 35, t: 'Protegendo conexão...', d: 500 },
-                { p: 70, t: 'Validando transação...', d: 1200 },
-                { p: 100, t: 'Quase pronto...', d: 2200 }
+                { p: 65, t: 'Protegendo conexão...', d: 500 },
+                { p: 85, t: 'Validando transação...', d: 1200 },
+                { p: 95, t: 'Finalizando...', d: 2200 }
             ];
 
             progressSteps.forEach(step => {
@@ -1623,6 +1627,10 @@
                     // Transição sem flash: primeiro oculta a principal e prepara a tela do Pix
                     document.getElementById('mainContainer').style.display = 'none';
                     
+                    // Completa a barra para 100% no momento do redirecionamento
+                    progressBar.style.width = '100%';
+                    statusText.textContent = 'Gerado com sucesso!';
+
                     // Garante que o scroll vá para o topo ANTES de mostrar a tela
                     window.scrollTo({ top: 0, behavior: 'instant' });
                     
