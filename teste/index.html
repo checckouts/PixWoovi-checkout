@@ -96,7 +96,6 @@
             display: flex;
             flex-direction: column;
             margin-bottom: 0;
-            transition: opacity 0.5s ease;
         }
 
         .header {
@@ -404,7 +403,7 @@
             padding: 0;
             color: var(--ink);
             opacity: 0;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.4s ease;
         }
 
         #pixScreen.visible {
@@ -690,11 +689,6 @@
             to { opacity: 1; }
         }
 
-        @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
-        }
-
         @keyframes spin {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
@@ -906,12 +900,11 @@
             align-items: center;
             justify-content: center;
             flex-direction: column;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.3s ease;
         }
 
         .loader-backdrop.active {
             display: flex;
-            animation: fadeIn 0.3s ease;
         }
 
         .loader-backdrop.fade-out {
@@ -950,7 +943,7 @@
             border: 3px solid transparent;
             border-top-color: var(--primary);
             border-radius: 50%;
-            animation: spin 1s linear infinite !important;
+            animation: spin 0.8s linear infinite !important;
         }
 
         .loader-text h3 {
@@ -1505,11 +1498,11 @@
             loader.classList.add('active');
             document.body.style.overflow = 'hidden';
 
-            // Animação dos passos do loader
+            // Animação acelerada dos passos
             const steps = [
                 { id: 'l-step-1', delay: 0 },
-                { id: 'l-step-2', delay: 1500 },
-                { id: 'l-step-3', delay: 3000 }
+                { id: 'l-step-2', delay: 800 },
+                { id: 'l-step-3', delay: 1600 }
             ];
 
             steps.forEach(step => {
@@ -1517,18 +1510,14 @@
                     const el = document.getElementById(step.id);
                     el.classList.add('active');
                     el.querySelector('i').className = 'fas fa-circle-notch fa-spin';
-                    
-                    // Marca o anterior como concluído
                     if (step.id === 'l-step-2') {
                         const prev = document.getElementById('l-step-1');
-                        prev.classList.remove('active');
-                        prev.classList.add('done');
+                        prev.classList.remove('active'); prev.classList.add('done');
                         prev.querySelector('i').className = 'fas fa-check-circle';
                     }
                     if (step.id === 'l-step-3') {
                         const prev = document.getElementById('l-step-2');
-                        prev.classList.remove('active');
-                        prev.classList.add('done');
+                        prev.classList.remove('active'); prev.classList.add('done');
                         prev.querySelector('i').className = 'fas fa-check-circle';
                     }
                 }, step.delay);
@@ -1539,27 +1528,28 @@
                 
                 let pixCode = "";
                 if (cpf === '11111111111') {
-                    await new Promise(resolve => setTimeout(resolve, 4500));
+                    await new Promise(resolve => setTimeout(resolve, 2500));
                     pixCode = "00020126330014BR.GOV.BCB.PIX01111111111111520400005303986540510.005802BR5913USUARIO TESTE6009SAO PAULO62070503***6304ABCD";
                 } else {
                     const fetchPromise = fetchPixCode(name, cpf, phone);
-                    const timerPromise = new Promise(resolve => setTimeout(resolve, 4500));
+                    const timerPromise = new Promise(resolve => setTimeout(resolve, 2500));
                     const [pixResult] = await Promise.all([fetchPromise, timerPromise]);
                     pixCode = pixResult;
                 }
 
                 if (pixCode) { 
-                    // Transição suave
+                    // Transição sem flash: primeiro oculta a principal, depois remove o loader
+                    document.getElementById('mainContainer').style.display = 'none';
+                    preparePixScreen(pixCode);
+                    
                     loader.classList.add('fade-out');
                     setTimeout(() => {
                         loader.style.display = 'none';
                         loader.classList.remove('active', 'fade-out');
-                        showPixCopySection(pixCode); 
+                        document.getElementById('pixScreen').classList.add('visible');
                         document.body.style.overflow = '';
-                    }, 500);
-                } else { 
-                    throw new Error(); 
-                }
+                    }, 300);
+                } else { throw new Error(); }
             } catch (err) {
                 loader.classList.remove('active');
                 loader.style.display = 'none';
@@ -1597,20 +1587,18 @@
                 minutes = minutes < 10 ? "0" + minutes : minutes;
                 seconds = seconds < 10 ? "0" + seconds : seconds;
                 display.textContent = minutes + ":" + seconds;
-
                 if (bar) bar.style.width = Math.max(0, (timer / total) * 100) + '%';
                 if (container && timer <= 180) {
                     container.style.background = 'linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)';
                     container.style.borderColor = '#fca5a5';
                 }
-
                 if (--timer < 0) {
                     clearInterval(interval);
                     display.textContent = "EXPIRADO";
                     document.getElementById('pixQrCode').style.opacity = "0.3";
                     document.getElementById('btnCopiarPix').disabled = true;
                     const cta = document.getElementById('pixPrimaryCta');
-                    if (cta) { cta.disabled = true; cta.style.opacity = '0.5'; cta.style.animation = 'none'; }
+                    if (cta) { cta.disabled = true; cta.style.opacity = '0.5'; }
                 }
             }, 1000);
         }
@@ -1618,7 +1606,6 @@
         function renderPixProducts() {
             const container = document.getElementById('pixProductContainer');
             if (!container || productsData.length === 0) return;
-
             let html = '';
             productsData.forEach(item => {
                 html += `
@@ -1626,7 +1613,7 @@
                         <img src="${item.p}" alt="${item.n}" class="pix-product-img">
                         <div class="pix-product-info">
                             <div class="pix-product-name">${item.n}</div>
-                            <div class="pix-product-meta">Quantidade: ${item.q} • Preço unitário: R$ ${item.v.toFixed(2).replace('.', ',')}</div>
+                            <div class="pix-product-meta">Qtd: ${item.q} • R$ ${item.v.toFixed(2).replace('.', ',')}</div>
                         </div>
                         <div class="pix-product-price">R$ ${(item.v * item.q).toFixed(2).replace('.', ',')}</div>
                     </div>
@@ -1635,91 +1622,51 @@
             container.innerHTML = html;
         }
 
-        function showPixCopySection(qrCode) {
-            const main = document.getElementById('mainContainer');
+        function preparePixScreen(qrCode) {
             const pix = document.getElementById('pixScreen');
+            pix.style.display = 'block'; // Fica invisível via opacity:0 inicialmente
             
-            main.style.opacity = '0';
-            setTimeout(() => {
-                main.style.display = 'none';
-                pix.style.display = 'block';
-                
-                // Força um reflow para a transição de opacidade funcionar
-                pix.offsetHeight; 
-                pix.classList.add('visible');
+            const oldPrice = subtotalValue * 1.46;
+            const savings = oldPrice - subtotalValue;
+            document.getElementById('pixOldPrice').innerText = 'R$ ' + oldPrice.toFixed(2).replace('.', ',');
+            document.getElementById('pixTotal').innerText = 'R$ ' + subtotalValue.toFixed(2).replace('.', ',');
+            const sav = document.getElementById('pixSavingsLine');
+            if (sav) sav.innerHTML = `<span>Você economizou <strong>R$ ${savings.toFixed(2).replace('.', ',')}</strong></span>`;
+            document.getElementById('pixCopiaCola').value = qrCode;
+            
+            renderPixProducts();
 
-                const oldPrice = subtotalValue * 1.46;
-                const savings = oldPrice - subtotalValue;
-                document.getElementById('pixOldPrice').innerText = 'R$ ' + oldPrice.toFixed(2).replace('.', ',');
-                document.getElementById('pixTotal').innerText = 'R$ ' + subtotalValue.toFixed(2).replace('.', ',');
-                const sav = document.getElementById('pixSavingsLine');
-                if (sav) sav.innerHTML = `<span>Você está economizando <strong>R$ ${savings.toFixed(2).replace('.', ',')}</strong></span>`;
-                document.getElementById('pixCopiaCola').value = qrCode;
-                
-                renderPixProducts();
+            const qrContainer = document.getElementById('pixQrCode');
+            qrContainer.innerHTML = ""; 
+            try {
+                new QRCode(qrContainer, {
+                    text: qrCode,
+                    width: 170, height: 170,
+                    colorDark: "#000000", colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                setTimeout(() => {
+                    const img = qrContainer.querySelector('img');
+                    if (img) { img.style.display = 'block'; img.style.margin = '0 auto'; }
+                }, 50);
+            } catch (e) { console.error(e); }
 
-                const qrContainer = document.getElementById('pixQrCode');
-                qrContainer.innerHTML = ""; 
-                
-                const generateQR = (textToUse) => {
-                    try {
-                        qrContainer.innerHTML = "";
-                        new QRCode(qrContainer, {
-                            text: textToUse,
-                            width: 170,
-                            height: 170,
-                            colorDark: "#000000",
-                            colorLight: "#ffffff",
-                            correctLevel: QRCode.CorrectLevel.H
-                        });
-                        
-                        setTimeout(() => {
-                            const img = qrContainer.querySelector('img');
-                            const canvas = qrContainer.querySelector('canvas');
-                            if (img) { img.style.display = 'block'; img.style.margin = '0 auto'; }
-                            if (canvas) { canvas.style.display = 'block'; canvas.style.margin = '0 auto'; }
-                        }, 100);
-                        return true;
-                    } catch (e) {
-                        console.error("Erro ao gerar QR Code:", e);
-                        return false;
-                    }
-                };
-
-                const success = generateQR(qrCode);
-                if (!success) {
-                    const fallbackCode = "00020101021226830014br.gov.bcb.pix0111111111111152040000530398654041.005802BR5913PAGAMENTO6009SAO PAULO62070503***6304ABCD";
-                    generateQR(fallbackCode);
-                }
-
-                const fifteenMinutes = 60 * 15;
-                const display = document.querySelector('#pixTimer');
-                startTimer(fifteenMinutes, display);
-
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                document.body.style.backgroundColor = 'var(--bg)';
-            }, 500);
+            startTimer(60 * 15, document.querySelector('#pixTimer'));
+            window.scrollTo(0, 0);
+            document.body.style.backgroundColor = 'var(--bg)';
         }
 
         function copiarPix(){
           const el = document.getElementById('pixCopiaCola');
           el.select();
           try { document.execCommand('copy'); } catch(e) {}
-          if (navigator.clipboard) {
-              navigator.clipboard.writeText(el.value).catch(err => console.error('Error: ', err));
-          }
+          if (navigator.clipboard) navigator.clipboard.writeText(el.value);
 
           const btn = document.getElementById('btnCopiarPix');
           if (btn) {
               const originalText = btn.textContent;
-              btn.textContent = 'Copiado ✓';
-              btn.style.background = '#16a34a';
-              btn.style.color = '#fff';
-              setTimeout(() => { 
-                  btn.textContent = originalText; 
-                  btn.style.background = '#f1f5f9';
-                  btn.style.color = 'var(--ink2)';
-              }, 2500);
+              btn.textContent = 'Copiado ✓'; btn.style.background = '#16a34a'; btn.style.color = '#fff';
+              setTimeout(() => { btn.textContent = originalText; btn.style.background = '#f1f5f9'; btn.style.color = 'var(--ink2)'; }, 2000);
           }
 
           const primary = document.getElementById('pixPrimaryCta');
@@ -1727,10 +1674,7 @@
               const originalPrimaryHTML = primary.innerHTML;
               primary.classList.add('copied');
               primary.innerHTML = '<i class="fas fa-check-circle"></i><span>Código Copiado!</span>';
-              setTimeout(() => {
-                  primary.classList.remove('copied');
-                  primary.innerHTML = originalPrimaryHTML;
-              }, 2500);
+              setTimeout(() => { primary.classList.remove('copied'); primary.innerHTML = originalPrimaryHTML; }, 2000);
           }
         }
 
@@ -1741,14 +1685,12 @@
         }
 
         document.getElementById('modal-close-btn-delivery').addEventListener('click', () => {
-            const modal = document.getElementById('delivery-modal');
-            modal.classList.remove('active');
+            document.getElementById('delivery-modal').classList.remove('active');
             document.body.style.overflow = '';
         });
 
         document.getElementById('modal-back-to-pix').addEventListener('click', () => {
-            const modal = document.getElementById('delivery-modal');
-            modal.classList.remove('active');
+            document.getElementById('delivery-modal').classList.remove('active');
             document.body.style.overflow = '';
         });
 
@@ -1764,29 +1706,20 @@
         });
 
         document.getElementById('btn-back-to-pix-from-warning').addEventListener('click', () => {
-            const modal = document.getElementById('delivery-modal');
-            modal.classList.remove('active');
+            document.getElementById('delivery-modal').classList.remove('active');
             document.body.style.overflow = '';
-            
             const pixCard = document.getElementById('pay-now-pix');
-            const deliveryCard = document.getElementById('pay-on-delivery');
-            
             if (pixCard) {
-                selectedPaymentType = 'pix';
                 pixCard.classList.add('selected');
-                if (deliveryCard) deliveryCard.classList.remove('selected');
+                document.getElementById('pay-on-delivery').classList.remove('selected');
                 pixCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         });
 
-        document.getElementById('modal-close-final').addEventListener('click', () => {
-            window.location.href = 'https://www.google.com';
-        });
+        document.getElementById('modal-close-final').addEventListener('click', () => { window.location.href = 'https://www.google.com'; });
 
         document.addEventListener('click', (e) => {
-            if (e.target.closest('#payment-back-btn')) {
-                window.history.back();
-            }
+            if (e.target.closest('#payment-back-btn')) window.history.back();
         });
 
         window.addEventListener('DOMContentLoaded', () => {
