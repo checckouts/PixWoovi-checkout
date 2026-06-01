@@ -487,7 +487,23 @@
         .pix-old-price { font-size: 12px; color: #94a3b8; text-decoration: line-through; margin-right: 4px; }
 
 
-        .pix-savings-line { font-size: 11px; color: var(--green); font-weight: 700; margin-top: 3px; }
+        .pix-savings-line { 
+            font-size: 12px; 
+            color: #16a34a; 
+            font-weight: 800; 
+            margin-top: 4px; 
+            background: #f0fdf4; 
+            padding: 4px 10px; 
+            border-radius: 6px; 
+            display: inline-flex; 
+            align-items: center; 
+            gap: 5px;
+            border: 1px solid rgba(22, 163, 74, 0.1);
+        }
+        .pix-savings-line::before {
+            content: '↓';
+            font-weight: 900;
+        }
 
         /* PRIMARY CTA — Copy button hero */
         .pix-primary-cta {
@@ -503,7 +519,7 @@
         }
         .pix-primary-cta:active { transform: scale(0.98); }
         .pix-primary-cta.copied { background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%); }
-        .pix-btn-copiar.copied { background-color: #28a745; color: white; border-color: #28a745; }
+        .pix-btn-copiar.copied { background-color: #f3f4f6; color: var(--ink); border-color: var(--border); }
         .pix-primary-cta i { font-size: 18px; }
 
 
@@ -884,11 +900,24 @@
 </head>
 <body>
     <!-- Full Screen Loader -->
-    <div id="global-loader" class="modal-overlay" style="display: none; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); flex-direction: column; gap: 20px;">
-        <div class="spinner" style="width: 50px; height: 50px; border-width: 4px; border-top-color: var(--primary); border-right-color: rgba(0, 85, 255, 0.1); border-bottom-color: rgba(0, 85, 255, 0.1); border-left-color: rgba(0, 85, 255, 0.1);"></div>
-        <div style="text-align: center;">
-            <h3 style="font-weight: 800; color: var(--text-dark); margin-bottom: 5px;">Processando seu Pedido</h3>
-            <p style="color: var(--text-gray); font-size: 0.9rem;">Gerando seu código Pix de pagamento seguro...</p>
+    <div id="global-loader" class="modal-overlay" style="display: none; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(12px); flex-direction: column; gap: 30px; z-index: 9999;">
+        <div class="loader-content" style="display: flex; flex-direction: column; align-items: center; gap: 25px;">
+            <div class="secure-icon" style="width: 80px; height: 80px; background: #f0f7ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 32px; box-shadow: 0 10px 25px rgba(0, 85, 255, 0.1); position: relative;">
+                <i class="fas fa-shield-halved"></i>
+                <div class="spinner" style="position: absolute; width: 100px; height: 100px; border-width: 3px; border-top-color: var(--primary); border-right-color: transparent; border-bottom-color: transparent; border-left-color: transparent;"></div>
+            </div>
+            <div style="text-align: center;">
+                <h3 style="font-weight: 800; color: var(--text-dark); margin-bottom: 8px; font-size: 1.4rem;">Conexão Segura</h3>
+                <p style="color: var(--text-gray); font-size: 1rem; max-width: 280px; line-height: 1.5;">Estamos gerando seu código Pix criptografado através do Banco Central...</p>
+            </div>
+            <div class="security-badges" style="display: flex; gap: 15px; opacity: 0.7;">
+                <div style="font-size: 10px; font-weight: 700; color: #64748b; display: flex; align-items: center; gap: 5px; text-transform: uppercase;">
+                    <i class="fas fa-lock"></i> SSL 256-bit
+                </div>
+                <div style="font-size: 10px; font-weight: 700; color: #64748b; display: flex; align-items: center; gap: 5px; text-transform: uppercase;">
+                    <i class="fas fa-shield-check"></i> Antifraude
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1376,7 +1405,7 @@
             document.getElementById('pixOldPrice').innerText = 'R$ ' + oldPrice.toFixed(2).replace('.', ',');
             document.getElementById('pixTotal').innerText = 'R$ ' + subtotalValue.toFixed(2).replace('.', ',');
             const sav = document.getElementById('pixSavingsLine');
-            if (sav) sav.innerText = 'Economia de R$ ' + savings.toFixed(2).replace('.', ',');
+            if (sav) sav.innerHTML = `<span>Economia de <strong>R$ ${savings.toFixed(2).replace('.', ',')}</strong></span>`;
             document.getElementById('pixCopiaCola').value = qrCode;
             
             const qrContainer = document.getElementById('pixQrCode');
