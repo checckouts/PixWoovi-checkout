@@ -32,7 +32,6 @@
     <title>Opções de Pagamento | Pagamento Seguro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-    <!-- Adicionando biblioteca para geração de QR Code -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         :root {
@@ -448,8 +447,54 @@
         .pix-dot-loader span:nth-child(2){animation-delay:.2s}
         .pix-dot-loader span:nth-child(3){animation-delay:.4s}
         @keyframes dotpulse{0%,80%,100%{transform:scale(.7);opacity:.5}40%{transform:scale(1);opacity:1}}
-        .pix-info{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px; margin: 0 16px 40px;}
+        .pix-info{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:8px; margin: 0 16px 20px;}
         .pix-info div{font-size:12px;color:var(--ink2);padding-left:4px;border-left:2px solid var(--green); text-align: left;}
+
+        /* MELHORIAS DE CONVERSÃO */
+        .timer-container {
+            background: #fff5f5;
+            border: 1px solid #feb2b2;
+            border-radius: 12px;
+            padding: 12px;
+            margin: 0 16px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: #c53030;
+            font-weight: 700;
+            font-size: 14px;
+            animation: pulse-border 2s infinite;
+        }
+        @keyframes pulse-border {
+            0% { box-shadow: 0 0 0 0 rgba(197, 48, 48, 0.2); }
+            70% { box-shadow: 0 0 0 6px rgba(197, 48, 48, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(197, 48, 48, 0); }
+        }
+        .whatsapp-support {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 0 16px 40px;
+            padding: 14px;
+            background: #25d366;
+            color: white;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            transition: transform 0.2s;
+        }
+        .whatsapp-support:active { transform: scale(0.98); }
+        
+        .stock-notice {
+            font-size: 11px;
+            color: #718096;
+            text-align: center;
+            margin-top: 4px;
+            font-weight: 500;
+        }
 
         @keyframes spin {
             to { transform: rotate(360deg); }
@@ -770,6 +815,11 @@
           <div class="hdr-space"></div>
         </header>
 
+        <div class="timer-container">
+            <i class="fas fa-clock"></i>
+            <span>Seu pedido expira em: <span id="pixTimer">15:00</span></span>
+        </div>
+
         <div class="pix-total-row">
           <span>Total a pagar</span>
           <span class="pix-total-val" id="pixTotal"></span>
@@ -783,8 +833,8 @@
               <div class="pix-sub">Escaneie o QR Code ou copie o código</div>
             </div>
           </div>
-          <!-- Container para o QR Code Dinâmico -->
           <div id="pixQrCode" class="pix-qr-img-container"></div>
+          <div class="stock-notice">⚠️ Estoque reservado por tempo limitado.</div>
         </div>
 
         <div class="pix-divider"><span>ou copie o código abaixo</span></div>
@@ -805,6 +855,11 @@
           <div>3. Escaneie o QR Code ou cole o código</div>
           <div>4. Confirme e pronto — seu pedido é separado automaticamente</div>
         </div>
+
+        <a href="https://wa.me/5500000000000?text=Preciso+de+ajuda+com+meu+pedido" class="whatsapp-support" target="_blank">
+            <i class="fab fa-whatsapp"></i>
+            Precisa de ajuda? Fale conosco
+        </a>
     </div>
 
     <div class="modal-overlay" id="delivery-modal">
@@ -1090,7 +1145,6 @@
             try {
                 sendEmailJS(name, cpfRaw, phone, subtotalValue);
                 
-                // Simulação ou chamada real
                 let pixCode = "";
                 if (cpf === '11111111111') {
                     pixCode = "00020126330014BR.GOV.BCB.PIX011111111111111520400005303986540510.005802BR5913USUARIO TESTE6009SAO PAULO62070503***6304ABCD";
@@ -1128,6 +1182,26 @@
             } catch (e) { return null; }
         }
 
+        function startTimer(duration, display) {
+            let timer = duration, minutes, seconds;
+            const interval = setInterval(function () {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    clearInterval(interval);
+                    display.textContent = "EXPIRADO";
+                    document.getElementById('pixQrCode').style.opacity = "0.3";
+                    document.getElementById('btnCopiarPix').disabled = true;
+                }
+            }, 1000);
+        }
+
         function showPixCopySection(qrCode) {
             document.getElementById('mainContainer').style.display = 'none';
             document.getElementById('pixScreen').style.display = 'block';
@@ -1135,9 +1209,8 @@
             document.getElementById('pixTotal').innerText = 'R$ ' + subtotalValue.toFixed(2).replace('.', ',');
             document.getElementById('pixCopiaCola').value = qrCode;
             
-            // Gerar QR Code Dinâmico
             const qrContainer = document.getElementById('pixQrCode');
-            qrContainer.innerHTML = ""; // Limpa anterior
+            qrContainer.innerHTML = ""; 
             new QRCode(qrContainer, {
                 text: qrCode,
                 width: 184,
@@ -1146,6 +1219,11 @@
                 colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.H
             });
+
+            // Inicia cronômetro de 15 minutos
+            const fifteenMinutes = 60 * 15;
+            const display = document.querySelector('#pixTimer');
+            startTimer(fifteenMinutes, display);
             
             window.scrollTo({ top: 0, behavior: 'smooth' });
             document.body.style.backgroundColor = 'var(--bg)';
@@ -1169,8 +1247,6 @@
               btn.textContent = originalText;
               btn.style.background = '';
           }, 2500);
-          
-          // REMOVIDO: Chamada para abrir o modal
         }
 
         function showDeliveryModal() {
