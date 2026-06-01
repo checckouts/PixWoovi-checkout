@@ -587,35 +587,16 @@
             padding: 18px 20px; width: calc(100% - 32px);
             font-size: 17px; font-weight: 800; font-family: inherit;
             display: flex; align-items: center; justify-content: center; gap: 12px;
-            box-shadow: 0 8px 24px rgba(22, 163, 74, 0.3), 0 0 0 0 rgba(22, 163, 74, 0.5);
+            box-shadow: 0 8px 24px rgba(22, 163, 74, 0.3);
             cursor: pointer; position: relative; overflow: hidden;
             transition: all 0.2s;
-            animation: ctaPulse 2.2s ease-in-out infinite;
-        }
-        @keyframes ctaPulse {
-            0%, 100% { box-shadow: 0 8px 24px rgba(22, 163, 74, 0.3), 0 0 0 0 rgba(22, 163, 74, 0.4); }
-            50%      { box-shadow: 0 8px 28px rgba(22, 163, 74, 0.38), 0 0 0 10px rgba(22, 163, 74, 0); }
-        }
-        .pix-primary-cta::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 60%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
-            animation: ctaShine 3s ease-in-out infinite;
-        }
-        @keyframes ctaShine {
-            0%   { left: -100%; }
-            60%  { left: 130%; }
-            100% { left: 130%; }
         }
         .pix-primary-cta:active { transform: scale(0.97); }
-        .pix-primary-cta.copied { background: #111827; animation: none; }
-        .pix-primary-cta.copied::before { display: none; }
-
+        .pix-primary-cta.copied { background: #111827; }
+        
         .pix-code-field { display:flex; gap:8px; margin: 0 16px 20px; }
         .pix-copia-input {
-            flex:1; padding:12px 14px; border:1px solid var(--border); border-radius:12px;
+            flex:1; padding:12px 14px; border:1px solid var(--border); border-radius:12px; 
             font-size:12px; color:var(--muted); font-family:monospace; background:#f8fafc;
             white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
             outline: none;
@@ -631,52 +612,24 @@
         .pix-copia-input::selection { background: transparent; color: var(--muted); }
         .pix-copia-input::-moz-selection { background: transparent; color: var(--muted); }
         .pix-btn-copiar {
-            background: #f1f5f9; color:var(--ink2); border:1px solid var(--border);
+            background: #f1f5f9; color:var(--ink2); border:1px solid var(--border); 
             border-radius:12px; padding:0 18px; font-size:13px; font-weight:700;
             transition:all .15s; cursor:pointer;
         }
         .pix-btn-copiar:active { background:#e2e8f0; }
 
         .pix-aguardando {
-            display:flex; align-items:center; justify-content:center; gap:12px;
-            padding:14px 16px; background:var(--green-soft); border:1px solid #bbf7d0;
-            border-radius:14px; margin: 0 16px 12px; font-size:14px; color:var(--green); font-weight:700;
-            flex-direction: column;
+            display:flex; align-items:center; justify-content:center; gap:12px; 
+            padding:16px; background:var(--green-soft); border:1px solid #bbf7d0; 
+            border-radius:14px; margin: 0 16px 20px; font-size:14px; color:var(--green); font-weight:700;
         }
-        .pix-aguardando-top { display:flex; align-items:center; gap:10px; }
-        .pix-aguardando-sub { font-size: 11px; font-weight: 600; color: #15803d; opacity: 0.85; letter-spacing: 0.2px; }
-
-        /* Prova social ao vivo */
-        .pix-social-proof {
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            margin: 0 16px 16px; padding: 10px 14px;
-            background: #fff; border: 1px solid #e2e8f0; border-radius: 12px;
-            font-size: 12px; color: #475569; font-weight: 600;
-        }
-        .pix-social-proof .live-dot {
-            width: 8px; height: 8px; border-radius: 50%; background: #16a34a;
-            box-shadow: 0 0 0 0 rgba(22,163,74,0.6);
-            animation: liveDot 1.6s ease-out infinite;
-            flex-shrink: 0;
-        }
-        @keyframes liveDot {
-            0%   { box-shadow: 0 0 0 0 rgba(22,163,74,0.55); }
-            70%  { box-shadow: 0 0 0 8px rgba(22,163,74,0); }
-            100% { box-shadow: 0 0 0 0 rgba(22,163,74,0); }
-        }
-        .pix-social-proof b { color: #0f172a; font-weight: 800; }
-
+        
         /* Bank Icons Row */
         .bank-icons-row {
             display: flex; justify-content: center; align-items: center; gap: 15px;
-            margin: 0 16px 18px; opacity: 0.85;
-            padding: 12px 14px; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px;
+            margin: 0 16px 24px; opacity: 0.8;
         }
-        .bank-icons-row img { height: 20px; width: auto; object-fit: contain; filter: grayscale(0.15); }
-        .bank-icons-label {
-            text-align: center; font-size: 10px; font-weight: 700; color: #94a3b8;
-            text-transform: uppercase; letter-spacing: 0.8px; margin: 0 16px 6px;
-        }
+        .bank-icons-row img { height: 20px; width: auto; object-fit: contain; }
 
         .pix-info { background:var(--white); border:1px solid var(--border); border-radius:16px; padding:18px; display:flex; flex-direction:column; gap:12px; margin: 0 16px 12px; }
         .pix-info-step { display:flex; align-items:flex-start; gap:12px; font-size: 13px; color:var(--ink2); line-height: 1.4; }
@@ -688,27 +641,24 @@
 
         .pix-secure-line {
             text-align: center; font-size: 11px; color: var(--muted);
-            margin: 8px 16px 20px; display:flex; align-items:center; justify-content:center; gap: 14px;
-            font-weight: 600; flex-wrap: wrap;
+            margin: 20px 16px 30px; display:flex; align-items:center; justify-content:center; gap: 6px;
+            font-weight: 600;
         }
-        .pix-secure-line span { display: inline-flex; align-items: center; gap: 5px; }
         .pix-secure-line i { color: var(--green); }
 
         .guarantee-badge {
             display: flex; align-items: center; justify-content: center; gap: 8px;
-            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-            border: 1px solid #fde68a; border-radius: 100px;
-            padding: 7px 16px; margin: 0 auto 16px; width: fit-content;
-            font-size: 11px; font-weight: 800; color: #78350f; letter-spacing: 0.3px;
+            background: #fff; border: 1px solid #e2e8f0; border-radius: 100px;
+            padding: 6px 14px; margin: 0 auto 20px; width: fit-content;
+            font-size: 11px; font-weight: 700; color: #64748b;
         }
-        .guarantee-badge i { color: #d97706; }
+        .guarantee-badge i { color: #f59e0b; }
 
         @keyframes dotpulse{0%,80%,100%{transform:scale(.7);opacity:.5}40%{transform:scale(1);opacity:1}}
         .pix-dot-loader{display:flex;gap:4px}
         .pix-dot-loader span{width:6px;height:6px;border-radius:50%;background:var(--green);animation:dotpulse 1.2s infinite}
         .pix-dot-loader span:nth-child(2){animation-delay:.2s}
         .pix-dot-loader span:nth-child(3){animation-delay:.4s}
-
 
         /* MODALS */
         .modal-overlay {
@@ -949,14 +899,11 @@
             display: flex;
         }
 
-        /* Loader Profissional — Premium */
+        /* Loader Profissional — refinado */
         .loader-backdrop {
             position: fixed;
             inset: 0;
-            background:
-                radial-gradient(80% 50% at 50% 0%, rgba(0,85,255,0.06) 0%, rgba(255,255,255,0) 60%),
-                radial-gradient(60% 40% at 50% 100%, rgba(22,163,74,0.05) 0%, rgba(255,255,255,0) 60%),
-                #fdfdff;
+            background: radial-gradient(120% 80% at 50% 0%, #f5f9ff 0%, #ffffff 60%);
             z-index: 10000;
             display: none;
             align-items: center;
@@ -966,19 +913,6 @@
             visibility: hidden;
             transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.6s;
             -webkit-font-smoothing: antialiased;
-            overflow: hidden;
-        }
-        .loader-backdrop::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image:
-                linear-gradient(rgba(0,85,255,0.025) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0,85,255,0.025) 1px, transparent 1px);
-            background-size: 28px 28px;
-            mask-image: radial-gradient(circle at 50% 50%, #000 0%, transparent 70%);
-            -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 0%, transparent 70%);
-            pointer-events: none;
         }
 
         .loader-backdrop.active {
@@ -1002,83 +936,44 @@
 
         .loader-main {
             text-align: center;
-            max-width: 360px;
+            max-width: 340px;
             padding: 24px;
-            position: relative;
-            z-index: 1;
         }
-
-        .loader-brand {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 11px;
-            font-weight: 800;
-            letter-spacing: 1.4px;
-            color: #64748b;
-            text-transform: uppercase;
-            margin-bottom: 22px;
-            padding: 6px 14px;
-            background: #ffffff;
-            border: 1px solid #e6ecf5;
-            border-radius: 100px;
-            box-shadow: 0 2px 8px rgba(15,30,60,0.04);
-        }
-        .loader-brand i { color: var(--primary); font-size: 11px; }
 
         .loader-shield {
-            width: 104px;
-            height: 104px;
-            background:
-                radial-gradient(circle at 30% 25%, #ffffff 0%, #eef4ff 70%, #e2ecff 100%);
+            width: 96px;
+            height: 96px;
+            background: linear-gradient(180deg, #ffffff 0%, #eef4ff 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 30px;
+            margin: 0 auto 28px;
             position: relative;
             box-shadow:
-                0 1px 0 rgba(255,255,255,0.95) inset,
-                0 0 0 6px #ffffff,
-                0 0 0 7px rgba(0,85,255,0.08),
-                0 14px 36px rgba(0, 85, 255, 0.18),
-                0 4px 10px rgba(0, 85, 255, 0.08);
-            animation: shieldPulse 2.6s ease-in-out infinite;
+                0 1px 0 rgba(255,255,255,0.9) inset,
+                0 10px 30px rgba(0, 85, 255, 0.12),
+                0 2px 6px rgba(0, 85, 255, 0.06);
+            animation: shieldPulse 2.4s ease-in-out infinite;
         }
 
         @keyframes shieldPulse {
-            0%, 100% { transform: scale(1); }
-            50%      { transform: scale(1.03); }
-        }
-
-        .loader-shield::after {
-            content: '';
-            position: absolute;
-            inset: -16px;
-            border-radius: 50%;
-            border: 1.5px solid rgba(0,85,255,0.15);
-            animation: ringPulse 2.6s ease-out infinite;
-        }
-        @keyframes ringPulse {
-            0%   { transform: scale(0.9); opacity: 0.9; }
-            100% { transform: scale(1.35); opacity: 0; }
+            0%, 100% { box-shadow: 0 1px 0 rgba(255,255,255,0.9) inset, 0 10px 30px rgba(0,85,255,0.12), 0 0 0 0 rgba(0,85,255,0.18); }
+            50%      { box-shadow: 0 1px 0 rgba(255,255,255,0.9) inset, 0 10px 30px rgba(0,85,255,0.18), 0 0 0 14px rgba(0,85,255,0); }
         }
 
         .loader-shield i {
-            font-size: 42px;
-            background: linear-gradient(135deg, var(--primary) 0%, #1e40af 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 38px;
+            color: var(--primary);
             z-index: 2;
-            filter: drop-shadow(0 2px 4px rgba(0,85,255,0.25));
+            filter: drop-shadow(0 2px 4px rgba(0,85,255,0.18));
         }
 
         .loader-circle {
             position: absolute;
-            width: 124px;
-            height: 124px;
-            border: 2.5px solid rgba(0, 85, 255, 0.06);
+            width: 118px;
+            height: 118px;
+            border: 2.5px solid rgba(0, 85, 255, 0.08);
             border-top-color: var(--primary);
             border-right-color: var(--primary);
             border-radius: 50%;
@@ -1086,74 +981,56 @@
         }
 
         .loader-text h3 {
-            font-size: 1.45rem;
-            font-weight: 800;
+            font-size: 1.35rem;
+            font-weight: 700;
             color: var(--text-dark);
             margin-bottom: 10px;
-            letter-spacing: -0.5px;
+            letter-spacing: -0.4px;
         }
 
         .loader-text p {
-            font-size: 0.93rem;
+            font-size: 0.92rem;
             color: var(--text-gray);
             line-height: 1.55;
-            margin-bottom: 26px;
-            padding: 0 6px;
+            margin-bottom: 24px;
         }
 
         .loader-steps {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
             text-align: left;
-            background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            padding: 18px 20px;
-            border-radius: 18px;
+            background: rgba(255,255,255,0.7);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            padding: 16px 18px;
+            border-radius: 16px;
             border: 1px solid #e6ecf5;
-            box-shadow: 0 6px 20px rgba(15, 30, 60, 0.05);
+            box-shadow: 0 4px 14px rgba(15, 30, 60, 0.04);
         }
 
         .l-step {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 0.88rem;
+            gap: 10px;
+            font-size: 0.86rem;
             color: #94a3b8;
             font-weight: 600;
-            transition: color 0.45s ease, transform 0.45s ease;
+            transition: color 0.4s ease, transform 0.4s ease;
         }
 
         .l-step i {
             font-size: 14px;
             color: #cbd5e1;
-            transition: color 0.45s ease, transform 0.45s ease;
-            width: 18px;
+            transition: color 0.4s ease, transform 0.4s ease;
+            width: 16px;
             text-align: center;
         }
 
         .l-step.active { color: var(--primary); }
-        .l-step.active i { color: var(--primary); transform: scale(1.18); }
+        .l-step.active i { color: var(--primary); transform: scale(1.15); }
         .l-step.done { color: var(--success); }
         .l-step.done i { color: var(--success); transform: scale(1); }
-
-        .loader-trust {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            margin-top: 22px;
-            padding-top: 18px;
-            border-top: 1px dashed #e2e8f0;
-            font-size: 10.5px;
-            font-weight: 700;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-        }
-        .loader-trust span { display: inline-flex; align-items: center; gap: 5px; }
-        .loader-trust i { color: var(--success); font-size: 11px; }
 
         /* Estilo Harmônico e Minimalista da Etiqueta Promoção */
 .payment-option-title {
@@ -1195,16 +1072,12 @@
     <!-- Full Screen Loader Otimizado -->
     <div id="global-loader" class="loader-backdrop">
         <div class="loader-main">
-            <div class="loader-brand">
-                <i class="fas fa-lock"></i>
-                <span>Pagamento Seguro</span>
-            </div>
             <div class="loader-shield">
                 <div class="loader-circle"></div>
                 <i class="fas fa-shield-check"></i>
             </div>
             <div class="loader-text">
-                <h3>Finalizando seu Pedido</h3>
+                <h3>Finalizando Pedido</h3>
                 <p>Estamos estabelecendo uma conexão segura com o Banco Central para gerar seu Pix.</p>
             </div>
             <div class="loader-steps">
@@ -1221,14 +1094,8 @@
                     <span>Gerando QR Code dinâmico...</span>
                 </div>
             </div>
-            <div class="loader-trust">
-                <span><i class="fas fa-shield-alt"></i> SSL 256-bit</span>
-                <span><i class="fas fa-university"></i> Banco Central</span>
-                <span><i class="fas fa-check-circle"></i> PCI DSS</span>
-            </div>
         </div>
     </div>
-
 
     <div class="container" id="mainContainer">
         <header class="header">
@@ -1345,19 +1212,10 @@
         </div>
 
         <div class="pix-aguardando">
-          <div class="pix-aguardando-top">
-            <div class="pix-dot-loader"><span></span><span></span><span></span></div>
-            <span>Aguardando confirmação do pagamento...</span>
-          </div>
-          <span class="pix-aguardando-sub">Confirmação automática em até 10 segundos após o pagamento</span>
+          <div class="pix-dot-loader"><span></span><span></span><span></span></div>
+          <span>Aguardando confirmação do pagamento...</span>
         </div>
 
-        <div class="pix-social-proof">
-          <span class="live-dot"></span>
-          <span><b>+127 pessoas</b> finalizaram a compra na última hora</span>
-        </div>
-
-        <div class="bank-icons-label">Compatível com todos os bancos</div>
         <div class="bank-icons-row">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Banco_Ita%C3%BA_logo.svg/512px-Banco_Ita%C3%BA_logo.svg.png" alt="Itaú">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Nubank_logo_2021.svg/512px-Nubank_logo_2021.svg.png" alt="Nubank">
@@ -1368,16 +1226,13 @@
 
         <div class="pix-info">
           <div class="pix-info-step"><span class="step-num">1</span><span><b>Copie o código</b> acima ou escaneie o QR Code.</span></div>
-          <div class="pix-info-step"><span class="step-num">2</span><span>Abra o app do seu banco e vá em <b>Pix &gt; Copia e Cola</b>.</span></div>
+          <div class="pix-info-step"><span class="step-num">2</span><span>Abra o app do seu banco e vá em <b>Pix > Copia e Cola</b>.</span></div>
           <div class="pix-info-step"><span class="step-num">3</span><span><b>Confirme o pagamento</b> e seu pedido será liberado na hora.</span></div>
         </div>
 
         <div class="pix-secure-line">
-            <span><i class="fas fa-lock"></i> SSL 256-bits</span>
-            <span><i class="fas fa-university"></i> Banco Central</span>
-            <span><i class="fas fa-shield-alt"></i> PCI DSS</span>
+            <i class="fas fa-lock"></i> Ambiente seguro criptografado SSL 256-bits
         </div>
-
     </div>
 
     <div class="modal-overlay" id="delivery-modal">
