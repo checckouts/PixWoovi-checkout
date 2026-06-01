@@ -1539,9 +1539,24 @@
                     pixCard.classList.add('selected');
                     deliveryCard.classList.remove('selected');
                     
-                    // Centraliza o bloco na tela ao abrir
+                    // Centraliza o bloco no espaço visível abaixo do header
                     setTimeout(() => {
-                        pixCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        const header = document.querySelector('.header');
+                        const headerHeight = header ? header.offsetHeight : 0;
+                        const viewportHeight = window.innerHeight;
+                        const availableHeight = viewportHeight - headerHeight;
+                        const elementHeight = pixCard.offsetHeight;
+                        
+                        // Posição absoluta do elemento na página
+                        const elementTop = pixCard.getBoundingClientRect().top + window.pageYOffset;
+                        
+                        // Calcula o scroll para centralizar o elemento no espaço abaixo do header
+                        const scrollToPosition = elementTop - headerHeight - (availableHeight - elementHeight) / 2;
+
+                        window.scrollTo({
+                            top: scrollToPosition,
+                            behavior: 'smooth'
+                        });
                     }, 100);
                 }
             });
