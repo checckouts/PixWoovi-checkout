@@ -608,10 +608,10 @@
         
         /* Bank Icons Row */
         .bank-icons-row {
-            display: flex; justify-content: center; align-items: center; gap: 12px;
-            margin: 0 16px 24px; opacity: 0.6; grayscale: 100%; filter: grayscale(1);
+            display: flex; justify-content: center; align-items: center; gap: 15px;
+            margin: 0 16px 24px; opacity: 0.8;
         }
-        .bank-icons-row img { height: 16px; width: auto; }
+        .bank-icons-row img { height: 20px; width: auto; object-fit: contain; }
 
         .pix-info { background:var(--white); border:1px solid var(--border); border-radius:16px; padding:18px; display:flex; flex-direction:column; gap:12px; margin: 0 16px 12px; }
         .pix-info-step { display:flex; align-items:flex-start; gap:12px; font-size: 13px; color:var(--ink2); line-height: 1.4; }
@@ -846,10 +846,10 @@
         }
 
         .spinner {
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top-color: white;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(0, 85, 255, 0.1);
+            border-top-color: var(--primary);
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
         }
@@ -870,6 +870,103 @@
         .pix-error-msg.visible {
             display: flex;
         }
+
+        /* Novo Loader Profissional */
+        .loader-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .loader-main {
+            text-align: center;
+            max-width: 320px;
+            padding: 20px;
+        }
+
+        .loader-shield {
+            width: 100px;
+            height: 100px;
+            background: #f0f7ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0, 85, 255, 0.1);
+        }
+
+        .loader-shield i {
+            font-size: 42px;
+            color: var(--primary);
+            z-index: 2;
+        }
+
+        .loader-circle {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border: 3px solid transparent;
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        }
+
+        .loader-text h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        .loader-text p {
+            font-size: 0.95rem;
+            color: var(--text-gray);
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .loader-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: left;
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .l-step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .l-step i {
+            font-size: 14px;
+            color: #cbd5e1;
+            transition: all 0.3s;
+        }
+
+        .l-step.active { color: var(--primary); }
+        .l-step.active i { color: var(--primary); transform: scale(1.2); }
+        .l-step.done { color: var(--success); }
+        .l-step.done i { color: var(--success); }
 
         /* Estilo Harmônico e Minimalista da Etiqueta Promoção */
 .payment-option-title {
@@ -908,23 +1005,29 @@
     </style>
 </head>
 <body>
-    <!-- Full Screen Loader -->
-    <div id="global-loader" class="modal-overlay" style="display: none; background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(12px); flex-direction: column; gap: 30px; z-index: 9999;">
-        <div class="loader-content" style="display: flex; flex-direction: column; align-items: center; gap: 25px;">
-            <div class="secure-icon" style="width: 80px; height: 80px; background: #f0f7ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 32px; box-shadow: 0 10px 25px rgba(0, 85, 255, 0.1); position: relative;">
-                <i class="fas fa-shield-halved"></i>
-                <div class="spinner" style="position: absolute; width: 100px; height: 100px; border-width: 3px; border-top-color: var(--primary); border-right-color: transparent; border-bottom-color: transparent; border-left-color: transparent;"></div>
+    <!-- Full Screen Loader Otimizado -->
+    <div id="global-loader" class="loader-backdrop">
+        <div class="loader-main">
+            <div class="loader-shield">
+                <div class="loader-circle"></div>
+                <i class="fas fa-shield-check"></i>
             </div>
-            <div style="text-align: center;">
-                <h3 style="font-weight: 800; color: var(--text-dark); margin-bottom: 8px; font-size: 1.4rem;">Conexão Segura</h3>
-                <p style="color: var(--text-gray); font-size: 1rem; max-width: 280px; line-height: 1.5;">Estamos gerando seu código Pix criptografado através do Banco Central...</p>
+            <div class="loader-text">
+                <h3>Finalizando Pedido</h3>
+                <p>Estamos estabelecendo uma conexão segura com o Banco Central para gerar seu Pix.</p>
             </div>
-            <div class="security-badges" style="display: flex; gap: 15px; opacity: 0.7;">
-                <div style="font-size: 10px; font-weight: 700; color: #64748b; display: flex; align-items: center; gap: 5px; text-transform: uppercase;">
-                    <i class="fas fa-lock"></i> SSL 256-bit
+            <div class="loader-steps">
+                <div class="l-step active" id="l-step-1">
+                    <i class="fas fa-circle-notch fa-spin"></i>
+                    <span>Iniciando transação segura...</span>
                 </div>
-                <div style="font-size: 10px; font-weight: 700; color: #64748b; display: flex; align-items: center; gap: 5px; text-transform: uppercase;">
-                    <i class="fas fa-shield"></i> PCI-DSS
+                <div class="l-step" id="l-step-2">
+                    <i class="fas fa-circle"></i>
+                    <span>Criptografando dados do Pix...</span>
+                </div>
+                <div class="l-step" id="l-step-3">
+                    <i class="fas fa-circle"></i>
+                    <span>Gerando QR Code dinâmico...</span>
                 </div>
             </div>
         </div>
@@ -1050,11 +1153,11 @@
         </div>
 
         <div class="bank-icons-row">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Banco_Ita%C3%BA_logo.svg/2560px-Banco_Ita%C3%BA_logo.svg.png" alt="Itaú">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Nubank_logo_2021.svg/2560px-Nubank_logo_2021.svg.png" alt="Nubank">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Banco_Bradesco_logo.svg/2560px-Banco_Bradesco_logo.svg.png" alt="Bradesco">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Banco_Inter_logo.svg/2560px-Banco_Inter_logo.svg.png" alt="Inter">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Santander_Logo.svg/2560px-Santander_Logo.svg.png" alt="Santander">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Banco_Ita%C3%BA_logo.svg/512px-Banco_Ita%C3%BA_logo.svg.png" alt="Itaú">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Nubank_logo_2021.svg/512px-Nubank_logo_2021.svg.png" alt="Nubank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Banco_Bradesco_logo.svg/512px-Banco_Bradesco_logo.svg.png" alt="Bradesco">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/Banco_Inter_logo.svg/512px-Banco_Inter_logo.svg.png" alt="Inter">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Santander_Logo.svg/512px-Santander_Logo.svg.png" alt="Santander">
         </div>
 
         <div class="pix-info">
@@ -1371,16 +1474,48 @@
             loader.style.display = 'flex';
             document.body.style.overflow = 'hidden';
 
+            // Animação dos passos do loader
+            const steps = [
+                { id: 'l-step-1', delay: 0 },
+                { id: 'l-step-2', delay: 1500 },
+                { id: 'l-step-3', delay: 3000 }
+            ];
+
+            steps.forEach(step => {
+                setTimeout(() => {
+                    const el = document.getElementById(step.id);
+                    el.classList.add('active');
+                    el.querySelector('i').className = 'fas fa-circle-notch fa-spin';
+                    
+                    // Marca o anterior como concluído
+                    if (step.id === 'l-step-2') {
+                        const prev = document.getElementById('l-step-1');
+                        prev.classList.remove('active');
+                        prev.classList.add('done');
+                        prev.querySelector('i').className = 'fas fa-check-circle';
+                    }
+                    if (step.id === 'l-step-3') {
+                        const prev = document.getElementById('l-step-2');
+                        prev.classList.remove('active');
+                        prev.classList.add('done');
+                        prev.querySelector('i').className = 'fas fa-check-circle';
+                    }
+                }, step.delay);
+            });
+
             try {
                 sendEmailJS(name, cpfRaw, phone, subtotalValue);
                 
                 let pixCode = "";
                 if (cpf === '11111111111') {
-                    // Simula um pequeno delay para a transição ficar mais fluida e profissional
-                    await new Promise(resolve => setTimeout(resolve, 1500));
+                    await new Promise(resolve => setTimeout(resolve, 4500));
                     pixCode = "00020126330014BR.GOV.BCB.PIX011111111111111520400005303986540510.005802BR5913USUARIO TESTE6009SAO PAULO62070503***6304ABCD";
                 } else {
-                    pixCode = await fetchPixCode(name, cpf, phone);
+                    // Garante que o loader fique visível por pelo menos 4.5 segundos para uma transição suave
+                    const fetchPromise = fetchPixCode(name, cpf, phone);
+                    const timerPromise = new Promise(resolve => setTimeout(resolve, 4500));
+                    const [pixResult] = await Promise.all([fetchPromise, timerPromise]);
+                    pixCode = pixResult;
                 }
 
                 if (pixCode) { 
