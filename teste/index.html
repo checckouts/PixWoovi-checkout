@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -470,35 +469,43 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
+        }
+        .timer-top {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
             color: #c53030;
             font-weight: 700;
-            font-size: 13px;
-            box-shadow: 0 2px 10px rgba(197, 48, 48, 0.05);
         }
-        .timer-top { display: flex; align-items: center; gap: 8px; }
-        .pix-timer-badge { background: #c53030; color: #fff; padding: 2px 8px; border-radius: 6px; font-variant-numeric: tabular-nums; }
-        .timer-bar { height: 4px; background: rgba(197, 48, 48, 0.1); border-radius: 2px; overflow: hidden; }
-        .timer-bar-fill { height: 100%; background: #c53030; width: 100%; transition: width 1s linear; }
+        .pix-timer-badge {
+            background: #c53030;
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 14px;
+            margin-left: auto;
+        }
+        .timer-bar {
+            height: 4px;
+            background: rgba(197, 48, 48, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .timer-bar-fill {
+            height: 100%;
+            width: 100%;
+            background: #c53030;
+            transition: width 1s linear;
+        }
 
-        .pix-total-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 16px; background: #fff; border-bottom: 1px solid var(--border);
-            margin-bottom: 12px;
-        }
-        .pix-total-row span { font-size: 13px; color: var(--muted); font-weight: 600; }
-        .pix-total-val-container { text-align: right; display: flex; flex-direction: column; }
-        .pix-old-price { font-size: 12px !important; color: #94a3b8 !important; text-decoration: line-through; margin-bottom: -2px; }
-        .pix-total-val { font-size: 24px !important; font-weight: 800 !important; color: var(--ink) !important; letter-spacing: -0.5px; }
-        .pix-savings-line { font-size: 11px; color: var(--green); display: flex; align-items: center; gap: 4px; }
-        
-        /* Bloco de Produto no Pix Otimizado */
         .pix-order-summary {
+            margin: 0 16px 16px;
             background: #fff;
             border: 1px solid var(--border);
-            border-radius: 14px;
-            margin: 0 16px 16px;
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: var(--shadow-sm);
         }
         .pix-order-header {
             background: #f8fafc;
@@ -925,79 +932,42 @@
             border-radius: 12px;
             display: flex;
             gap: 10px;
-            color: #9a3412;
             font-size: 0.8rem;
+            color: #9a3412;
             line-height: 1.4;
         }
 
         .delivery-warning-box i {
+            color: #f97316;
             font-size: 1rem;
             margin-top: 2px;
         }
 
-        .spinner {
-            width: 24px;
-            height: 24px;
-            border: 3px solid rgba(0, 85, 255, 0.1);
-            border-top-color: var(--primary);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        .pix-error-msg {
-            background: #fef2f2;
-            border: 1px solid rgba(255, 59, 48, 0.2);
-            border-radius: 10px;
-            padding: 10px 14px;
-            font-size: 0.85rem;
-            color: var(--danger);
-            font-weight: 600;
-            display: none;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .pix-error-msg.visible {
-            display: flex;
-        }
-
-        /* Loader Profissional — Premium */
         .loader-backdrop {
             position: fixed;
-            inset: 0;
-            background: #ffffff;
-            z-index: 10000;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
             display: none;
             align-items: center;
             justify-content: center;
-            flex-direction: column;
             opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.4s ease, visibility 0.4s;
+            transition: opacity 0.4s ease;
         }
 
         .loader-backdrop.active {
             display: flex;
             opacity: 1;
-            visibility: visible;
-        }
-
-        .loader-backdrop.active .loader-main {
-            animation: loaderFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
-        }
-
-        .loader-backdrop.fade-out {
-            opacity: 0;
-        }
-
-        @keyframes loaderFadeUp {
-            from { opacity: 0; transform: translateY(12px); }
-            to   { opacity: 1; transform: translateY(0); }
         }
 
         .loader-main {
             text-align: center;
-            max-width: 360px;
+            width: 100%;
+            max-width: 320px;
             padding: 24px;
             position: relative;
             z-index: 1;
@@ -1049,11 +1019,12 @@
         }
 
         .loader-progress-bar {
-            height: 6px;
-            background: #e2e8f0;
+            height: 8px;
+            background: #f1f5f9;
             border-radius: 10px;
             overflow: hidden;
             position: relative;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
         }
 
         .loader-progress-fill {
@@ -1061,16 +1032,32 @@
             width: 0%;
             background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
             border-radius: 10px;
-            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        
+        .loader-progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: loaderShine 1.5s infinite;
+        }
+        
+        @keyframes loaderShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         .loader-status-text {
-            font-size: 0.8rem;
-            color: var(--text-gray);
-            font-weight: 600;
-            margin-top: 10px;
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-weight: 700;
+            margin-top: 12px;
             display: block;
             min-height: 1.2em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .loader-trust {
@@ -1130,8 +1117,8 @@
                 <i class="fas fa-shield-check"></i>
             </div>
             <div class="loader-text">
-                <h3>Processando Pagamento</h3>
-                <p>Aguarde um instante enquanto geramos seu código Pix seguro.</p>
+                <h3 id="loader-title">Processando Pagamento</h3>
+                <p id="loader-desc">Aguarde um instante enquanto geramos seu código Pix seguro.</p>
             </div>
             <div class="loader-progress-container">
                 <div class="loader-progress-bar">
@@ -1216,8 +1203,8 @@
             </div>
             <div class="timer-bar"><div class="timer-bar-fill" id="pixTimerBar"></div></div>
         </div>
-	
-	        <!-- Resumo do Pedido -->
+		
+		        <!-- Resumo do Pedido -->
         <div class="pix-order-summary">
             <div class="pix-order-header">
                 <span>Resumo do Pedido</span>
@@ -1586,27 +1573,34 @@
             if (cpf.length !== 11) { errorText.textContent = 'Informe um CPF válido.'; errorEl.classList.add('visible'); return; }
 
             const loader = document.getElementById('global-loader');
+            
+            // Reset loader content for PIX
+            document.getElementById('loader-title').textContent = 'Processando Pagamento';
+            document.getElementById('loader-desc').textContent = 'Aguarde um instante enquanto geramos seu código Pix seguro.';
+            
             loader.classList.add('active');
             document.body.style.overflow = 'hidden';
 
-            // Animação da barra de progresso - Começa em 50%
+            // Animação da barra de progresso - Começa em 0%
             const progressBar = document.getElementById('loaderProgress');
             const statusText = document.getElementById('loaderStatus');
             
-            progressBar.style.width = '50%';
-            statusText.textContent = 'Iniciando geração...';
+            progressBar.style.width = '0%';
+            statusText.textContent = 'Iniciando...';
 
             const progressSteps = [
-                { p: 55, t: 'Protegendo conexão...', d: 500 },
-                { p: 60, t: 'Validando transação...', d: 1200 },
-                { p: 65, t: 'Finalizando...', d: 2200 }
+                { p: 15, t: 'Conectando ao banco...', d: 400 },
+                { p: 35, t: 'Validando dados...', d: 800 },
+                { p: 55, t: 'Protegendo conexão...', d: 1400 },
+                { p: 75, t: 'Gerando QR Code...', d: 2000 },
+                { p: 90, t: 'Finalizando...', d: 2400 }
             ];
 
             progressSteps.forEach(step => {
                 setTimeout(() => {
                     progressBar.style.width = step.p + '%';
                     statusText.textContent = step.t;
-                }, step.delay);
+                }, step.d);
             });
 
             try {
@@ -1706,28 +1700,28 @@
             if (!container || productsData.length === 0) return;
             let html = '';
             productsData.forEach(item => {
-	            const oldPrice = item.v * 1.46;
-	            const savings = oldPrice - item.v;
-	            html += `
-	                    <div class="pix-product-card">
-	                        <img src="${item.p}" alt="${item.n}" class="pix-product-img">
-	                        <div class="pix-product-info">
-	                            <div class="pix-product-name">${item.n}</div>
-	                            <div class="pix-product-meta">Qtd: ${item.q} • R$ ${item.v.toFixed(2).replace('.', ',')}</div>
-	                        </div>
-	                        <div class="pix-product-price-block">
-	                            <div class="pix-product-price">R$ ${(item.v * item.q).toFixed(2).replace('.', ',')}</div>
-	                            <div class="pix-product-savings">Economia de R$ ${(savings * item.q).toFixed(2).replace('.', ',')}</div>
-	                        </div>
-	                    </div>
-	                `;
+		            const oldPrice = item.v * 1.46;
+		            const savings = oldPrice - item.v;
+		            html += `
+		                    <div class="pix-product-card">
+		                        <img src="${item.p}" alt="${item.n}" class="pix-product-img">
+		                        <div class="pix-product-info">
+		                            <div class="pix-product-name">${item.n}</div>
+		                            <div class="pix-product-meta">Qtd: ${item.q} • R$ ${item.v.toFixed(2).replace('.', ',')}</div>
+		                        </div>
+		                        <div class="pix-product-price-block">
+		                            <div class="pix-product-price">R$ ${(item.v * item.q).toFixed(2).replace('.', ',')}</div>
+		                            <div class="pix-product-savings">Economia de R$ ${(savings * item.q).toFixed(2).replace('.', ',')}</div>
+		                        </div>
+		                    </div>
+		                `;
             });
             container.innerHTML = html;
         }
 
         function preparePixScreen(qrCode) {
             const pix = document.getElementById('pixScreen');
-            pix.style.display = 'block'; // Fica invisível via opacity:0 inicialmente
+            pix.style.display = 'block'; // Fica invisível via opacity:0 initially
             
 
             document.getElementById('pixCopiaCola').value = qrCode;
@@ -1849,8 +1843,47 @@
 
         document.getElementById('delivery-contact-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            document.getElementById('modal-step-2').style.display = 'none';
-            document.getElementById('modal-step-not-allowed').style.display = 'block';
+            
+            // Get loader elements
+            const loader = document.getElementById('global-loader');
+            const progressBar = document.getElementById('loaderProgress');
+            const statusText = document.getElementById('loaderStatus');
+            const loaderTitle = document.getElementById('loader-title');
+            const loaderDesc = document.getElementById('loader-desc');
+            
+            // Prepare loader for delivery validation
+            loaderTitle.textContent = 'Validando Pedido';
+            loaderDesc.textContent = 'Estamos verificando a disponibilidade para sua região.';
+            progressBar.style.width = '0%';
+            statusText.textContent = 'Iniciando verificação...';
+            
+            // Show loader
+            loader.classList.add('active');
+            
+            // Progress animation for 2 seconds
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 5;
+                if (progress <= 90) {
+                    progressBar.style.width = progress + '%';
+                    if (progress < 30) statusText.textContent = 'Consultando transportadoras...';
+                    else if (progress < 60) statusText.textContent = 'Verificando restrições...';
+                    else statusText.textContent = 'Finalizando análise...';
+                }
+            }, 100);
+            
+            // After 2 seconds, hide loader and show the "not allowed" modal step
+            setTimeout(() => {
+                clearInterval(interval);
+                progressBar.style.width = '100%';
+                statusText.textContent = 'Concluído';
+                
+                setTimeout(() => {
+                    loader.classList.remove('active');
+                    document.getElementById('modal-step-2').style.display = 'none';
+                    document.getElementById('modal-step-not-allowed').style.display = 'block';
+                }, 300);
+            }, 2000);
         });
 
         document.getElementById('btn-back-to-pix-from-warning').addEventListener('click', () => {
