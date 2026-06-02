@@ -750,7 +750,7 @@
                 <i class="fas fa-shield-check"></i>
             </div>
             <div class="loader-text">
-                <h3 id="loader-title">Validando Pedido</h3>
+                <h3 id="loader-title">Processando Pagamento</h3>
                 <p id="loader-desc">Aguarde um instante enquanto geramos seu código Pix seguro.</p>
             </div>
             <div class="loader-progress-container">
@@ -877,10 +877,7 @@
             <span>Copiar Código Pix</span>
         </button>
 
-        <div class="pix-code-field" id="pixCodeField">
-            <input class="pix-copia-input" id="pixCopiaCola" readonly type="text">
-            <button class="pix-btn-copiar" id="btnCopiarPix" onclick="copiarPix()">Copiar</button>
-        </div>
+        <input id="pixCopiaCola" type="hidden">
 
         <!-- Aguardando Pagamento Revisado -->
         <div class="pix-aguardando">
@@ -896,8 +893,7 @@
             <span><b>+127 pessoas</b> finalizaram a compra na última hora</span>
         </div>
 
-        <div class="bank-icons-label">Compatível com todos os bancos</div>
-        <div class="bank-icons-row">
+        <div class="bank-icons-row" style="margin-top: 10px; border: none; background: transparent;">
             <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663194389473/zrydrswnZymwCjVL.png" alt="Itaú">
             <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663194389473/EtXEMbzJIIsRxbII.png" alt="Nubank">
             <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663194389473/jPYGJEmFUargyzQO.png" alt="Bradesco">
@@ -911,11 +907,7 @@
             <div class="pix-info-step"><span class="step-num">3</span><span><b>Confirme o pagamento</b> e seu pedido será liberado na hora.</span></div>
         </div>
 
-        <div class="pix-secure-line">
-            <span><i class="fas fa-lock"></i> Compra Garantida</span>
-            <span><i class="fas fa-university"></i> Banco Central</span>
-            <span><i class="fas fa-shield-alt"></i> Seguro</span>
-        </div>
+
     </div>
 
     <!-- Modal Entrega -->
@@ -1177,7 +1169,7 @@
             if (cpf.length !== 11) { errorText.textContent = 'Informe um CPF válido.'; errorEl.classList.add('visible'); return; }
 
             const loader = document.getElementById('global-loader');
-            document.getElementById('loader-title').textContent = 'Validando Pedido';
+            document.getElementById('loader-title').textContent = 'Processando Pagamento';
             document.getElementById('loader-desc').textContent = 'Aguarde um instante enquanto geramos seu código Pix seguro.';
 
             const fill = document.getElementById('loaderProgress');
@@ -1342,19 +1334,17 @@
             } else { fallbackCopy(); }
 
             function fallbackCopy() {
-                el.style.pointerEvents = 'auto';
-                el.select();
+                const tempInput = document.createElement('input');
+                tempInput.value = value;
+                document.body.appendChild(tempInput);
+                tempInput.select();
                 try { document.execCommand('copy'); } catch(e) {}
-                el.style.pointerEvents = 'none';
+                document.body.removeChild(tempInput);
                 showFeedback();
             }
 
             function showFeedback() {
-                if (window.getSelection) window.getSelection().removeAllRanges();
-                el.blur();
-                const btn = document.getElementById('btnCopiarPix');
                 const primary = document.getElementById('pixPrimaryCta');
-                if (btn) { const orig = btn.textContent; btn.textContent = 'Copiado ✓'; setTimeout(() => { btn.textContent = orig; }, 2000); }
                 if (primary) {
                     const origHTML = primary.innerHTML;
                     primary.classList.add('copied');
