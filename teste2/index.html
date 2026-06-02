@@ -347,6 +347,16 @@
             font-size: 18px;
         }
 
+        /* Spinner circular no bloco de entrega */
+        .delivery-spinner {
+            width: 22px;
+            height: 22px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+        }
+
         .pix-delivery-info {
             flex: 1;
             display: flex;
@@ -406,14 +416,19 @@
         }
 
         .pix-delivery-footer i {
-            color: #f59e0b;
-            font-size: 10px;
+            color: #16a34a;
+            font-size: 11px;
         }
 
         .pix-delivery-footer span {
             font-size: 11px;
             font-weight: 600;
-            color: #64748b;
+            color: #374151;
+        }
+
+        .pix-delivery-footer strong {
+            color: #16a34a;
+            font-weight: 800;
         }
 
         /* ===== FIM BLOCO DE ENTREGA ===== */
@@ -672,24 +687,6 @@
         .loader-step-item.active .loader-step-label { color: var(--primary); }
         .loader-step-item.done .loader-step-label { color: #60a5fa; }
 
-        .loader-status-text {
-            font-size: 0.8rem;
-            color: var(--primary);
-            font-weight: 700;
-            margin-top: 16px;
-            display: block;
-            min-height: 1.2em;
-            letter-spacing: 0.3px;
-            opacity: 0;
-            transform: translateY(4px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-
-        .loader-status-text.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
         .loader-trust {
             display: flex; align-items: center; justify-content: center; gap: 12px;
             margin-top: 28px; font-size: 11px; color: #94a3b8; font-weight: 500;
@@ -807,7 +804,7 @@
                         <span class="loader-step-label">Concluído</span>
                     </div>
                 </div>
-                <span class="loader-status-text" id="loaderStatus">Iniciando...</span>
+
             </div>
             <div class="loader-trust">
                 <span><i class="fas fa-shield-alt"></i> Ambiente Seguro</span>
@@ -896,11 +893,11 @@
             </div>
             <div class="pix-delivery-body">
                 <div class="pix-delivery-icon-wrap">
-                    <i class="fas fa-bolt"></i>
+                    <div class="delivery-spinner"></div>
                 </div>
                 <div class="pix-delivery-info">
-                    <div class="pix-delivery-time-text" id="pixDeliveryTime">Entrega em 20 Minutos</div>
-                    <div class="pix-delivery-sub">Após confirmação do pagamento</div>
+                    <div class="pix-delivery-time-text">Aguardando Pagamento</div>
+                    <div class="pix-delivery-sub">Confirmação instantânea via Pix</div>
                 </div>
                 <div class="pix-delivery-badge">
                     <span class="pix-delivery-badge-icon"><i class="fas fa-bolt"></i></span>
@@ -908,8 +905,8 @@
                 </div>
             </div>
             <div class="pix-delivery-footer">
-                <i class="fas fa-hourglass-half"></i>
-                <span>Aguardando confirmação do pagamento</span>
+                <i class="fas fa-truck"></i>
+                <span>Prazo: <strong id="pixDeliveryTime">20 Minutos</strong> após confirmação</span>
             </div>
         </div>
 
@@ -1204,13 +1201,8 @@
         /* === Loader progress helper === */
         function setLoaderStep(stepIndex, statusMsg) {
             const fill = document.getElementById('loaderProgress');
-            const statusEl = document.getElementById('loaderStatus');
             const steps = ['step-1','step-2','step-3'];
 
-            // Cada etapa tem largura, duração e easing próprios
-            // Etapa 0: arranca rápido (sensação de resposta imediata)
-            // Etapa 1: desacelera no meio (simula processamento real)
-            // Etapa 2: estoura até 100% com overshoot suave
             const config = [
                 { width: '28%',  duration: '0.55s', easing: 'cubic-bezier(0.22, 1, 0.36, 1)' },
                 { width: '62%',  duration: '1.1s',  easing: 'cubic-bezier(0.4, 0, 0.15, 1)' },
@@ -1229,12 +1221,6 @@
                 if (i < stepIndex) el.classList.add('done');
                 else if (i === stepIndex) el.classList.add('active');
             });
-
-            statusEl.classList.remove('visible');
-            setTimeout(() => {
-                statusEl.textContent = statusMsg;
-                statusEl.classList.add('visible');
-            }, 120);
         }
 
         async function generatePix() {
@@ -1260,7 +1246,6 @@
                 const el = document.getElementById(id);
                 if (el) el.classList.remove('active','done');
             });
-            document.getElementById('loaderStatus').classList.remove('visible');
 
             loader.classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -1470,8 +1455,7 @@
             const fill = document.getElementById('loaderProgress');
             fill.style.width = '0%';
             fill.classList.remove('has-progress');
-            ['step-1','step-2','step-3','step-4'].forEach(id => document.getElementById(id).classList.remove('active','done'));
-            document.getElementById('loaderStatus').classList.remove('visible');
+            ['step-1','step-2','step-3'].forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('active','done'); });
 
             loader.classList.add('active');
 
