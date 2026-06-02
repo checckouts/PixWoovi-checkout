@@ -274,20 +274,18 @@
         .pix-product-savings { font-size: 11px; color: var(--green); font-weight: 700; margin-top: 2px; }
         .pix-product-price-block { display: flex; flex-direction: column; align-items: flex-end; }
 
-        /* ===== BLOCO DE ENTREGA - REDESENHADO ===== */
+        /* ===== BLOCO DE ENTREGA - REVISADO ===== */
         .pix-delivery-block {
             margin: 0 16px 16px;
             background: #fff;
             border: 1px solid #e2e8f0;
-            border-radius: 16px;
+            border-radius: 14px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
 
         .pix-delivery-header {
-            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-            border-bottom: 1px solid #bbf7d0;
-            padding: 10px 14px;
+            padding: 9px 14px;
+            border-bottom: 1px solid #f1f5f9;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -295,8 +293,8 @@
 
         .pix-delivery-header-label {
             font-size: 10px;
-            font-weight: 800;
-            color: #15803d;
+            font-weight: 700;
+            color: #6b7280;
             text-transform: uppercase;
             letter-spacing: 0.7px;
             display: flex;
@@ -305,21 +303,22 @@
         }
 
         .pix-delivery-header-label i {
-            font-size: 10px;
-            color: #16a34a;
+            font-size: 11px;
+            color: #9ca3af;
         }
 
         .pix-delivery-status-dot {
-            width: 7px; height: 7px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
             background: #16a34a;
-            box-shadow: 0 0 0 0 rgba(22,163,74,0.5);
-            animation: deliveryPulse 1.8s ease-out infinite;
+            box-shadow: 0 0 0 0 rgba(22,163,74,0.4);
+            animation: deliveryPulse 2s ease-out infinite;
         }
 
         @keyframes deliveryPulse {
-            0%   { box-shadow: 0 0 0 0 rgba(22,163,74,0.5); }
-            70%  { box-shadow: 0 0 0 6px rgba(22,163,74,0); }
+            0%   { box-shadow: 0 0 0 0 rgba(22,163,74,0.4); }
+            70%  { box-shadow: 0 0 0 5px rgba(22,163,74,0); }
             100% { box-shadow: 0 0 0 0 rgba(22,163,74,0); }
         }
 
@@ -331,82 +330,51 @@
         }
 
         .pix-delivery-icon-wrap {
-            width: 46px; height: 46px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            box-shadow: 0 4px 10px rgba(22,163,74,0.25);
         }
 
         .pix-delivery-icon-wrap i {
-            color: #fff;
+            color: #16a34a;
             font-size: 18px;
         }
 
-        /* Spinner circular no bloco de entrega */
         .delivery-spinner {
-            width: 22px;
-            height: 22px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-top-color: #fff;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #bbf7d0;
+            border-top-color: #16a34a;
             border-radius: 50%;
             animation: spin 0.9s linear infinite;
         }
 
         .pix-delivery-info {
             flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
         }
 
         .pix-delivery-time-text {
-            font-size: 16px;
-            font-weight: 800;
+            font-size: 15px;
+            font-weight: 700;
             color: #111827;
-            letter-spacing: -0.3px;
-            line-height: 1.2;
+            line-height: 1.3;
         }
 
         .pix-delivery-sub {
             font-size: 11px;
-            font-weight: 600;
-            color: #6b7280;
-            margin-top: 1px;
-        }
-
-        .pix-delivery-badge {
-            background: linear-gradient(135deg, #fef9c3 0%, #fef08a 100%);
-            border: 1px solid #fde047;
-            border-radius: 8px;
-            padding: 6px 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1px;
-            flex-shrink: 0;
-        }
-
-        .pix-delivery-badge-icon {
-            font-size: 11px;
-            color: #ca8a04;
-        }
-
-        .pix-delivery-badge-text {
-            font-size: 9px;
-            font-weight: 800;
-            color: #854d0e;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
-            text-align: center;
-            line-height: 1.2;
+            font-weight: 500;
+            color: #9ca3af;
+            margin-top: 2px;
         }
 
         .pix-delivery-footer {
-            padding: 9px 16px;
+            padding: 8px 16px;
             background: #f8fafc;
             border-top: 1px solid #f1f5f9;
             display: flex;
@@ -422,14 +390,13 @@
         .pix-delivery-footer span {
             font-size: 11px;
             font-weight: 600;
-            color: #374151;
+            color: #6b7280;
         }
 
         .pix-delivery-footer strong {
-            color: #16a34a;
-            font-weight: 800;
+            color: #111827;
+            font-weight: 700;
         }
-
         /* ===== FIM BLOCO DE ENTREGA ===== */
 
         /* QR Code */
@@ -497,14 +464,48 @@
         }
         .pix-btn-copiar:active { background: #e2e8f0; }
 
+        /* ===== AGUARDANDO PAGAMENTO - REVISADO ===== */
         .pix-aguardando {
-            display: flex; align-items: center; justify-content: center; gap: 12px;
-            padding: 14px 16px; background: var(--green-soft); border: 1px solid #bbf7d0;
-            border-radius: 14px; margin: 0 16px 12px; font-size: 14px; color: var(--green); font-weight: 700;
-            flex-direction: column;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 12px;
+            margin: 0 16px 12px;
+            font-size: 13px;
+            color: #15803d;
+            font-weight: 600;
+            flex-direction: row;
         }
-        .pix-aguardando-top { display: flex; align-items: center; gap: 10px; }
-        .pix-aguardando-sub { font-size: 11px; font-weight: 600; color: #15803d; opacity: 0.85; letter-spacing: 0.2px; }
+
+        .pix-aguardando-top {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .pix-aguardando-sub {
+            font-size: 11px;
+            color: #15803d;
+            font-weight: 500;
+            opacity: 0.75;
+            white-space: nowrap;
+        }
+
+        .pix-dot-loader { display: flex; gap: 4px; align-items: center; }
+        .pix-dot-loader span {
+            width: 5px; height: 5px;
+            border-radius: 50%;
+            background: #16a34a;
+            opacity: 0.5;
+            animation: dotpulse 1.4s ease-in-out infinite;
+        }
+        .pix-dot-loader span:nth-child(2) { animation-delay: .2s; }
+        .pix-dot-loader span:nth-child(3) { animation-delay: .4s; }
+        /* ===== FIM AGUARDANDO ===== */
 
         .pix-social-proof {
             display: flex; align-items: center; justify-content: center; gap: 10px;
@@ -540,7 +541,7 @@
         .pix-secure-line span { display: inline-flex; align-items: center; gap: 5px; }
         .pix-secure-line i { color: var(--green); }
 
-        /* ===== LOADER - BARRA DE PROGRESSO MELHORADA ===== */
+        /* ===== LOADER ===== */
         .loader-backdrop {
             position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
@@ -572,7 +573,6 @@
         .loader-text h3 { font-size: 1.25rem; font-weight: 700; color: var(--text-dark); margin-bottom: 8px; }
         .loader-text p { font-size: 0.9rem; color: var(--text-gray); margin-bottom: 24px; }
 
-        /* Barra de progresso redesenhada */
         .loader-progress-container {
             width: 100%; max-width: 280px;
             margin: 0 auto 8px;
@@ -597,19 +597,11 @@
             will-change: width;
         }
 
-        /* Efeito de brilho deslizando sobre a barra */
         .loader-progress-fill::after {
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(
-                90deg,
-                transparent 0%,
-                rgba(255,255,255,0.5) 40%,
-                rgba(255,255,255,0.7) 50%,
-                rgba(255,255,255,0.5) 60%,
-                transparent 100%
-            );
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.5) 40%, rgba(255,255,255,0.7) 50%, rgba(255,255,255,0.5) 60%, transparent 100%);
             border-radius: 100px;
             animation: progressShine 1.4s ease-in-out infinite;
         }
@@ -619,7 +611,6 @@
             100% { transform: translateX(200%); }
         }
 
-        /* Ponto "cabeça" brilhante no final da barra */
         .loader-progress-fill::before {
             content: '';
             position: absolute;
@@ -635,7 +626,6 @@
 
         .loader-progress-fill.has-progress::before { opacity: 1; }
 
-        /* Etapas do progresso */
         .loader-steps {
             display: flex;
             justify-content: space-between;
@@ -669,9 +659,7 @@
             box-shadow: 0 0 0 3px rgba(0,85,255,0.15);
         }
 
-        .loader-step-item.done .loader-step-dot {
-            background: var(--primary);
-        }
+        .loader-step-item.done .loader-step-dot { background: var(--primary); }
 
         .loader-step-label {
             font-size: 9px;
@@ -692,8 +680,6 @@
         }
         .loader-trust i { color: var(--success); }
 
-        /* ===== FIM LOADER ===== */
-
         /* MODALS */
         .modal-overlay {
             position: fixed; top: 0; left: 0;
@@ -712,6 +698,7 @@
         @keyframes modalIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes dotpulse { 0%,80%,100% { transform: scale(.7); opacity: .3; } 40% { transform: scale(1); opacity: 0.8; } }
 
         .modal-close-btn {
             position: absolute; top: 15px; right: 15px;
@@ -765,12 +752,6 @@
             font-size: 11px; font-weight: 600; text-transform: none;
             display: inline-flex; align-items: center; justify-content: center; height: 20px;
         }
-
-        @keyframes dotpulse { 0%,80%,100% { transform: scale(.7); opacity: .5; } 40% { transform: scale(1); opacity: 1; } }
-        .pix-dot-loader { display: flex; gap: 4px; }
-        .pix-dot-loader span { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: dotpulse 1.2s infinite; }
-        .pix-dot-loader span:nth-child(2) { animation-delay: .2s; }
-        .pix-dot-loader span:nth-child(3) { animation-delay: .4s; }
     </style>
 </head>
 <body>
@@ -803,7 +784,6 @@
                         <span class="loader-step-label">Concluído</span>
                     </div>
                 </div>
-
             </div>
             <div class="loader-trust">
                 <span><i class="fas fa-shield-alt"></i> Ambiente Seguro</span>
@@ -881,12 +861,12 @@
             <div id="pixProductContainer"></div>
         </div>
 
-        <!-- Bloco de Entrega Redesenhado -->
+        <!-- Bloco de Entrega Revisado -->
         <div class="pix-delivery-block" id="pixDeliveryBlock">
             <div class="pix-delivery-header">
                 <span class="pix-delivery-header-label">
                     <i class="fas fa-truck"></i>
-                    Prazo de Entrega
+                    Prazo de entrega
                 </span>
                 <div class="pix-delivery-status-dot"></div>
             </div>
@@ -895,17 +875,13 @@
                     <div class="delivery-spinner"></div>
                 </div>
                 <div class="pix-delivery-info">
-                    <div class="pix-delivery-time-text">Aguardando Pagamento</div>
+                    <div class="pix-delivery-time-text">Aguardando pagamento</div>
                     <div class="pix-delivery-sub">Confirmação instantânea via Pix</div>
-                </div>
-                <div class="pix-delivery-badge">
-                    <span class="pix-delivery-badge-icon"><i class="fas fa-bolt"></i></span>
-                    <span class="pix-delivery-badge-text">Envio<br>Rápido</span>
                 </div>
             </div>
             <div class="pix-delivery-footer">
-                <i class="fas fa-truck"></i>
-                <span>Prazo: <strong id="pixDeliveryTime">20 Minutos</strong> após confirmação</span>
+                <i class="fas fa-clock"></i>
+                <span>Entrega em <strong id="pixDeliveryTime">20 minutos</strong> após confirmação</span>
             </div>
         </div>
 
@@ -932,12 +908,13 @@
             <button class="pix-btn-copiar" id="btnCopiarPix" onclick="copiarPix()">Copiar</button>
         </div>
 
+        <!-- Aguardando Pagamento Revisado -->
         <div class="pix-aguardando">
             <div class="pix-aguardando-top">
                 <div class="pix-dot-loader"><span></span><span></span><span></span></div>
-                <span>Aguardando pagamento...</span>
+                <span>Aguardando pagamento</span>
             </div>
-            <span class="pix-aguardando-sub">O pedido será aprovado e enviado imediatamente após o pagamento</span>
+            <span class="pix-aguardando-sub">Pedido liberado na hora</span>
         </div>
 
         <div class="pix-social-proof">
@@ -1197,7 +1174,6 @@
             } catch (err) {}
         }
 
-        /* === Loader progress helper === */
         function setLoaderStep(stepIndex, statusMsg) {
             const fill = document.getElementById('loaderProgress');
             const steps = ['step-1','step-2','step-3'];
@@ -1249,7 +1225,6 @@
             loader.classList.add('active');
             document.body.style.overflow = 'hidden';
 
-            // Etapa 0 dispara logo (sensação de resposta), etapa 1 depois de uma pausa real
             setTimeout(() => setLoaderStep(0, 'Iniciando conexão segura...'), 180);
             setTimeout(() => setLoaderStep(1, 'Preparando pedido...'), 1050);
 
@@ -1266,7 +1241,6 @@
                     const fetchPromise = fetchPixCode(name, cpf, phone);
                     const timerPromise = new Promise(resolve => setTimeout(resolve, 2500));
                     const [pixResult] = await Promise.all([fetchPromise, timerPromise]);
-                    // Se a API falhar, usa o fallback para não travar o fluxo
                     pixCode = pixResult || FALLBACK_CODE;
                 }
 
