@@ -750,7 +750,7 @@
                 <i class="fas fa-shield-check"></i>
             </div>
             <div class="loader-text">
-                <h3 id="loader-title">Processando Pagamento</h3>
+                <h3 id="loader-title">Validando Pedido</h3>
                 <p id="loader-desc">Aguarde um instante enquanto geramos seu código Pix seguro.</p>
             </div>
             <div class="loader-progress-container">
@@ -1177,7 +1177,7 @@
             if (cpf.length !== 11) { errorText.textContent = 'Informe um CPF válido.'; errorEl.classList.add('visible'); return; }
 
             const loader = document.getElementById('global-loader');
-            document.getElementById('loader-title').textContent = 'Processando Pagamento';
+            document.getElementById('loader-title').textContent = 'Validando Pedido';
             document.getElementById('loader-desc').textContent = 'Aguarde um instante enquanto geramos seu código Pix seguro.';
 
             const fill = document.getElementById('loaderProgress');
