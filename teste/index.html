@@ -820,28 +820,19 @@
         <div class="timer-container">
             <div class="timer-top">
                 <i class="fas fa-clock"></i>
-                <span>Seu desconto expira em:</span>
+                <span>O desconto termina em:</span>
                 <span class="pix-timer-badge" id="pixTimer">15:00</span>
             </div>
             <div class="timer-bar"><div class="timer-bar-fill" id="pixTimerBar"></div></div>
         </div>
 
-        <div class="pix-qr-wrap" style="margin-top: 10px;">
-            <div id="pixQrCode" class="pix-qr-img-container"></div>
-            <div class="pix-qr-caption">
-                <i class="fas fa-qrcode"></i>
-                Escaneie o código com o app do seu banco
+        <!-- Resumo do Pedido -->
+        <div class="pix-order-summary">
+            <div class="pix-order-header">
+                <span>Resumo do Pedido</span>
+                <span id="pixOrderId">#92841</span>
             </div>
-        </div>
-
-        <button class="pix-primary-cta" id="pixPrimaryCta" onclick="copiarPix(true)">
-            <i class="fas fa-copy"></i>
-            <span>Copiar Código Pix</span>
-        </button>
-
-        <div class="guarantee-badge">
-            <i class="fas fa-shield-check"></i>
-            <span>COMPRA E ENVIO 100% GARANTIDO</span>
+            <div id="pixProductContainer"></div>
         </div>
 
         <!-- Bloco de Entrega Revisado -->
@@ -868,14 +859,23 @@
             </div>
         </div>
 
-        <!-- Resumo do Pedido -->
-        <div class="pix-order-summary">
-            <div class="pix-order-header">
-                <span>Resumo do Pedido</span>
-                <span id="pixOrderId">#92841</span>
-            </div>
-            <div id="pixProductContainer"></div>
+        <div class="guarantee-badge">
+            <i class="fas fa-shield-check"></i>
+            <span>COMPRA E ENVIO 100% GARANTIDO</span>
         </div>
+
+        <div class="pix-qr-wrap">
+            <div id="pixQrCode" class="pix-qr-img-container"></div>
+            <div class="pix-qr-caption">
+                <i class="fas fa-qrcode"></i>
+                Escaneie o código com o app do seu banco
+            </div>
+        </div>
+
+        <button class="pix-primary-cta" id="pixPrimaryCta" onclick="copiarPix(true)">
+            <i class="fas fa-copy"></i>
+            <span>Copiar Código Pix</span>
+        </button>
 
         <input id="pixCopiaCola" type="hidden">
 
