@@ -611,20 +611,7 @@
             100% { transform: translateX(200%); }
         }
 
-        .loader-progress-fill::before {
-            content: '';
-            position: absolute;
-            right: -1px; top: 50%;
-            transform: translateY(-50%);
-            width: 12px; height: 12px;
-            background: #fff;
-            border-radius: 50%;
-            box-shadow: 0 0 0 2px #0055ff, 0 0 8px rgba(0,85,255,0.6);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
 
-        .loader-progress-fill.has-progress::before { opacity: 1; }
 
         .loader-steps {
             display: flex;
@@ -1174,7 +1161,7 @@
             fill.style.setProperty('--progress-duration', duration);
             fill.style.setProperty('--progress-easing', easing);
             fill.style.width = width;
-            fill.classList.add('has-progress');
+
         }
 
         async function generatePix() {
@@ -1195,7 +1182,7 @@
 
             const fill = document.getElementById('loaderProgress');
             fill.style.width = '0%';
-            fill.classList.remove('has-progress');
+
 
             loader.classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -1402,7 +1389,7 @@
 
             const fill = document.getElementById('loaderProgress');
             fill.style.width = '0%';
-            fill.classList.remove('has-progress');
+
 
             loader.classList.add('active');
 
