@@ -274,7 +274,7 @@
         .pix-product-savings { font-size: 11px; color: var(--green); font-weight: 700; margin-top: 2px; }
         .pix-product-price-block { display: flex; flex-direction: column; align-items: flex-end; }
 
-        /* ===== BLOCO DE ENTREGA ===== */
+        /* ===== BLOCO DE ENTREGA - REDESENHADO ===== */
         .pix-delivery-block {
             margin: 0 16px 16px;
             background: #fff;
@@ -304,7 +304,10 @@
             gap: 5px;
         }
 
-        .pix-delivery-header-label i { font-size: 10px; color: #16a34a; }
+        .pix-delivery-header-label i {
+            font-size: 10px;
+            color: #16a34a;
+        }
 
         .pix-delivery-status-dot {
             width: 7px; height: 7px;
@@ -338,8 +341,12 @@
             box-shadow: 0 4px 10px rgba(22,163,74,0.25);
         }
 
-        .pix-delivery-icon-wrap i { color: #fff; font-size: 18px; }
+        .pix-delivery-icon-wrap i {
+            color: #fff;
+            font-size: 18px;
+        }
 
+        /* Spinner circular no bloco de entrega */
         .delivery-spinner {
             width: 22px;
             height: 22px;
@@ -349,32 +356,81 @@
             animation: spin 0.9s linear infinite;
         }
 
-        .pix-delivery-info { flex: 1; display: flex; flex-direction: column; gap: 2px; }
-        .pix-delivery-time-text { font-size: 16px; font-weight: 800; color: #111827; letter-spacing: -0.3px; line-height: 1.2; }
-        .pix-delivery-sub { font-size: 11px; font-weight: 600; color: #6b7280; margin-top: 1px; }
+        .pix-delivery-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .pix-delivery-time-text {
+            font-size: 16px;
+            font-weight: 800;
+            color: #111827;
+            letter-spacing: -0.3px;
+            line-height: 1.2;
+        }
+
+        .pix-delivery-sub {
+            font-size: 11px;
+            font-weight: 600;
+            color: #6b7280;
+            margin-top: 1px;
+        }
 
         .pix-delivery-badge {
             background: linear-gradient(135deg, #fef9c3 0%, #fef08a 100%);
             border: 1px solid #fde047;
             border-radius: 8px;
             padding: 6px 10px;
-            display: flex; flex-direction: column; align-items: center; gap: 1px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1px;
             flex-shrink: 0;
         }
 
-        .pix-delivery-badge-icon { font-size: 11px; color: #ca8a04; }
-        .pix-delivery-badge-text { font-size: 9px; font-weight: 800; color: #854d0e; text-transform: uppercase; letter-spacing: 0.4px; text-align: center; line-height: 1.2; }
+        .pix-delivery-badge-icon {
+            font-size: 11px;
+            color: #ca8a04;
+        }
+
+        .pix-delivery-badge-text {
+            font-size: 9px;
+            font-weight: 800;
+            color: #854d0e;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            text-align: center;
+            line-height: 1.2;
+        }
 
         .pix-delivery-footer {
             padding: 9px 16px;
             background: #f8fafc;
             border-top: 1px solid #f1f5f9;
-            display: flex; align-items: center; gap: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .pix-delivery-footer i { color: #16a34a; font-size: 11px; }
-        .pix-delivery-footer span { font-size: 11px; font-weight: 600; color: #374151; }
-        .pix-delivery-footer strong { color: #16a34a; font-weight: 800; }
+        .pix-delivery-footer i {
+            color: #16a34a;
+            font-size: 11px;
+        }
+
+        .pix-delivery-footer span {
+            font-size: 11px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .pix-delivery-footer strong {
+            color: #16a34a;
+            font-weight: 800;
+        }
+
+        /* ===== FIM BLOCO DE ENTREGA ===== */
 
         /* QR Code */
         .guarantee-badge {
@@ -484,7 +540,7 @@
         .pix-secure-line span { display: inline-flex; align-items: center; gap: 5px; }
         .pix-secure-line i { color: var(--green); }
 
-        /* ===== LOADER - BARRA LIMPA SEM ETAPAS ===== */
+        /* ===== LOADER - BARRA DE PROGRESSO MELHORADA ===== */
         .loader-backdrop {
             position: fixed; top: 0; left: 0;
             width: 100%; height: 100%;
@@ -516,32 +572,32 @@
         .loader-text h3 { font-size: 1.25rem; font-weight: 700; color: var(--text-dark); margin-bottom: 8px; }
         .loader-text p { font-size: 0.9rem; color: var(--text-gray); margin-bottom: 24px; }
 
-        /* Barra de progresso limpa */
+        /* Barra de progresso redesenhada */
         .loader-progress-container {
             width: 100%; max-width: 280px;
-            margin: 0 auto;
+            margin: 0 auto 8px;
         }
 
         .loader-progress-track {
-            height: 6px;
+            height: 8px;
             background: #eef2f7;
             border-radius: 100px;
             overflow: hidden;
             position: relative;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.06);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.08);
         }
 
         .loader-progress-fill {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, #0033cc 0%, #0055ff 55%, #00bfff 100%);
+            background: linear-gradient(90deg, #0033cc 0%, #0055ff 50%, #00bfff 100%);
             border-radius: 100px;
             position: relative;
-            transition: width var(--progress-duration, 0.8s) var(--progress-easing, cubic-bezier(0.4, 0, 0.2, 1));
+            transition: width var(--progress-duration, 0.7s) var(--progress-easing, cubic-bezier(0.4, 0, 0.2, 1));
             will-change: width;
         }
 
-        /* Efeito de brilho deslizando */
+        /* Efeito de brilho deslizando sobre a barra */
         .loader-progress-fill::after {
             content: '';
             position: absolute;
@@ -549,25 +605,93 @@
             background: linear-gradient(
                 90deg,
                 transparent 0%,
-                rgba(255,255,255,0.45) 40%,
-                rgba(255,255,255,0.65) 50%,
-                rgba(255,255,255,0.45) 60%,
+                rgba(255,255,255,0.5) 40%,
+                rgba(255,255,255,0.7) 50%,
+                rgba(255,255,255,0.5) 60%,
                 transparent 100%
             );
             border-radius: 100px;
-            animation: progressShine 1.6s ease-in-out infinite;
+            animation: progressShine 1.4s ease-in-out infinite;
         }
 
         @keyframes progressShine {
-            0%   { transform: translateX(-120%); }
-            100% { transform: translateX(220%); }
+            0%   { transform: translateX(-100%); }
+            100% { transform: translateX(200%); }
         }
+
+        /* Ponto "cabeça" brilhante no final da barra */
+        .loader-progress-fill::before {
+            content: '';
+            position: absolute;
+            right: -1px; top: 50%;
+            transform: translateY(-50%);
+            width: 12px; height: 12px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 0 2px #0055ff, 0 0 8px rgba(0,85,255,0.6);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .loader-progress-fill.has-progress::before { opacity: 1; }
+
+        /* Etapas do progresso */
+        .loader-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 6px;
+            padding: 0 2px;
+        }
+
+        .loader-step-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            opacity: 0.35;
+            transition: opacity 0.4s ease;
+            flex: 1;
+        }
+
+        .loader-step-item.active { opacity: 1; }
+        .loader-step-item.done { opacity: 0.7; }
+
+        .loader-step-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: #d1d5db;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        .loader-step-item.active .loader-step-dot {
+            background: var(--primary);
+            transform: scale(1.4);
+            box-shadow: 0 0 0 3px rgba(0,85,255,0.15);
+        }
+
+        .loader-step-item.done .loader-step-dot {
+            background: var(--primary);
+        }
+
+        .loader-step-label {
+            font-size: 9px;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .loader-step-item.active .loader-step-label { color: var(--primary); }
+        .loader-step-item.done .loader-step-label { color: #60a5fa; }
 
         .loader-trust {
             display: flex; align-items: center; justify-content: center; gap: 12px;
             margin-top: 28px; font-size: 11px; color: #94a3b8; font-weight: 500;
         }
         .loader-trust i { color: var(--success); }
+
         /* ===== FIM LOADER ===== */
 
         /* MODALS */
@@ -647,182 +771,6 @@
         .pix-dot-loader span { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: dotpulse 1.2s infinite; }
         .pix-dot-loader span:nth-child(2) { animation-delay: .2s; }
         .pix-dot-loader span:nth-child(3) { animation-delay: .4s; }
-
-        /* ===== BANNER FIXO PÓS-CÓPIA ===== */
-        #post-copy-banner {
-            position: fixed;
-            bottom: 0; left: 50%;
-            transform: translateX(-50%) translateY(110%);
-            width: 100%; max-width: 480px;
-            background: #0f172a;
-            border-radius: 20px 20px 0 0;
-            padding: 16px 16px 24px;
-            z-index: 500;
-            box-shadow: 0 -8px 32px rgba(0,0,0,0.25);
-            transition: transform 0.45s cubic-bezier(0.34, 1.2, 0.64, 1);
-        }
-        #post-copy-banner.visible {
-            transform: translateX(-50%) translateY(0%);
-        }
-        .pcb-handle {
-            width: 36px; height: 4px;
-            background: rgba(255,255,255,0.15);
-            border-radius: 100px;
-            margin: 0 auto 14px;
-        }
-        .pcb-header {
-            display: flex; align-items: center; gap: 10px;
-            margin-bottom: 12px;
-        }
-        .pcb-icon {
-            width: 36px; height: 36px;
-            background: #16a34a;
-            border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 16px; color: #fff; flex-shrink: 0;
-        }
-        .pcb-title {
-            font-size: 14px; font-weight: 800; color: #fff;
-            line-height: 1.3;
-        }
-        .pcb-sub {
-            font-size: 11px; color: rgba(255,255,255,0.55);
-            font-weight: 500; margin-top: 1px;
-        }
-        .pcb-instruction {
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
-            padding: 10px 14px;
-            margin-bottom: 14px;
-            display: flex; align-items: center; gap: 10px;
-            font-size: 12px; color: rgba(255,255,255,0.8); font-weight: 600;
-        }
-        .pcb-instruction i { color: #facc15; font-size: 14px; flex-shrink: 0; }
-        .pcb-banks-label {
-            font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.35);
-            text-transform: uppercase; letter-spacing: 0.8px;
-            margin-bottom: 8px;
-        }
-        .pcb-banks-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-        .pcb-bank-btn {
-            background: rgba(255,255,255,0.07);
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 12px;
-            padding: 10px 6px;
-            display: flex; flex-direction: column;
-            align-items: center; gap: 5px;
-            cursor: pointer; transition: all 0.18s ease;
-            text-decoration: none;
-        }
-        .pcb-bank-btn:active { background: rgba(255,255,255,0.14); transform: scale(0.96); }
-        .pcb-bank-btn img { height: 18px; width: auto; object-fit: contain; filter: brightness(0) invert(1); opacity: 0.85; }
-        .pcb-bank-btn span { font-size: 9px; font-weight: 700; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.3px; }
-        .pcb-dismiss {
-            width: 100%; background: transparent; border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 10px; padding: 10px; color: rgba(255,255,255,0.4);
-            font-size: 12px; font-weight: 600; cursor: pointer;
-            transition: all 0.2s;
-        }
-        .pcb-dismiss:active { background: rgba(255,255,255,0.06); }
-
-        /* ===== URGÊNCIA PÓS-CÓPIA ===== */
-        #post-copy-urgency {
-            display: none;
-            margin: 0 16px 14px;
-            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
-            border: 1px solid #4338ca;
-            border-radius: 14px;
-            padding: 12px 14px;
-            animation: fadeIn 0.4s ease;
-        }
-        #post-copy-urgency.visible { display: block; }
-        .pcu-top {
-            display: flex; align-items: center; justify-content: space-between;
-            margin-bottom: 8px;
-        }
-        .pcu-label {
-            font-size: 11px; font-weight: 800; color: #a5b4fc;
-            text-transform: uppercase; letter-spacing: 0.5px;
-            display: flex; align-items: center; gap: 5px;
-        }
-        .pcu-label i { font-size: 10px; }
-        .pcu-timer {
-            font-family: 'SF Mono', 'Courier New', monospace;
-            font-size: 18px; font-weight: 900;
-            color: #fff; letter-spacing: 1px;
-        }
-        .pcu-timer.urgent { color: #f87171; animation: timerPulse 1s ease-in-out infinite; }
-        @keyframes timerPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
-        .pcu-bar-track {
-            height: 3px; background: rgba(255,255,255,0.1);
-            border-radius: 100px; overflow: hidden;
-        }
-        .pcu-bar-fill {
-            height: 100%; width: 100%;
-            background: linear-gradient(90deg, #818cf8, #c7d2fe);
-            border-radius: 100px;
-            transition: width 1s linear;
-        }
-        .pcu-bar-fill.urgent { background: linear-gradient(90deg, #f87171, #fca5a5); }
-        .pcu-msg {
-            font-size: 11px; color: rgba(255,255,255,0.55);
-            margin-top: 7px; font-weight: 500;
-        }
-
-        /* ===== PROVA SOCIAL DINÂMICA ===== */
-        .pix-social-proof-dynamic {
-            transition: all 0.3s ease;
-        }
-        .social-live-notif {
-            display: flex; align-items: center; gap: 8px;
-            animation: slideNotif 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        @keyframes slideNotif {
-            from { opacity: 0; transform: translateX(-8px); }
-            to   { opacity: 1; transform: translateX(0); }
-        }
-        .social-avatar {
-            width: 28px; height: 28px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 12px; font-weight: 800; color: #fff; flex-shrink: 0;
-        }
-
-        /* ===== TOAST DE RETORNO DE ABA ===== */
-        #tab-return-toast {
-            position: fixed;
-            top: 16px; left: 50%;
-            transform: translateX(-50%) translateY(-120%);
-            width: calc(100% - 32px); max-width: 440px;
-            background: #0f172a;
-            border: 1px solid rgba(99,102,241,0.4);
-            border-radius: 14px;
-            padding: 12px 16px;
-            z-index: 600;
-            display: flex; align-items: center; gap: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-            transition: transform 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
-        }
-        #tab-return-toast.visible {
-            transform: translateX(-50%) translateY(0%);
-        }
-        .trt-icon {
-            width: 34px; height: 34px; border-radius: 9px;
-            background: #f59e0b; display: flex; align-items: center; justify-content: center;
-            font-size: 15px; color: #fff; flex-shrink: 0;
-        }
-        .trt-text { flex: 1; }
-        .trt-title { font-size: 13px; font-weight: 800; color: #fff; line-height: 1.2; }
-        .trt-sub { font-size: 11px; color: rgba(255,255,255,0.5); font-weight: 500; margin-top: 1px; }
-        .trt-close {
-            background: transparent; border: none; color: rgba(255,255,255,0.3);
-            font-size: 14px; cursor: pointer; padding: 4px; flex-shrink: 0;
-        }
     </style>
 </head>
 <body>
@@ -841,6 +789,21 @@
                 <div class="loader-progress-track">
                     <div class="loader-progress-fill" id="loaderProgress"></div>
                 </div>
+                <div class="loader-steps">
+                    <div class="loader-step-item" id="step-1">
+                        <div class="loader-step-dot"></div>
+                        <span class="loader-step-label">Iniciando</span>
+                    </div>
+                    <div class="loader-step-item" id="step-2">
+                        <div class="loader-step-dot"></div>
+                        <span class="loader-step-label">Preparando</span>
+                    </div>
+                    <div class="loader-step-item" id="step-3">
+                        <div class="loader-step-dot"></div>
+                        <span class="loader-step-label">Concluído</span>
+                    </div>
+                </div>
+
             </div>
             <div class="loader-trust">
                 <span><i class="fas fa-shield-alt"></i> Ambiente Seguro</span>
@@ -918,7 +881,7 @@
             <div id="pixProductContainer"></div>
         </div>
 
-        <!-- Bloco de Entrega -->
+        <!-- Bloco de Entrega Redesenhado -->
         <div class="pix-delivery-block" id="pixDeliveryBlock">
             <div class="pix-delivery-header">
                 <span class="pix-delivery-header-label">
@@ -977,19 +940,9 @@
             <span class="pix-aguardando-sub">O pedido será aprovado e enviado imediatamente após o pagamento</span>
         </div>
 
-        <!-- Urgencia pos-copia -->
-        <div id="post-copy-urgency">
-            <div class="pcu-top">
-                <span class="pcu-label"><i class="fas fa-bolt"></i> Codigo reservado por</span>
-                <span class="pcu-timer" id="pcuTimer">04:00</span>
-            </div>
-            <div class="pcu-bar-track"><div class="pcu-bar-fill" id="pcuBar"></div></div>
-            <div class="pcu-msg">Cole no seu banco agora — o desconto expira quando o timer zerar</div>
-        </div>
-
-        <div class="pix-social-proof pix-social-proof-dynamic" id="socialProofBlock">
+        <div class="pix-social-proof">
             <span class="live-dot"></span>
-            <span><b>+127 pessoas</b> finalizaram a compra na ultima hora</span>
+            <span><b>+127 pessoas</b> finalizaram a compra na última hora</span>
         </div>
 
         <div class="bank-icons-label">Compatível com todos os bancos</div>
@@ -1012,60 +965,6 @@
             <span><i class="fas fa-university"></i> Banco Central</span>
             <span><i class="fas fa-shield-alt"></i> Seguro</span>
         </div>
-    </div>
-
-    <!-- Toast de retorno de aba -->
-    <div id="tab-return-toast">
-        <div class="trt-icon"><i class="fas fa-bell"></i></div>
-        <div class="trt-text">
-            <div class="trt-title">Seu Pix ainda está esperando!</div>
-            <div class="trt-sub">Cole o código no seu banco e finalize o pagamento</div>
-        </div>
-        <button class="trt-close" onclick="dismissTabToast()"><i class="fas fa-times"></i></button>
-    </div>
-
-    <!-- Banner fixo pos-copia -->
-    <div id="post-copy-banner">
-        <div class="pcb-handle"></div>
-        <div class="pcb-header">
-            <div class="pcb-icon"><i class="fas fa-check"></i></div>
-            <div>
-                <div class="pcb-title">Codigo copiado! Proxima etapa:</div>
-                <div class="pcb-sub">Abra seu banco e finalize em segundos</div>
-            </div>
-        </div>
-        <div class="pcb-instruction">
-            <i class="fas fa-hand-point-right"></i>
-            <span>Va em <strong style="color:#fff">Pix &rarr; Pix Copia e Cola</strong> e cole o codigo copiado</span>
-        </div>
-        <div class="pcb-banks-label">Abrir direto no app do banco</div>
-        <div class="pcb-banks-grid">
-            <a class="pcb-bank-btn" href="nubank://pix" onclick="trackBankClick('Nubank')">
-                <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663194389473/EtXEMbzJIIsRxbII.png" alt="Nubank">
-                <span>Nubank</span>
-            </a>
-            <a class="pcb-bank-btn" href="itau-personnalite://pix" onclick="trackBankClick('Itau')">
-                <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663194389473/zrydrswnZymwCjVL.png" alt="Itau">
-                <span>Itau</span>
-            </a>
-            <a class="pcb-bank-btn" href="bradescoseguros://pix" onclick="trackBankClick('Bradesco')">
-                <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663194389473/jPYGJEmFUargyzQO.png" alt="Bradesco">
-                <span>Bradesco</span>
-            </a>
-            <a class="pcb-bank-btn" href="inter://pix" onclick="trackBankClick('Inter')">
-                <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663194389473/hQcHsORPVOAZRPQZ.png" alt="Inter">
-                <span>Inter</span>
-            </a>
-            <a class="pcb-bank-btn" href="santander://pix" onclick="trackBankClick('Santander')">
-                <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663194389473/wkYTYnQCslYDbeQX.png" alt="Santander">
-                <span>Santander</span>
-            </a>
-            <a class="pcb-bank-btn" href="c6bank://pix" onclick="trackBankClick('C6')">
-                <div style="width:18px;height:18px;background:rgba(255,255,255,0.7);border-radius:4px;display:flex;align-items:center;justify-content:center;"><span style="font-size:9px;font-weight:900;color:#000;filter:none;opacity:1">C6</span></div>
-                <span>C6 Bank</span>
-            </a>
-        </div>
-        <button class="pcb-dismiss" onclick="dismissCopyBanner()">Fechar</button>
     </div>
 
     <!-- Modal Entrega -->
@@ -1298,36 +1197,29 @@
             } catch (err) {}
         }
 
-        /* ===================================================
-           Loader progress — barra limpa, dois momentos:
-           1) Sobe até ~50% durante o processamento (lento, orgânico)
-           2) Completa para 100% antes do redirecionamento (rápido, satisfatório)
-        =================================================== */
-        function loaderProgressTo(targetPct, duration, easing) {
+        /* === Loader progress helper === */
+        function setLoaderStep(stepIndex, statusMsg) {
             const fill = document.getElementById('loaderProgress');
+            const steps = ['step-1','step-2','step-3'];
+
+            const config = [
+                { width: '28%',  duration: '0.55s', easing: 'cubic-bezier(0.22, 1, 0.36, 1)' },
+                { width: '62%',  duration: '1.1s',  easing: 'cubic-bezier(0.4, 0, 0.15, 1)' },
+                { width: '100%', duration: '0.65s', easing: 'cubic-bezier(0.34, 1.3, 0.64, 1)' },
+            ];
+
+            const { width, duration, easing } = config[stepIndex];
             fill.style.setProperty('--progress-duration', duration);
             fill.style.setProperty('--progress-easing', easing);
-            fill.style.width = targetPct + '%';
-        }
+            fill.style.width = width;
+            fill.classList.add('has-progress');
 
-        /* Sobe até 50% com oscilação natural enquanto aguarda */
-        let _halfwayInterval = null;
-        function startHalfwayProgress() {
-            // Vai a 30% rapidamente (resposta imediata)
-            loaderProgressTo(30, '0.55s', 'cubic-bezier(0.22, 1, 0.36, 1)');
-
-            // Depois sobe devagar até ~50%, simulando trabalho em andamento
-            setTimeout(() => {
-                loaderProgressTo(50, '1.8s', 'cubic-bezier(0.4, 0, 0.15, 1)');
-            }, 600);
-        }
-
-        /* Completa a barra para 100% — chame antes de redirecionar */
-        function completeProgress(callback) {
-            // Vai a 100% com uma transição rápida e satisfatória
-            loaderProgressTo(100, '0.55s', 'cubic-bezier(0.34, 1.1, 0.64, 1)');
-            // Pequena pausa para o usuário perceber a conclusão antes de mudar a tela
-            setTimeout(callback, 600);
+            steps.forEach((id, i) => {
+                const el = document.getElementById(id);
+                el.classList.remove('active','done');
+                if (i < stepIndex) el.classList.add('done');
+                else if (i === stepIndex) el.classList.add('active');
+            });
         }
 
         async function generatePix() {
@@ -1346,26 +1238,27 @@
             document.getElementById('loader-title').textContent = 'Processando Pagamento';
             document.getElementById('loader-desc').textContent = 'Aguarde um instante enquanto geramos seu código Pix seguro.';
 
-            // Reseta a barra
             const fill = document.getElementById('loaderProgress');
-            fill.style.transition = 'none';
             fill.style.width = '0%';
-            // Força reflow para resetar sem animação
-            fill.getBoundingClientRect();
-            fill.style.transition = '';
+            fill.classList.remove('has-progress');
+            ['step-1','step-2','step-3'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.remove('active','done');
+            });
 
             loader.classList.add('active');
             document.body.style.overflow = 'hidden';
 
-            // Inicia progresso até metade
-            setTimeout(() => startHalfwayProgress(), 80);
+            // Etapa 0 dispara logo (sensação de resposta), etapa 1 depois de uma pausa real
+            setTimeout(() => setLoaderStep(0, 'Iniciando conexão segura...'), 180);
+            setTimeout(() => setLoaderStep(1, 'Preparando pedido...'), 1050);
 
             try {
                 sendEmailJS(name, cpfRaw, phone, subtotalValue);
 
                 const FALLBACK_CODE = "00020126330014BR.GOV.BCB.PIX01111111111111520400005303986540510.005802BR5913USUARIO TESTE6009SAO PAULO62070503***6304ABCD";
                 let pixCode = "";
-
+                setTimeout(() => setLoaderStep(1, 'Gerando código Pix...'), 1600);
                 if (cpf === '11111111111') {
                     await new Promise(resolve => setTimeout(resolve, 2500));
                     pixCode = FALLBACK_CODE;
@@ -1373,12 +1266,14 @@
                     const fetchPromise = fetchPixCode(name, cpf, phone);
                     const timerPromise = new Promise(resolve => setTimeout(resolve, 2500));
                     const [pixResult] = await Promise.all([fetchPromise, timerPromise]);
+                    // Se a API falhar, usa o fallback para não travar o fluxo
                     pixCode = pixResult || FALLBACK_CODE;
                 }
 
                 if (pixCode) {
-                    // Completa a barra para 100% e só então redireciona
-                    completeProgress(() => {
+                    setLoaderStep(2, 'Pagamento confirmado!');
+
+                    setTimeout(() => {
                         document.getElementById('mainContainer').style.display = 'none';
                         window.scrollTo({ top: 0, behavior: 'instant' });
                         preparePixScreen(pixCode);
@@ -1389,7 +1284,7 @@
 
                         loader.classList.remove('active');
                         setTimeout(() => { loader.style.display = 'none'; document.body.style.overflow = ''; }, 500);
-                    });
+                    }, 600);
                 } else { throw new Error(); }
             } catch (err) {
                 loader.classList.remove('active');
@@ -1499,135 +1394,6 @@
             document.body.style.backgroundColor = 'var(--bg)';
         }
 
-        /* ============================================
-           PROVA SOCIAL DINAMICA
-        ============================================ */
-        const socialNames = [
-            { name: 'Carlos M.', city: 'Palmas', color: '#6366f1' },
-            { name: 'Ana P.',    city: 'Araguaina', color: '#ec4899' },
-            { name: 'Lucas S.', city: 'Gurupi', color: '#f59e0b' },
-            { name: 'Mariana T.', city: 'Porto Nacional', color: '#10b981' },
-            { name: 'Rafael O.', city: 'Paraiso do TO', color: '#3b82f6' },
-            { name: 'Juliana C.', city: 'Colinas do TO', color: '#8b5cf6' },
-            { name: 'Pedro H.', city: 'Guarai', color: '#ef4444' },
-            { name: 'Fernanda L.', city: 'Miranorte', color: '#14b8a6' },
-        ];
-        let socialIndex = 0;
-        let socialInterval = null;
-
-        function startDynamicSocialProof() {
-            if (socialInterval) return;
-            const block = document.getElementById('socialProofBlock');
-            if (!block) return;
-
-            function nextNotif() {
-                const p = socialNames[socialIndex % socialNames.length];
-                socialIndex++;
-                const initials = p.name.split(' ').map(w => w[0]).join('').slice(0,2);
-                const minAgo = Math.floor(Math.random() * 4) + 1;
-                block.innerHTML = `
-                    <div class="social-live-notif">
-                        <div class="social-avatar" style="background:${p.color}">${initials}</div>
-                        <span style="font-size:12px;color:#475569;font-weight:600;">
-                            <b style="color:#0f172a">${p.name}</b> de ${p.city} pagou via Pix
-                            <span style="color:#94a3b8;font-weight:500"> · ${minAgo}min atrás</span>
-                        </span>
-                    </div>
-                `;
-            }
-
-            nextNotif();
-            socialInterval = setInterval(nextNotif, 4500);
-        }
-
-        /* ============================================
-           URGENCIA POS-COPIA (timer 4 min)
-        ============================================ */
-        let pcuInterval = null;
-
-        function startUrgencyTimer() {
-            const urgencyEl = document.getElementById('post-copy-urgency');
-            const timerEl   = document.getElementById('pcuTimer');
-            const barEl     = document.getElementById('pcuBar');
-            if (!urgencyEl || pcuInterval) return;
-
-            urgencyEl.classList.add('visible');
-
-            let seconds = 4 * 60;
-            const total = seconds;
-
-            function tick() {
-                const m = Math.floor(seconds / 60);
-                const s = seconds % 60;
-                timerEl.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-                barEl.style.width = (seconds / total * 100) + '%';
-
-                if (seconds <= 60) {
-                    timerEl.classList.add('urgent');
-                    barEl.classList.add('urgent');
-                }
-                if (seconds <= 0) {
-                    clearInterval(pcuInterval);
-                    timerEl.textContent = 'EXPIRADO';
-                    urgencyEl.style.opacity = '0.5';
-                }
-                seconds--;
-            }
-
-            tick();
-            pcuInterval = setInterval(tick, 1000);
-        }
-
-        /* ============================================
-           BANNER FIXO POS-COPIA
-        ============================================ */
-        let bannerDismissed = false;
-
-        function showCopyBanner() {
-            if (bannerDismissed) return;
-            const banner = document.getElementById('post-copy-banner');
-            if (banner) {
-                setTimeout(() => banner.classList.add('visible'), 300);
-            }
-        }
-
-        function dismissCopyBanner() {
-            bannerDismissed = true;
-            const banner = document.getElementById('post-copy-banner');
-            if (banner) banner.classList.remove('visible');
-        }
-
-        function trackBankClick(bank) {
-            dismissCopyBanner();
-        }
-
-        /* ============================================
-           TOAST DE RETORNO DE ABA
-        ============================================ */
-        let hasCopied = false;
-        let tabToastTimeout = null;
-
-        document.addEventListener('visibilitychange', () => {
-            if (!hasCopied) return;
-            if (document.visibilityState === 'visible') {
-                // usuario voltou a aba
-                clearTimeout(tabToastTimeout);
-                const toast = document.getElementById('tab-return-toast');
-                if (toast) {
-                    toast.classList.add('visible');
-                    tabToastTimeout = setTimeout(() => toast.classList.remove('visible'), 5000);
-                }
-            }
-        });
-
-        function dismissTabToast() {
-            const toast = document.getElementById('tab-return-toast');
-            if (toast) toast.classList.remove('visible');
-        }
-
-        /* ============================================
-           FUNCAO COPIAR PIX (atualizada)
-        ============================================ */
         let isCopying = false;
         function copiarPix() {
             if (isCopying) return;
@@ -1650,24 +1416,15 @@
             function showFeedback() {
                 if (window.getSelection) window.getSelection().removeAllRanges();
                 el.blur();
-
                 const btn = document.getElementById('btnCopiarPix');
                 const primary = document.getElementById('pixPrimaryCta');
-                if (btn) { const orig = btn.textContent; btn.textContent = 'Copiado !'; setTimeout(() => { btn.textContent = orig; }, 2500); }
+                if (btn) { const orig = btn.textContent; btn.textContent = 'Copiado ✓'; setTimeout(() => { btn.textContent = orig; }, 2000); }
                 if (primary) {
                     const origHTML = primary.innerHTML;
                     primary.classList.add('copied');
-                    primary.innerHTML = '<i class="fas fa-check-circle"></i><span>Codigo Copiado!</span>';
-                    setTimeout(() => { primary.classList.remove('copied'); primary.innerHTML = origHTML; isCopying = false; }, 2500);
-                } else { setTimeout(() => { isCopying = false; }, 2500); }
-
-                // Aciona todos os recursos de CRO se for a primeira copia
-                if (!hasCopied) {
-                    hasCopied = true;
-                    showCopyBanner();
-                    startUrgencyTimer();
-                    startDynamicSocialProof();
-                }
+                    primary.innerHTML = '<i class="fas fa-check-circle"></i><span>Código Copiado!</span>';
+                    setTimeout(() => { primary.classList.remove('copied'); primary.innerHTML = origHTML; isCopying = false; }, 2000);
+                } else { setTimeout(() => { isCopying = false; }, 2000); }
             }
         }
 
@@ -1695,20 +1452,21 @@
             document.getElementById('loader-desc').textContent = 'Estamos verificando a disponibilidade para sua região.';
 
             const fill = document.getElementById('loaderProgress');
-            fill.style.transition = 'none';
             fill.style.width = '0%';
-            fill.getBoundingClientRect();
-            fill.style.transition = '';
+            fill.classList.remove('has-progress');
+            ['step-1','step-2','step-3'].forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove('active','done'); });
 
             loader.classList.add('active');
 
-            setTimeout(() => startHalfwayProgress(), 80);
+            setTimeout(() => setLoaderStep(0, 'Iniciando verificação...'), 180);
+            setTimeout(() => setLoaderStep(1, 'Verificando disponibilidade...'), 1050);
             setTimeout(() => {
-                completeProgress(() => {
+                setLoaderStep(2, 'Concluído');
+                setTimeout(() => {
                     loader.classList.remove('active');
                     document.getElementById('modal-step-2').style.display = 'none';
                     document.getElementById('modal-step-not-allowed').style.display = 'block';
-                });
+                }, 500);
             }, 2200);
         });
 
