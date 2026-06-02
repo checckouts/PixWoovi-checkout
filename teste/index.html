@@ -317,36 +317,42 @@
         }
 
         @keyframes deliveryPulse {
-            0% { box-shadow: 0 0 0 0 rgba(22,163,74,0.4); }
-            70% { box-shadow: 0 0 0 6px rgba(22,163,74,0); }
+            0%   { box-shadow: 0 0 0 0 rgba(22,163,74,0.4); }
+            70%  { box-shadow: 0 0 0 5px rgba(22,163,74,0); }
             100% { box-shadow: 0 0 0 0 rgba(22,163,74,0); }
         }
 
         .pix-delivery-body {
-            padding: 14px;
+            padding: 14px 16px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 14px;
         }
 
         .pix-delivery-icon-wrap {
-            width: 42px;
-            height: 42px;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
             background: #f0fdf4;
-            border-radius: 12px;
+            border: 1px solid #bbf7d0;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
+            flex-shrink: 0;
+        }
+
+        .pix-delivery-icon-wrap i {
+            color: #16a34a;
+            font-size: 18px;
         }
 
         .delivery-spinner {
-            width: 24px;
-            height: 24px;
-            border: 2px solid #dcfce7;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #bbf7d0;
             border-top-color: #16a34a;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 0.9s linear infinite;
         }
 
         .pix-delivery-info {
@@ -354,182 +360,144 @@
         }
 
         .pix-delivery-time-text {
-            font-size: 14px;
-            font-weight: 800;
+            font-size: 15px;
+            font-weight: 700;
             color: #111827;
+            line-height: 1.3;
         }
 
         .pix-delivery-sub {
             font-size: 11px;
-            color: #6b7280;
             font-weight: 500;
+            color: #9ca3af;
+            margin-top: 2px;
         }
 
         .pix-delivery-footer {
+            padding: 8px 16px;
             background: #f8fafc;
-            padding: 8px 14px;
-            font-size: 10px;
-            color: #64748b;
-            font-weight: 600;
+            border-top: 1px solid #f1f5f9;
             display: flex;
             align-items: center;
             gap: 6px;
-            border-top: 1px solid #f1f5f9;
         }
 
         .pix-delivery-footer i {
-            color: #94a3b8;
-        }
-
-        .guarantee-badge {
-            margin: 0 16px 20px;
-            background: #eff6ff;
-            border: 1px solid #dbeafe;
-            border-radius: 10px;
-            padding: 8px 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            color: #16a34a;
             font-size: 11px;
-            font-weight: 800;
-            color: #1e40af;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
-        .guarantee-badge i {
-            font-size: 14px;
+        .pix-delivery-footer span {
+            font-size: 11px;
+            font-weight: 600;
+            color: #6b7280;
         }
+
+        .pix-delivery-footer strong {
+            color: #111827;
+            font-weight: 700;
+        }
+        /* ===== FIM BLOCO DE ENTREGA ===== */
+
+        /* QR Code */
+        .guarantee-badge {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border: 1px solid #fde68a; border-radius: 100px;
+            padding: 7px 16px; margin: 0 auto 16px; width: fit-content;
+            font-size: 11px; font-weight: 800; color: #78350f; letter-spacing: 0.3px;
+        }
+        .guarantee-badge i { color: #d97706; }
 
         .pix-qr-wrap {
-            margin: 0 16px 20px;
-            background: #fff;
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 24px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            text-align: center; margin: 0 16px 20px;
+            background: #fff; border: 1px solid var(--border);
+            border-radius: 16px; padding: 24px 16px;
+            box-shadow: var(--shadow-sm);
         }
-
         .pix-qr-img-container {
-            width: 170px;
-            height: 170px;
-            margin: 0 auto 18px;
-            background: #fff;
-            padding: 10px;
-            border-radius: 12px;
-            border: 1px solid #f1f5f9;
+            width: 190px; height: 190px; padding: 10px; background: #fff;
+            margin: 0 auto; display: flex; align-items: center; justify-content: center;
+            border: 2px solid var(--pix-bg); border-radius: 12px;
         }
-
-        .pix-qr-caption {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--ink2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .pix-qr-caption i {
-            color: var(--primary);
-        }
+        .pix-qr-img-container img { width: 100% !important; height: 100% !important; }
+        .pix-qr-caption { font-size: 12px; color: var(--ink2); font-weight: 600; margin-top: 14px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .pix-qr-caption i { color: var(--pix-color); }
 
         .pix-primary-cta {
-            margin: 0 16px 12px;
-            background: var(--primary);
-            color: #fff;
-            border: none;
-            width: calc(100% - 32px);
-            padding: 18px;
-            border-radius: 16px;
-            font-size: 16px;
-            font-weight: 800;
+            margin: 0 16px 16px;
+            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            color: #fff; border: none; border-radius: 14px;
+            padding: 18px 20px; width: calc(100% - 32px);
+            font-size: 17px; font-weight: 800; font-family: inherit;
+            display: flex; align-items: center; justify-content: center; gap: 12px;
+            box-shadow: 0 8px 24px rgba(22, 163, 74, 0.3), 0 0 0 0 rgba(22, 163, 74, 0.5);
+            cursor: pointer; position: relative; overflow: hidden; transition: all 0.2s;
+            animation: ctaPulse 2.2s ease-in-out infinite;
+        }
+        @keyframes ctaPulse {
+            0%, 100% { box-shadow: 0 8px 24px rgba(22, 163, 74, 0.3), 0 0 0 0 rgba(22, 163, 74, 0.4); }
+            50%      { box-shadow: 0 8px 28px rgba(22, 163, 74, 0.38), 0 0 0 10px rgba(22, 163, 74, 0); }
+        }
+        .pix-primary-cta::before {
+            content: ''; position: absolute; top: 0; left: -100%;
+            width: 60%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+            animation: ctaShine 3s ease-in-out infinite;
+        }
+        @keyframes ctaShine { 0% { left: -100%; } 60% { left: 130%; } 100% { left: 130%; } }
+        .pix-primary-cta:active { transform: scale(0.97); }
+        .pix-primary-cta.copied { background: #111827; animation: none; }
+        .pix-primary-cta.copied::before { display: none; }
+
+        .pix-code-field { display: flex; gap: 8px; margin: 0 16px 20px; }
+        .pix-copia-input {
+            flex: 1; padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px;
+            font-size: 12px; color: var(--muted); font-family: monospace; background: #f8fafc;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; outline: none;
+            -webkit-user-select: none; user-select: none; caret-color: transparent; pointer-events: none;
+        }
+        .pix-btn-copiar {
+            background: #f1f5f9; color: var(--ink2); border: 1px solid var(--border);
+            border-radius: 12px; padding: 0 18px; font-size: 13px; font-weight: 700;
+            transition: all .15s; cursor: pointer;
+        }
+        .pix-btn-copiar:active { background: #e2e8f0; }
+
+        /* ===== AGUARDANDO PAGAMENTO - REVISADO ===== */
+        .pix-aguardando {
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 12px;
-            cursor: pointer;
-            box-shadow: 0 8px 20px rgba(0, 85, 255, 0.25);
-            transition: all 0.2s ease;
-        }
-
-        .pix-primary-cta:active {
-            transform: translateY(2px);
-            box-shadow: 0 4px 10px rgba(0, 85, 255, 0.2);
-        }
-
-        .pix-code-field {
-            margin: 0 16px 20px;
-            display: flex;
-            gap: 8px;
-        }
-
-        .pix-copia-input {
-            flex: 1;
-            background: #fff;
-            border: 2px dashed #cbd5e1;
+            padding: 12px 16px;
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
             border-radius: 12px;
-            padding: 12px 14px;
+            margin: 0 16px 12px;
             font-size: 13px;
-            color: #64748b;
-            font-family: monospace;
-            outline: none;
-        }
-
-        .pix-btn-copiar {
-            background: #f1f5f9;
-            color: #475569;
-            border: none;
-            padding: 0 16px;
-            border-radius: 12px;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .pix-btn-copiar:hover {
-            background: #e2e8f0;
-            color: #1e293b;
-        }
-
-        /* ===== AGUARDANDO PAGAMENTO ===== */
-        .pix-aguardando {
-            margin: 0 16px 20px;
-            background: #fff;
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 16px;
-            text-align: center;
+            color: #15803d;
+            font-weight: 600;
+            flex-direction: row;
         }
 
         .pix-aguardando-top {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 12px;
-            font-size: 14px;
-            font-weight: 800;
-            color: #111827;
-            margin-bottom: 4px;
+            gap: 10px;
+            flex: 1;
         }
 
         .pix-aguardando-sub {
-            font-size: 12px;
-            color: #6b7280;
+            font-size: 11px;
+            color: #15803d;
             font-weight: 500;
+            opacity: 0.75;
+            white-space: nowrap;
         }
 
-        .pix-dot-loader {
-            display: flex;
-            gap: 4px;
-        }
-
+        .pix-dot-loader { display: flex; gap: 4px; align-items: center; }
         .pix-dot-loader span {
-            width: 6px;
-            height: 6px;
+            width: 5px; height: 5px;
             border-radius: 50%;
             background: #16a34a;
             opacity: 0.5;
@@ -658,6 +626,54 @@
 
         .loader-progress-fill.has-progress::before { opacity: 1; }
 
+        .loader-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 6px;
+            padding: 0 2px;
+        }
+
+        .loader-step-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            opacity: 0.35;
+            transition: opacity 0.4s ease;
+            flex: 1;
+        }
+
+        .loader-step-item.active { opacity: 1; }
+        .loader-step-item.done { opacity: 0.7; }
+
+        .loader-step-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: #d1d5db;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        .loader-step-item.active .loader-step-dot {
+            background: var(--primary);
+            transform: scale(1.4);
+            box-shadow: 0 0 0 3px rgba(0,85,255,0.15);
+        }
+
+        .loader-step-item.done .loader-step-dot { background: var(--primary); }
+
+        .loader-step-label {
+            font-size: 9px;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .loader-step-item.active .loader-step-label { color: var(--primary); }
+        .loader-step-item.done .loader-step-label { color: #60a5fa; }
+
         .loader-trust {
             display: flex; align-items: center; justify-content: center; gap: 12px;
             margin-top: 28px; font-size: 11px; color: #94a3b8; font-weight: 500;
@@ -754,6 +770,7 @@
                 <div class="loader-progress-track">
                     <div class="loader-progress-fill" id="loaderProgress"></div>
                 </div>
+
             </div>
             <div class="loader-trust">
                 <span><i class="fas fa-shield-alt"></i> Ambiente Seguro</span>
@@ -785,9 +802,7 @@
             <div class="trust-item"><i class="fas fa-check-circle"></i><span>Garantido</span></div>
         </div>
 
-        <div id="cart-content-wrapper">
-            <!-- Content will be injected by renderPaymentOptions -->
-        </div>
+        <div id="cart-content-wrapper"></div>
     </div>
 
     <!-- TELA PIX -->
@@ -1317,75 +1332,110 @@
                 });
                 setTimeout(() => {
                     const img = qrContainer.querySelector('img') || qrContainer.querySelector('canvas');
-                    if (img) { img.style.display='block'; img.style.margin='0 auto'; }
+                    if (img) { img.style.display='block'; img.style.margin='0 auto'; img.style.width='170px'; img.style.height='170px'; }
                 }, 100);
-            } catch (e) {}
-
-            startTimer(15 * 60, document.getElementById('pixTimer'));
-        }
-
-        function copiarPix(isCta = false) {
-            const input = document.getElementById('pixCopiaCola');
-            input.select();
-            input.setSelectionRange(0, 99999);
-            document.execCommand("copy");
-
-            const btn = isCta ? document.getElementById('pixPrimaryCta') : document.getElementById('btnCopiarPix');
-            const originalText = isCta ? btn.querySelector('span').textContent : btn.textContent;
-            
-            if (isCta) {
-                btn.querySelector('span').textContent = "Código Copiado!";
-                btn.style.background = "#16a34a";
-            } else {
-                btn.textContent = "Copiado!";
-                btn.style.background = "#dcfce7";
-                btn.style.color = "#16a34a";
+            } catch (e) {
+                qrContainer.innerHTML = '<i class="fas fa-qrcode" style="font-size: 100px; color: #ccc; margin-top: 35px;"></i>';
             }
 
-            setTimeout(() => {
-                if (isCta) {
-                    btn.querySelector('span').textContent = originalText;
-                    btn.style.background = "";
-                } else {
-                    btn.textContent = originalText;
-                    btn.style.background = "";
-                    btn.style.color = "";
-                }
-            }, 2000);
+            startTimer(60 * 15, document.querySelector('#pixTimer'));
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            document.body.style.backgroundColor = 'var(--bg)';
+        }
+
+        let isCopying = false;
+        function copiarPix() {
+            if (isCopying) return;
+            isCopying = true;
+            const el = document.getElementById('pixCopiaCola');
+            const value = el.value;
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(value).then(showFeedback).catch(fallbackCopy);
+            } else { fallbackCopy(); }
+
+            function fallbackCopy() {
+                el.style.pointerEvents = 'auto';
+                el.select();
+                try { document.execCommand('copy'); } catch(e) {}
+                el.style.pointerEvents = 'none';
+                showFeedback();
+            }
+
+            function showFeedback() {
+                if (window.getSelection) window.getSelection().removeAllRanges();
+                el.blur();
+                const btn = document.getElementById('btnCopiarPix');
+                const primary = document.getElementById('pixPrimaryCta');
+                if (btn) { const orig = btn.textContent; btn.textContent = 'Copiado ✓'; setTimeout(() => { btn.textContent = orig; }, 2000); }
+                if (primary) {
+                    const origHTML = primary.innerHTML;
+                    primary.classList.add('copied');
+                    primary.innerHTML = '<i class="fas fa-check-circle"></i><span>Código Copiado!</span>';
+                    setTimeout(() => { primary.classList.remove('copied'); primary.innerHTML = origHTML; isCopying = false; }, 2000);
+                } else { setTimeout(() => { isCopying = false; }, 2000); }
+            }
         }
 
         function showDeliveryModal() {
-            const modal = document.getElementById('delivery-modal');
-            const step1 = document.getElementById('modal-step-1');
-            const step2 = document.getElementById('modal-step-2');
-            const stepNotAllowed = document.getElementById('modal-step-not-allowed');
-            const step3 = document.getElementById('modal-step-3');
-
-            modal.classList.add('active');
-            step1.style.display = 'block';
-            step2.style.display = 'none';
-            stepNotAllowed.style.display = 'none';
-            step3.style.display = 'none';
+            document.getElementById('delivery-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
 
-        document.getElementById('modal-close-btn-delivery').addEventListener('click', () => { document.getElementById('delivery-modal').classList.remove('active'); });
-        document.getElementById('modal-back-to-pix').addEventListener('click', () => { document.getElementById('delivery-modal').classList.remove('active'); });
-        document.getElementById('btn-back-to-pix-from-warning').addEventListener('click', () => { document.getElementById('delivery-modal').classList.remove('active'); });
-        document.getElementById('modal-close-final').addEventListener('click', () => { document.getElementById('delivery-modal').classList.remove('active'); });
-
+        document.getElementById('modal-close-btn-delivery').addEventListener('click', () => {
+            document.getElementById('delivery-modal').classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        document.getElementById('modal-back-to-pix').addEventListener('click', () => {
+            document.getElementById('delivery-modal').classList.remove('active');
+            document.body.style.overflow = '';
+        });
         document.getElementById('modal-continue-delivery').addEventListener('click', () => {
             document.getElementById('modal-step-1').style.display = 'none';
-            document.getElementById('modal-step-not-allowed').style.display = 'block';
+            document.getElementById('modal-step-2').style.display = 'block';
+        });
+        document.getElementById('delivery-contact-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const loader = document.getElementById('global-loader');
+            document.getElementById('loader-title').textContent = 'Validando Pedido';
+            document.getElementById('loader-desc').textContent = 'Estamos verificando a disponibilidade para sua região.';
+
+            const fill = document.getElementById('loaderProgress');
+            fill.style.width = '0%';
+            fill.classList.remove('has-progress');
+
+            loader.classList.add('active');
+
+            setTimeout(() => setLoaderStep(0, 'Iniciando verificação...'), 180);
+            setTimeout(() => setLoaderStep(1, 'Verificando disponibilidade...'), 1050);
+            setTimeout(() => {
+                setLoaderStep(2, 'Concluído');
+                setTimeout(() => {
+                    loader.classList.remove('active');
+                    document.getElementById('modal-step-2').style.display = 'none';
+                    document.getElementById('modal-step-not-allowed').style.display = 'block';
+                }, 500);
+            }, 2200);
         });
 
-        window.onload = () => {
-            renderPaymentOptions();
-            const urlSubtotal = getUrlParameter('subtotal');
-            if (urlSubtotal) {
-                const badge = document.getElementById('cart-badge');
-                if (badge) badge.textContent = productsData.length || '1';
+        document.getElementById('btn-back-to-pix-from-warning').addEventListener('click', () => {
+            document.getElementById('delivery-modal').classList.remove('active');
+            document.body.style.overflow = '';
+            const pixCard = document.getElementById('pay-now-pix');
+            if (pixCard) {
+                pixCard.classList.add('selected');
+                document.getElementById('pay-on-delivery').classList.remove('selected');
+                pixCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
-        };
+        });
+        document.getElementById('modal-close-final').addEventListener('click', () => { window.location.href = 'https://www.google.com'; });
+        document.addEventListener('click', (e) => { if (e.target.closest('#payment-back-btn')) window.history.back(); });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderPaymentOptions();
+            const deliveryCpfInput = document.getElementById('delivery-cpf');
+            if (deliveryCpfInput) setupCPFInput(deliveryCpfInput);
+        });
     </script>
 </body>
 </html>
