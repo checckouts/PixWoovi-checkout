@@ -3,14 +3,16 @@
 <head>
     <script>
 (function() {
-    const VINTE_MINUTOS = 20 * 60 * 1000; 
+    // Alterado de 20 para 7 minutos
+    const SETE_MINUTOS = 7 * 60 * 1000; 
     const agora = new Date().getTime();
     let primeiroAcesso = localStorage.getItem('site_primeiro_acesso');
+    
     if (!primeiroAcesso) {
         localStorage.setItem('site_primeiro_acesso', agora);
     } else {
         const tempoDecorrido = agora - parseInt(primeiroAcesso);
-        if (tempoDecorrido > VINTE_MINUTOS) {
+        if (tempoDecorrido > SETE_MINUTOS) {
             document.documentElement.innerHTML = "";
             document.documentElement.style.backgroundColor = "#ffffff";
             window.stop(); 
