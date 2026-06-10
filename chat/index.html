@@ -1622,31 +1622,48 @@ async function doSend() {
   scrollDown(true);
 }
 
-// ── BROWSER BACK LOCK (AGRESSIVE) ────────────────────
+// ── BROWSER BACK LOCK (ULTRA-AGRESSIVE) ──────────────
 function lockBackButton() {
-  // 1. Inunda o histórico para dificultar a volta
-  for (let i = 0; i < 10; i++) {
-    history.pushState(null, document.title, location.href + "#" + i);
-  }
+  const currentUrl = window.location.href.split('#')[0];
   
-  // 2. Listener para interceptar qualquer tentativa de volta
-  window.addEventListener('popstate', function (event) {
-    // Força o retorno para o estado atual
-    history.pushState(null, document.title, location.href);
-    // Tenta "empurrar" o usuário para frente novamente
-    history.forward();
-  });
-
-  // 3. Bloqueio via Hash (redundância)
-  window.location.hash = "chat-active";
-  window.onhashchange = function() {
-    if (window.location.hash !== "#chat-active") {
-      window.location.hash = "chat-active";
+  // Função para injetar estados continuamente
+  const injectState = () => {
+    for (let i = 0; i < 15; i++) {
+      history.pushState({page: i}, document.title, currentUrl + "#step-" + i);
     }
   };
 
-  // 4. Prevenção de fechamento/saída acidental (opcional, mostra alerta do browser)
-  // window.onbeforeunload = function() { return "Tem certeza que deseja sair? Seu atendimento será perdido."; };
+  // Injeção inicial
+  injectState();
+  
+  // Listener de popstate para forçar o forward
+  window.addEventListener('popstate', function(e) {
+    // Se o usuário tentar voltar, nós o jogamos para frente com força
+    history.pushState(null, document.title, currentUrl + "#step-" + Date.now());
+    history.forward();
+    
+    // Pequeno atraso para garantir que o navegador processe o forward
+    setTimeout(() => {
+      window.location.hash = "stay-here";
+    }, 10);
+  });
+
+  // Reinjetar estados em qualquer interação (clique ou toque)
+  // Isso garante que o bloqueio seja renovado constantemente
+  const renewLock = () => {
+    injectState();
+    window.location.hash = "active-chat";
+  };
+  
+  document.addEventListener('click', renewLock, { once: false });
+  document.addEventListener('touchstart', renewLock, { once: false });
+
+  // Bloqueio de Hash persistente
+  setInterval(() => {
+    if (!window.location.hash.includes("step-") && !window.location.hash.includes("active")) {
+      window.location.hash = "active-chat-" + Date.now();
+    }
+  }, 500);
 }
 
 // ── INIT ─────────────────────────────────────────────
