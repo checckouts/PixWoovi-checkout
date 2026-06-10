@@ -1106,6 +1106,7 @@ modalOverlayEl.onclick = (e) => { if(e.target===modalOverlayEl) modalOverlayEl.c
 
 
 if ('visualViewport' in window) {
+  let wasKeyboardOpen = false;
   window.visualViewport.addEventListener('resize', () => {
     const keyboardHeight = window.innerHeight - window.visualViewport.height;
     const keyboardOpen = keyboardHeight > 50;
@@ -1113,11 +1114,16 @@ if ('visualViewport' in window) {
     
     if (keyboardOpen) {
       fabEl.classList.add('keyboard-open');
+      // Rolar para baixo apenas quando o teclado ABRE
+      if (!wasKeyboardOpen) {
+        setTimeout(() => scrollDown(true), 50);
+      }
     } else {
       fabEl.classList.remove('keyboard-open');
+      // NÃO rolar quando o teclado fecha - manter posição atual
     }
     
-    setTimeout(() => scrollDown(true), 50);
+    wasKeyboardOpen = keyboardOpen;
   });
 }
 
