@@ -152,6 +152,8 @@ html,body{
   padding:16px 14px 6px;
   display:flex;flex-direction:column;gap:3px;
   position:relative;
+  padding-bottom:6px;
+  transition:padding-bottom 0.3s ease;
 }
 .msgs::-webkit-scrollbar{width:4px;}
 .msgs::-webkit-scrollbar-track{background:transparent;}
@@ -402,13 +404,16 @@ html,body{
 .footer{
   background:var(--surface);
   border-top:1px solid var(--border-2);
-  padding:12px 14px;
-  padding-bottom:max(12px, env(safe-area-inset-bottom));
+  padding:12px 14px 12px 14px;
   flex-shrink:0;
   box-shadow:0 -2px 8px rgba(0,0,0,0.06);
-  position:relative;
+  position:fixed;
+  bottom:0;left:0;right:0;
+  max-width:430px;margin:0 auto;
   z-index:100;
-  transition: padding-bottom 0.3s ease, box-shadow 0.3s ease;
+  transition: box-shadow 0.3s ease;
+  width:100%;
+  box-sizing:border-box;
 }
 .input-row{display:flex;gap:10px;align-items:flex-end;max-width:100%;}
 .input-wrap{
@@ -1098,19 +1103,25 @@ modalOverlayEl.onclick = (e) => { if(e.target===modalOverlayEl) modalOverlayEl.c
 
 
 if ('visualViewport' in window) {
+  const footerEl = document.querySelector('.footer');
+  const msgsEl = document.querySelector('.msgs');
+  
   window.visualViewport.addEventListener('resize', () => {
-    setTimeout(() => {
-      scrollDown(true);
-      const keyboardOpen = window.visualViewport.height < window.innerHeight * 0.75;
-      const fabEl = document.querySelector('.scroll-fab');
-      if (keyboardOpen) {
-        fabEl.classList.add('keyboard-open');
-        document.querySelector('.footer').style.paddingBottom = '12px';
-      } else {
-        fabEl.classList.remove('keyboard-open');
-        document.querySelector('.footer').style.paddingBottom = 'max(12px, env(safe-area-inset-bottom))';
-      }
-    }, 100);
+    const keyboardHeight = window.innerHeight - window.visualViewport.height;
+    const keyboardOpen = keyboardHeight > 50;
+    const fabEl = document.querySelector('.scroll-fab');
+    
+    if (keyboardOpen) {
+      fabEl.classList.add('keyboard-open');
+      footerEl.style.bottom = keyboardHeight + 'px';
+      msgsEl.style.paddingBottom = (keyboardHeight + 80) + 'px';
+    } else {
+      fabEl.classList.remove('keyboard-open');
+      footerEl.style.bottom = '0px';
+      msgsEl.style.paddingBottom = '6px';
+    }
+    
+    setTimeout(() => scrollDown(true), 50);
   });
 }
 
