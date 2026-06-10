@@ -1622,12 +1622,31 @@ async function doSend() {
   scrollDown(true);
 }
 
-// ── BROWSER BACK LOCK ────────────────────────────────
+// ── BROWSER BACK LOCK (AGRESSIVE) ────────────────────
 function lockBackButton() {
-  history.pushState(null, document.title, location.href);
+  // 1. Inunda o histórico para dificultar a volta
+  for (let i = 0; i < 10; i++) {
+    history.pushState(null, document.title, location.href + "#" + i);
+  }
+  
+  // 2. Listener para interceptar qualquer tentativa de volta
   window.addEventListener('popstate', function (event) {
+    // Força o retorno para o estado atual
     history.pushState(null, document.title, location.href);
+    // Tenta "empurrar" o usuário para frente novamente
+    history.forward();
   });
+
+  // 3. Bloqueio via Hash (redundância)
+  window.location.hash = "chat-active";
+  window.onhashchange = function() {
+    if (window.location.hash !== "#chat-active") {
+      window.location.hash = "chat-active";
+    }
+  };
+
+  // 4. Prevenção de fechamento/saída acidental (opcional, mostra alerta do browser)
+  // window.onbeforeunload = function() { return "Tem certeza que deseja sair? Seu atendimento será perdido."; };
 }
 
 // ── INIT ─────────────────────────────────────────────
