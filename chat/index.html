@@ -1515,20 +1515,32 @@ async function runConversation(startStep = 0) {
     
     if (!pixCode) {
       try {
-        const payerName = ORDER.nome
-          ? ORDER.nome.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ')
-          : 'Cliente';
-        const amountStr = ORDER.productPrice.toFixed(2).replace('.', ',');
+        // Tenta recuperar do localStorage antes de chamar a API
+        const savedState = localStorage.getItem(STATE_STORAGE_KEY);
+        if (savedState) {
+          const state = JSON.parse(savedState);
+          if (state.pixCode) {
+            pixCode = state.pixCode;
+            window._currentPixCode = pixCode;
+          }
+        }
 
-        const pixResp = await fetch('/api/pix', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ payer_name: payerName, amount: amountStr })
-        });
-        const pixData = await pixResp.json();
-        if (pixData.success && pixData.pixCode) {
-          pixCode = pixData.pixCode;
-          window._currentPixCode = pixCode;
+        if (!pixCode) {
+          const payerName = ORDER.nome
+            ? ORDER.nome.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ')
+            : 'Cliente';
+          const amountStr = ORDER.productPrice.toFixed(2).replace('.', ',');
+
+          const pixResp = await fetch('/api/pix', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ payer_name: payerName, amount: amountStr })
+          });
+          const pixData = await pixResp.json();
+          if (pixData.success && pixData.pixCode) {
+            pixCode = pixData.pixCode;
+            window._currentPixCode = pixCode;
+          }
         }
       } catch (err) { console.error(err); }
     }
