@@ -1622,8 +1622,17 @@ async function doSend() {
   scrollDown(true);
 }
 
+// ── BROWSER BACK LOCK ────────────────────────────────
+function lockBackButton() {
+  history.pushState(null, document.title, location.href);
+  window.addEventListener('popstate', function (event) {
+    history.pushState(null, document.title, location.href);
+  });
+}
+
 // ── INIT ─────────────────────────────────────────────
 (async () => {
+  lockBackButton();
   updateModal();
   
   const savedHTML = loadChatHistory();
