@@ -895,6 +895,7 @@ html,body{
 <script>
 const msgsEl         = document.getElementById('msgs');
 const LOCAL_STORAGE_KEY = 'diskgas_chat_history';
+const STATE_STORAGE_KEY = 'diskgas_chat_state';
 const inputEl        = document.getElementById('msgInput');
 const inputWrapEl    = document.getElementById('inputWrap');
 const sendBtnEl      = document.getElementById('sendBtn');
@@ -1155,56 +1156,17 @@ function addMsg(text, type, newGroup=false, saveToStorage=true) {
 }
 
 function saveChatHistory() {
-  const messages = [];
-  const rows = msgsEl.querySelectorAll('.row');
-  rows.forEach(row => {
-    const isUser = row.classList.contains('user');
-    const type = isUser ? 'user' : 'agent';
-    const isGrouped = row.classList.contains('grouped');
-    
-    // Check if it's a "long message" warning bubble
-    const bubble = row.querySelector('.bubble');
-    if (bubble && bubble.style.background === 'rgb(241, 245, 249)') {
-      // Don't save the warning bubble state directly, we'll let the user see their original text when reloaded
-      // Or we can save it with a special flag. For simplicity, we just save the text content
-      // Actually, since it overrides the innerHTML, we should extract the text carefully or just save the original text
-      // To keep it simple, we won't persist the warning state perfectly, but we will persist normal messages
-    }
-    
-    // Get text content - removing the meta div first to get just the text
-    const bubbleClone = bubble.cloneNode(true);
-    const meta = bubbleClone.querySelector('.b-meta');
-    if (meta) meta.remove();
-    
-    // Replace <br> with \n for saving
-    let text = bubbleClone.innerHTML.replace(/<br\s*[\/]?>/gi, '\\n');
-    // Decode HTML entities
-    const txt = document.createElement('textarea');
-    txt.innerHTML = text;
-    text = txt.value;
-    
-    // Only save normal messages, not the long message warning which has SVG etc.
-    if (!bubbleClone.innerHTML.includes('<svg')) {
-      messages.push({ text, type, newGroup: !isGrouped });
-    }
-  });
-  
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(messages));
+  localStorage.setItem(LOCAL_STORAGE_KEY, msgsEl.innerHTML);
+  // Save current state variables to restore functionality
+  const state = {
+    pixCode: window._currentPixCode || null,
+    lastSender: lastSender
+  };
+  localStorage.setItem(STATE_STORAGE_KEY, JSON.stringify(state));
 }
 
 function loadChatHistory() {
-  const history = localStorage.getItem(LOCAL_STORAGE_KEY);
-  if (history) {
-    try {
-      const messages = JSON.parse(history);
-      if (messages.length > 0) {
-        return messages;
-      }
-    } catch (e) {
-      console.error('Error loading chat history:', e);
-    }
-  }
-  return null;
+  return localStorage.getItem(LOCAL_STORAGE_KEY);
 }
 
 function addSys(html, variant='') {
@@ -1216,6 +1178,7 @@ function addSys(html, variant='') {
   if(variant==='gold')   icon=`<svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
   if(variant==='brand')  icon=`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`;
   s.innerHTML=icon+' '+html; d.appendChild(s); msgsEl.appendChild(d); scrollDown();
+  saveChatHistory();
   return s;
 }
 
@@ -1353,6 +1316,7 @@ function showOrderConfirmation() {
 // ── PIX CARD ────────────────────────────────────────
 function showDeliverySteps(pixCode) {
   pixCode = pixCode || '(código indisponível)';
+  window._currentPixCode = pixCode;
   const finalPrice = ORDER.productPrice.toFixed(2).replace('.',',');
 
   const card = document.createElement('div');
@@ -1601,23 +1565,35 @@ async function doSend() {
 (async () => {
   updateModal();
   
-  const savedHistory = loadChatHistory();
+  const savedHTML = loadChatHistory();
+  const savedState = localStorage.getItem(STATE_STORAGE_KEY);
   
-  if (savedHistory) {
-    // Load from history
-    savedHistory.forEach(msg => {
-      addMsg(msg.text, msg.type, msg.newGroup, false);
+  if (savedHTML && savedState) {
+    const state = JSON.parse(savedState);
+    window._currentPixCode = state.pixCode;
+    lastSender = state.lastSender;
+    msgsEl.innerHTML = savedHTML;
+    
+    // Re-attach event listeners
+    const pixCopyBtn = msgsEl.querySelector('#pixCopyBtn');
+    if (pixCopyBtn && window._currentPixCode) {
+      pixCopyBtn.onclick = () => {
+        navigator.clipboard.writeText(window._currentPixCode).catch(()=>{});
+        pixCopyBtn.classList.add('copied');
+        pixCopyBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Código copiado!`;
+        setTimeout(()=>{
+          pixCopyBtn.classList.remove('copied');
+          pixCopyBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copiar código Pix`;
+        }, 2500);
+      };
+    }
+    
+    // Re-attach intro card and avatar clicks
+    msgsEl.querySelectorAll('.intro-card, .m-avatar:not(.ghost)').forEach(el => {
+      el.onclick = openSellerModal;
     });
-    
-    // Add system message to show connection
-    const searchSys = addSys('','ok');
-    searchSys.innerHTML=`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Thiago Callegari reconectado`;
-    
-    showIntroCard();
+
     scrollDown(true);
-    
-    // Se o último passo não foi concluído (como gerar o PIX), poderíamos continuar a conversa.
-    // Para simplificar, assumimos que o histórico tem tudo.
   } else {
     // New conversation
     const { onReadPromise } = addMsg('Olá! Gostaria de fazer meu pedido.','user');
