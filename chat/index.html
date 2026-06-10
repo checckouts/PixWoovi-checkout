@@ -149,10 +149,9 @@ html,body{
 /* ── MESSAGES AREA ── */
 .msgs{
   flex:1;overflow-y:auto;overflow-x:hidden;
-  padding:16px 14px 6px;
+  padding:16px 14px 80px 14px;
   display:flex;flex-direction:column;gap:3px;
   position:relative;
-  padding-bottom:6px;
   transition:padding-bottom 0.3s ease;
 }
 .msgs::-webkit-scrollbar{width:4px;}
@@ -1114,11 +1113,9 @@ if ('visualViewport' in window) {
     if (keyboardOpen) {
       fabEl.classList.add('keyboard-open');
       footerEl.style.bottom = keyboardHeight + 'px';
-      msgsEl.style.paddingBottom = (keyboardHeight + 80) + 'px';
     } else {
       fabEl.classList.remove('keyboard-open');
       footerEl.style.bottom = '0px';
-      msgsEl.style.paddingBottom = '6px';
     }
     
     setTimeout(() => scrollDown(true), 50);
