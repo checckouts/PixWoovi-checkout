@@ -1440,9 +1440,11 @@ async function agentSay(text, newGroup=false, immediateTyping=false) {
 async function runConversation(startStep = 0) {
   const { location } = ORDER;
   const gr = getGreeting();
-  window._currentFlowStep = startStep;
-
-  if (window._currentFlowStep <= 0) {
+  
+  // Se estivermos retomando, não re-executamos o passo que já imprimiu as mensagens
+  // O startStep é o passo que estava EM ANDAMENTO.
+  
+  if (startStep === 0) {
     const spWaiting = addSpinner("Aguardando vendedor Autorizado");
     await pause(3000);
     spWaiting.remove();
@@ -1450,7 +1452,7 @@ async function runConversation(startStep = 0) {
     saveChatHistory();
   }
 
-  if (window._currentFlowStep <= 1) {
+  if (window._currentFlowStep === 1) {
     await agentSay(`${gr}`, false, true);
     await pause(100);
     await agentSay(`Sou Thiago, vendedor autorizado Diskgas em ${location} e região`, false, true);
@@ -1459,7 +1461,7 @@ async function runConversation(startStep = 0) {
     saveChatHistory();
   }
 
-  if (window._currentFlowStep <= 2) {
+  if (window._currentFlowStep === 2) {
     const spValPre = addSpinner("Validando dados do pedido...");
     await pause(3000);
     spValPre.remove();
@@ -1470,20 +1472,20 @@ async function runConversation(startStep = 0) {
   }
 
   let action;
-  if (window._currentFlowStep <= 3) {
+  if (window._currentFlowStep === 3) {
     action = await showOrderConfirmation();
     if (action === 'correct') {
       window._currentFlowStep = 4;
       saveChatHistory();
     } else if (action === 'change') {
       await agentSay(`Sem problemas! Pode me falar o que deseja alterar ou clique no ícone do carrinho no topo para ajustar seu pedido.`);
-      window._currentFlowStep = 99; // Flow ended/interrupted
+      window._currentFlowStep = 99; 
       saveChatHistory();
       return;
     }
   }
 
-  if (window._currentFlowStep <= 4) {
+  if (window._currentFlowStep === 4) {
     const spVal = addSpinner("Validando dados do pedido...");
     await pause(3500);
     spVal.remove();
@@ -1492,14 +1494,14 @@ async function runConversation(startStep = 0) {
     saveChatHistory();
   }
 
-  if (window._currentFlowStep <= 5) {
+  if (window._currentFlowStep === 5) {
     await agentSay(`Ótimo, vou gerar agora o código pix, um segundo`);
     await pause(1000);
     window._currentFlowStep = 6;
     saveChatHistory();
   }
 
-  if (window._currentFlowStep <= 6) {
+  if (window._currentFlowStep === 6) {
     const sp = addSpinner("Preparando chave Pix...");
     let pixCode = window._currentPixCode;
     const pixStartTime = Date.now();
@@ -1533,7 +1535,7 @@ async function runConversation(startStep = 0) {
     saveChatHistory();
   }
 
-  if (window._currentFlowStep <= 7) {
+  if (window._currentFlowStep === 7) {
     setTyping(true);
     await pause(2500);
     setTyping(false);
@@ -1542,7 +1544,7 @@ async function runConversation(startStep = 0) {
     saveChatHistory();
   }
 
-  if (window._currentFlowStep <= 8) {
+  if (window._currentFlowStep === 8) {
     await agentSay(`Me chamo Thiago, qualquer dúvida é só chamar, estarei a disposição 😊`, true, true);
     window._currentFlowStep = 9;
     saveChatHistory();
@@ -1604,7 +1606,7 @@ async function doSend() {
     window._currentFlowStep = state.flowStep || 0;
     msgsEl.innerHTML = savedHTML;
     
-    // Re-attach event listeners
+    // Re-attach event listeners for PIX
     const pixCopyBtn = msgsEl.querySelector('#pixCopyBtn');
     if (pixCopyBtn && window._currentPixCode) {
       pixCopyBtn.onclick = () => {
@@ -1616,6 +1618,23 @@ async function doSend() {
           pixCopyBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copiar código Pix`;
         }, 2500);
       };
+    }
+    
+    // Re-attach event listeners for Order Confirmation Buttons
+    const btnCorrect = msgsEl.querySelector('#btnCorrect');
+    const btnChange = msgsEl.querySelector('#btnChange');
+    if (btnCorrect && btnChange && window._currentFlowStep === 3) {
+        btnCorrect.onclick = async () => {
+            const block = btnCorrect.closest('.order-confirmation-block');
+            block.style.opacity='0.8';
+            block.style.pointerEvents='none';
+            btnCorrect.style.background = 'var(--green)';
+            btnCorrect.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px;"><polyline points="20 6 9 17 4 12"/></svg> Confirmado';
+            block.querySelectorAll('button').forEach(b=>b.disabled=true);
+            addMsg('Sim, prosseguir','user');
+            if(confirmationResolve) confirmationResolve('correct');
+        };
+        btnChange.onclick = () => { updateModal(true); modalOverlayEl.classList.add('on'); };
     }
     
     // Re-attach intro card and avatar clicks
