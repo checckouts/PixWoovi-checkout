@@ -386,6 +386,7 @@ html,body{
   z-index:20;transition:all .22s var(--spring);
 }
 .scroll-fab.on{display:flex;}
+.scroll-fab.keyboard-open{display:none !important;}
 .scroll-fab:hover{transform:translateY(-2px);}
 .scroll-fab:active{transform:scale(.9);}
 .fab-badge{
@@ -404,27 +405,27 @@ html,body{
   padding:12px 14px;
   padding-bottom:max(12px, env(safe-area-inset-bottom));
   flex-shrink:0;
-  box-shadow:0 -4px 15px rgba(0,0,0,0.03);
+  box-shadow:0 -2px 8px rgba(0,0,0,0.06);
   position:relative;
   z-index:100;
-  transition: padding-bottom 0.3s ease;
+  transition: padding-bottom 0.3s ease, box-shadow 0.3s ease;
 }
 .input-row{display:flex;gap:10px;align-items:flex-end;max-width:100%;}
 .input-wrap{
   flex:1;display:flex;align-items:center;
   background:var(--surface-2);
   border-radius:26px;
-  padding:10px 16px;
-  border:1.5px solid var(--border);
+  padding:11px 16px;
+  border:1.5px solid var(--border-2);
   transition:all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  min-height:46px;gap:10px;
-  position: relative;
+  min-height:48px;gap:10px;
+  position:relative;
 }
 .input-wrap:focus-within{
   border-color:var(--brand-mid);
-  box-shadow: 0 0 0 4px var(--brand-glow);
+  box-shadow:0 0 0 3px var(--brand-glow);
   background:var(--surface);
-  transform: translateY(-1px);
+  transform:translateY(-1px);
 }
 .input-wrap.locked{
   background:var(--bg);
@@ -1100,10 +1101,13 @@ if ('visualViewport' in window) {
   window.visualViewport.addEventListener('resize', () => {
     setTimeout(() => {
       scrollDown(true);
-      // Ajusta o padding do footer baseado na altura do teclado se necessário
-      if (window.visualViewport.height < window.innerHeight * 0.8) {
+      const keyboardOpen = window.visualViewport.height < window.innerHeight * 0.75;
+      const fabEl = document.querySelector('.scroll-fab');
+      if (keyboardOpen) {
+        fabEl.classList.add('keyboard-open');
         document.querySelector('.footer').style.paddingBottom = '12px';
       } else {
+        fabEl.classList.remove('keyboard-open');
         document.querySelector('.footer').style.paddingBottom = 'max(12px, env(safe-area-inset-bottom))';
       }
     }, 100);
