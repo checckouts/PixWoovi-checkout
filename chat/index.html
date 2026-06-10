@@ -727,7 +727,7 @@ html,body{
 
   <!-- HEADER -->
   <header class="header">
-    <button class="icon-btn" aria-label="Voltar">
+    <button class="icon-btn" id="backBtn" aria-label="Voltar">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
     </button>
     <div class="h-agent" id="headerSellerTrigger">
@@ -906,6 +906,7 @@ const statusTextEl   = document.getElementById('statusText');
 const typingDotsMini = document.getElementById('typingDotsMini');
 const headerStatusEl = document.getElementById('headerStatus');
 const cartBtnEl      = document.getElementById('cartBtn');
+const backBtnEl      = document.getElementById('backBtn');
 const modalOverlayEl = document.getElementById('modalOverlay');
 const closeModalEl   = document.getElementById('closeModal');
 const confirmModalEl = document.getElementById('confirmModal');
@@ -987,9 +988,9 @@ function parseOrderData() {
 }
 const ORDER = parseOrderData();
 
-function updateModal(isEditing = false) {
+function updateModal(isEditing = false, customTitle = null) {
   if (isEditing) {
-    document.querySelector('.modal-title').textContent = 'Editar Pedido';
+    document.querySelector('.modal-title').textContent = customTitle || 'Editar Pedido';
     confirmModalEl.textContent = 'Salvar Alterações';
     if (ORDER.products.length > 0) {
       orderItemsEl.innerHTML = ORDER.products.map((p, idx) => `
@@ -1096,6 +1097,11 @@ confirmModalEl.onclick = () => {
   if (currentConfirmationBlock) showOrderConfirmation();
 };
 modalOverlayEl.onclick = (e) => { if(e.target===modalOverlayEl) modalOverlayEl.classList.remove('on'); };
+
+backBtnEl.onclick = () => {
+  updateModal(true, 'Gostaria de alterar algo?');
+  modalOverlayEl.classList.add('on');
+};
 
 
 
