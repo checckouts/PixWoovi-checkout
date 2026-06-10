@@ -1075,10 +1075,18 @@ function recalculateTotal() {
 }
 
 // ── SCROLL ───────────────────────────────────────────
+let lastScrollTop = 0;
 msgsEl.addEventListener('scroll', () => {
   atBottom = msgsEl.scrollHeight - msgsEl.scrollTop - msgsEl.clientHeight < 80;
   if (atBottom) { unread=0; fabEl.classList.remove('on'); fabBadge.classList.remove('on'); }
   else fabEl.classList.add('on');
+  
+  // Fechar teclado ao rolar para cima
+  const currentScrollTop = msgsEl.scrollTop;
+  if (currentScrollTop < lastScrollTop && document.activeElement === inputEl) {
+    inputEl.blur();
+  }
+  lastScrollTop = currentScrollTop;
 });
 fabEl.addEventListener('click', () => { scrollDown(true); unread=0; fabEl.classList.remove('on'); fabBadge.classList.remove('on'); });
 function scrollDown(force=false) {
