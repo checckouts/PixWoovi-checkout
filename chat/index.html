@@ -1160,7 +1160,8 @@ function saveChatHistory() {
   // Save current state variables to restore functionality
   const state = {
     pixCode: window._currentPixCode || null,
-    lastSender: lastSender
+    lastSender: lastSender,
+    flowStep: window._currentFlowStep || 0
   };
   localStorage.setItem(STATE_STORAGE_KEY, JSON.stringify(state));
 }
@@ -1436,88 +1437,116 @@ async function agentSay(text, newGroup=false, immediateTyping=false) {
   addMsg(text, 'agent', newGroup); 
 }
 
-async function runConversation() {
+async function runConversation(startStep = 0) {
   const { location } = ORDER;
   const gr = getGreeting();
+  window._currentFlowStep = startStep;
 
-  const spWaiting = addSpinner("Aguardando vendedor Autorizado");
-  await pause(3000);
-  spWaiting.remove();
+  if (window._currentFlowStep <= 0) {
+    const spWaiting = addSpinner("Aguardando vendedor Autorizado");
+    await pause(3000);
+    spWaiting.remove();
+    window._currentFlowStep = 1;
+    saveChatHistory();
+  }
 
-  await agentSay(`${gr}`, false, true);
-  await pause(100);
-  await agentSay(`Sou Thiago, vendedor autorizado Diskgas em ${location} e região`, false, true);
-  await pause(1500); // Respiro antes de processar dados
+  if (window._currentFlowStep <= 1) {
+    await agentSay(`${gr}`, false, true);
+    await pause(100);
+    await agentSay(`Sou Thiago, vendedor autorizado Diskgas em ${location} e região`, false, true);
+    await pause(1500);
+    window._currentFlowStep = 2;
+    saveChatHistory();
+  }
 
-  // NOVO: Validando dados do pedido antes da confirmação
-  const spValPre = addSpinner("Validando dados do pedido...");
-  await pause(3000);
-  spValPre.remove();
+  if (window._currentFlowStep <= 2) {
+    const spValPre = addSpinner("Validando dados do pedido...");
+    await pause(3000);
+    spValPre.remove();
+    addMsg(`Peço que verifique se está tudo certinho, por gentileza`, 'agent', true);
+    await pause(800);
+    window._currentFlowStep = 3;
+    saveChatHistory();
+  }
 
-  addMsg(`Peço que verifique se está tudo certinho, por gentileza`, 'agent', true);
-  await pause(800);
+  let action;
+  if (window._currentFlowStep <= 3) {
+    action = await showOrderConfirmation();
+    if (action === 'correct') {
+      window._currentFlowStep = 4;
+      saveChatHistory();
+    } else if (action === 'change') {
+      await agentSay(`Sem problemas! Pode me falar o que deseja alterar ou clique no ícone do carrinho no topo para ajustar seu pedido.`);
+      window._currentFlowStep = 99; // Flow ended/interrupted
+      saveChatHistory();
+      return;
+    }
+  }
 
-  const action = await showOrderConfirmation();
-
-  if (action==='correct') {
-    // Inicia a validação imediatamente após a mensagem do usuário ser confirmada
+  if (window._currentFlowStep <= 4) {
     const spVal = addSpinner("Validando dados do pedido...");
     await pause(3500);
     spVal.remove();
     addSys('Pedido validado com sucesso', 'ok');
+    window._currentFlowStep = 5;
+    saveChatHistory();
   }
 
-  if (action==='change') {
-    await agentSay(`Sem problemas! Pode me falar o que deseja alterar ou clique no ícone do carrinho no topo para ajustar seu pedido.`);
-    return;
+  if (window._currentFlowStep <= 5) {
+    await agentSay(`Ótimo, vou gerar agora o código pix, um segundo`);
+    await pause(1000);
+    window._currentFlowStep = 6;
+    saveChatHistory();
   }
 
-  // ── MELHORADO: mensagem de transição com contexto de segurança ──
-  await agentSay(`Ótimo, vou gerar agora o código pix,  um segundo`);
-  await pause(1000);
+  if (window._currentFlowStep <= 6) {
+    const sp = addSpinner("Preparando chave Pix...");
+    let pixCode = window._currentPixCode;
+    const pixStartTime = Date.now();
+    
+    if (!pixCode) {
+      try {
+        const payerName = ORDER.nome
+          ? ORDER.nome.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ')
+          : 'Cliente';
+        const amountStr = ORDER.productPrice.toFixed(2).replace('.', ',');
 
-  // ── Gera o Pix via API enquanto exibe o spinner ──
-  const sp = addSpinner("Preparando chave Pix...");
-
-  let pixCode = null;
-  const pixStartTime = Date.now();
-  try {
-    const payerName = ORDER.nome
-      ? ORDER.nome.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ')
-      : 'Cliente';
-    const amountStr = ORDER.productPrice.toFixed(2).replace('.', ',');
-
-    const pixResp = await fetch('/api/pix', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ payer_name: payerName, amount: amountStr })
-    });
-    const pixData = await pixResp.json();
-    if (pixData.success && pixData.pixCode) {
-      pixCode = pixData.pixCode;
-    } else {
-      console.error('Erro Woovi:', pixData);
+        const pixResp = await fetch('/api/pix', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ payer_name: payerName, amount: amountStr })
+        });
+        const pixData = await pixResp.json();
+        if (pixData.success && pixData.pixCode) {
+          pixCode = pixData.pixCode;
+          window._currentPixCode = pixCode;
+        }
+      } catch (err) { console.error(err); }
     }
-  } catch (err) {
-    console.error('Falha ao chamar /api/pix:', err);
+
+    const elapsed = Date.now() - pixStartTime;
+    if (elapsed < 2000) await pause(2000 - elapsed);
+    sp.remove();
+
+    showDeliverySteps(pixCode);
+    window._currentFlowStep = 7;
+    saveChatHistory();
   }
 
-  // Garante mínimo de 2s de spinner para UX
-  const elapsed = Date.now() - pixStartTime;
-  if (elapsed < 2000) await pause(2000 - elapsed);
+  if (window._currentFlowStep <= 7) {
+    setTyping(true);
+    await pause(2500);
+    setTyping(false);
+    addMsg(`Após o pagamento o prazo de entrega do seu gás é de 20-30 minutos. ⏰`, 'agent', true);
+    window._currentFlowStep = 8;
+    saveChatHistory();
+  }
 
-  sp.remove();
-
-  showDeliverySteps(pixCode);
-  
-  // Efeito de digitando aparece imediatamente após o bloco PIX
-  setTyping(true);
-  await pause(2500);
-  setTyping(false);
-  addMsg(`Após o pagamento o prazo de entrega do seu gás é de 20-30 minutos. ⏰`, 'agent', true);
-
-  // ── NOVO: segunda mensagem reforçando acompanhamento em tempo real ──
-  await agentSay(`Me chamo Thiago, qualquer dúvida é só chamar, estarei a disposição 😊`, true, true);
+  if (window._currentFlowStep <= 8) {
+    await agentSay(`Me chamo Thiago, qualquer dúvida é só chamar, estarei a disposição 😊`, true, true);
+    window._currentFlowStep = 9;
+    saveChatHistory();
+  }
 }
 
 // ── SEND ─────────────────────────────────────────────
@@ -1572,6 +1601,7 @@ async function doSend() {
     const state = JSON.parse(savedState);
     window._currentPixCode = state.pixCode;
     lastSender = state.lastSender;
+    window._currentFlowStep = state.flowStep || 0;
     msgsEl.innerHTML = savedHTML;
     
     // Re-attach event listeners
@@ -1594,6 +1624,11 @@ async function doSend() {
     });
 
     scrollDown(true);
+
+    // Continue flow if not finished
+    if (window._currentFlowStep < 9 && window._currentFlowStep !== 99) {
+      runConversation(window._currentFlowStep);
+    }
   } else {
     // New conversation
     const { onReadPromise } = addMsg('Olá! Gostaria de fazer meu pedido.','user');
