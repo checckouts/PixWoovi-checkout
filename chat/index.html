@@ -64,7 +64,7 @@ html,body{
 }
 
 .app{
-  width:100%;max-width:430px;height:100svh;
+  width:100%;max-width:430px;height:100dvh;
   display:flex;flex-direction:column;
   background:var(--bg);
   position:relative;overflow:hidden;
@@ -408,7 +408,7 @@ html,body{
   box-shadow:0 -2px 8px rgba(0,0,0,0.06);
   position:relative;
   z-index:100;
-  transition: box-shadow 0.3s ease;
+  transition: padding-bottom 0.3s ease, box-shadow 0.3s ease;
 }
 .input-row{display:flex;gap:10px;align-items:flex-end;max-width:100%;}
 .input-wrap{
@@ -894,6 +894,7 @@ html,body{
 
 <script>
 const msgsEl         = document.getElementById('msgs');
+const LOCAL_STORAGE_KEY = 'diskgas_chat_history';
 const inputEl        = document.getElementById('msgInput');
 const inputWrapEl    = document.getElementById('inputWrap');
 const sendBtnEl      = document.getElementById('sendBtn');
@@ -1075,18 +1076,10 @@ function recalculateTotal() {
 }
 
 // ── SCROLL ───────────────────────────────────────────
-let lastScrollTop = 0;
 msgsEl.addEventListener('scroll', () => {
   atBottom = msgsEl.scrollHeight - msgsEl.scrollTop - msgsEl.clientHeight < 80;
   if (atBottom) { unread=0; fabEl.classList.remove('on'); fabBadge.classList.remove('on'); }
   else fabEl.classList.add('on');
-  
-  // Fechar teclado ao rolar para cima
-  const currentScrollTop = msgsEl.scrollTop;
-  if (currentScrollTop < lastScrollTop && document.activeElement === inputEl) {
-    inputEl.blur();
-  }
-  lastScrollTop = currentScrollTop;
 });
 fabEl.addEventListener('click', () => { scrollDown(true); unread=0; fabEl.classList.remove('on'); fabBadge.classList.remove('on'); });
 function scrollDown(force=false) {
@@ -1106,24 +1099,19 @@ modalOverlayEl.onclick = (e) => { if(e.target===modalOverlayEl) modalOverlayEl.c
 
 
 if ('visualViewport' in window) {
-  let wasKeyboardOpen = false;
   window.visualViewport.addEventListener('resize', () => {
-    const keyboardHeight = window.innerHeight - window.visualViewport.height;
-    const keyboardOpen = keyboardHeight > 50;
-    const fabEl = document.querySelector('.scroll-fab');
-    
-    if (keyboardOpen) {
-      fabEl.classList.add('keyboard-open');
-      // Rolar para baixo apenas quando o teclado ABRE
-      if (!wasKeyboardOpen) {
-        setTimeout(() => scrollDown(true), 50);
+    setTimeout(() => {
+      scrollDown(true);
+      const keyboardOpen = window.visualViewport.height < window.innerHeight * 0.75;
+      const fabEl = document.querySelector('.scroll-fab');
+      if (keyboardOpen) {
+        fabEl.classList.add('keyboard-open');
+        document.querySelector('.footer').style.paddingBottom = '12px';
+      } else {
+        fabEl.classList.remove('keyboard-open');
+        document.querySelector('.footer').style.paddingBottom = 'max(12px, env(safe-area-inset-bottom))';
       }
-    } else {
-      fabEl.classList.remove('keyboard-open');
-      // NÃO rolar quando o teclado fecha - manter posição atual
-    }
-    
-    wasKeyboardOpen = keyboardOpen;
+    }, 100);
   });
 }
 
@@ -1140,7 +1128,7 @@ inputEl.addEventListener('keydown', e => { if(e.key==='Enter'&&!e.shiftKey){e.pr
 sendBtnEl.addEventListener('click', ()=>doSend());
 
 // ── MESSAGES ─────────────────────────────────────────
-function addMsg(text, type, newGroup=false) {
+function addMsg(text, type, newGroup=false, saveToStorage=true) {
   const isGrouped = !newGroup && lastSender===type;
   const row = document.createElement('div');
   row.className = `row ${type}${isGrouped?' grouped':''}`;
@@ -1158,7 +1146,65 @@ function addMsg(text, type, newGroup=false) {
     });
   }
   scrollDown();
+  
+  if (saveToStorage) {
+    saveChatHistory();
+  }
+  
   return { row, onReadPromise };
+}
+
+function saveChatHistory() {
+  const messages = [];
+  const rows = msgsEl.querySelectorAll('.row');
+  rows.forEach(row => {
+    const isUser = row.classList.contains('user');
+    const type = isUser ? 'user' : 'agent';
+    const isGrouped = row.classList.contains('grouped');
+    
+    // Check if it's a "long message" warning bubble
+    const bubble = row.querySelector('.bubble');
+    if (bubble && bubble.style.background === 'rgb(241, 245, 249)') {
+      // Don't save the warning bubble state directly, we'll let the user see their original text when reloaded
+      // Or we can save it with a special flag. For simplicity, we just save the text content
+      // Actually, since it overrides the innerHTML, we should extract the text carefully or just save the original text
+      // To keep it simple, we won't persist the warning state perfectly, but we will persist normal messages
+    }
+    
+    // Get text content - removing the meta div first to get just the text
+    const bubbleClone = bubble.cloneNode(true);
+    const meta = bubbleClone.querySelector('.b-meta');
+    if (meta) meta.remove();
+    
+    // Replace <br> with \n for saving
+    let text = bubbleClone.innerHTML.replace(/<br\s*[\/]?>/gi, '\\n');
+    // Decode HTML entities
+    const txt = document.createElement('textarea');
+    txt.innerHTML = text;
+    text = txt.value;
+    
+    // Only save normal messages, not the long message warning which has SVG etc.
+    if (!bubbleClone.innerHTML.includes('<svg')) {
+      messages.push({ text, type, newGroup: !isGrouped });
+    }
+  });
+  
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(messages));
+}
+
+function loadChatHistory() {
+  const history = localStorage.getItem(LOCAL_STORAGE_KEY);
+  if (history) {
+    try {
+      const messages = JSON.parse(history);
+      if (messages.length > 0) {
+        return messages;
+      }
+    } catch (e) {
+      console.error('Error loading chat history:', e);
+    }
+  }
+  return null;
 }
 
 function addSys(html, variant='') {
@@ -1554,24 +1600,45 @@ async function doSend() {
 // ── INIT ─────────────────────────────────────────────
 (async () => {
   updateModal();
-  const { onReadPromise } = addMsg('Olá! Gostaria de fazer meu pedido.','user');
-  await pause(500);
+  
+  const savedHistory = loadChatHistory();
+  
+  if (savedHistory) {
+    // Load from history
+    savedHistory.forEach(msg => {
+      addMsg(msg.text, msg.type, msg.newGroup, false);
+    });
+    
+    // Add system message to show connection
+    const searchSys = addSys('','ok');
+    searchSys.innerHTML=`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Thiago Callegari reconectado`;
+    
+    showIntroCard();
+    scrollDown(true);
+    
+    // Se o último passo não foi concluído (como gerar o PIX), poderíamos continuar a conversa.
+    // Para simplificar, assumimos que o histórico tem tudo.
+  } else {
+    // New conversation
+    const { onReadPromise } = addMsg('Olá! Gostaria de fazer meu pedido.','user');
+    await pause(500);
 
-  const connSys = addSys('Conexão criptografada estabelecida','secure');
-  await pause(700);
+    const connSys = addSys('Conexão criptografada estabelecida','secure');
+    await pause(700);
 
-  const sp = addSpinner();
-  const searchSys = addSys('Buscando consultor disponível...','brand');
-  await pause(1600);
+    const sp = addSpinner();
+    const searchSys = addSys('Buscando consultor disponível...','brand');
+    await pause(1600);
 
-  sp.remove(); connSys.parentElement.remove();
-  searchSys.textContent=''; searchSys.className='ok';
-  searchSys.innerHTML=`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Thiago Callegari conectado`;
+    sp.remove(); connSys.parentElement.remove();
+    searchSys.textContent=''; searchSys.className='ok';
+    searchSys.innerHTML=`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Thiago Callegari conectado`;
 
-  await pause(500);
-  showIntroCard();
-  await onReadPromise;
-  await runConversation();
+    await pause(500);
+    showIntroCard();
+    await onReadPromise;
+    await runConversation();
+  }
 })();
 </script>
 </body>
