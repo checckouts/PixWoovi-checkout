@@ -1167,7 +1167,8 @@ function saveChatHistory() {
   const state = {
     pixCode: window._currentPixCode || null,
     lastSender: lastSender,
-    flowStep: window._currentFlowStep || 0
+    flowStep: window._currentFlowStep || 0,
+    paymentConfirmed: window._paymentConfirmed || false
   };
   localStorage.setItem(STATE_STORAGE_KEY, JSON.stringify(state));
 }
@@ -1566,17 +1567,28 @@ async function doSend() {
   const originalText = text;
   inputEl.value=''; inputEl.style.height='auto';
 
+  // Reconhecimento de termos de pagamento
+  const paymentTerms = ["pago", "paguei", "fiz", "finalizei", "concluido", "concluído"];
+  const lowerText = originalText.toLowerCase();
+  const foundPaymentTerm = paymentTerms.some(term => lowerText.includes(term));
+
   // Conta o número de palavras (separadas por espaços)
   const words = originalText.split(/\s+/).filter(w => w.trim().length > 0);
   const wordCount = words.length;
   
-  // O aviso aparece se a mensagem tiver mais de 2 palavras
-  const isLongMessage = wordCount > 2;
+  // O aviso aparece se a mensagem tiver mais de 2 palavras e NÃO for um termo de pagamento após o PIX
+  const isLongMessage = wordCount > 2 && !(foundPaymentTerm && window._currentFlowStep >= 6);
 
   const { row } = addMsg(originalText, 'user');
   await pause(600);
 
-  if (isLongMessage) {
+  // Resposta automática de pagamento
+  if (foundPaymentTerm && window._currentFlowStep >= 6 && !window._paymentConfirmed) {
+    window._paymentConfirmed = true;
+    saveChatHistory();
+    await agentSay("Certo, com o pagamento concluido ja vamos preparar o envio, o prazo de entrega é de 20-30 minutos", true, true);
+    saveChatHistory();
+  } else if (isLongMessage) {
     const bubble = row.querySelector('.bubble');
     bubble.style.transition='all 0.4s cubic-bezier(0.4,0,0.2,1)';
     bubble.style.background='#F1F5F9'; 
@@ -1610,6 +1622,7 @@ async function doSend() {
     window._currentPixCode = state.pixCode;
     lastSender = state.lastSender;
     window._currentFlowStep = state.flowStep || 0;
+    window._paymentConfirmed = state.paymentConfirmed || false;
     msgsEl.innerHTML = savedHTML;
     
     // Re-attach event listeners for PIX
