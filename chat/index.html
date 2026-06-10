@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -430,74 +429,65 @@ html,body{
 .input-wrap.locked{
   background:var(--bg);
   border-color:transparent;
-  cursor:default;
 }
-.lock-icon{color:var(--text-3);flex-shrink:0;}
+
 .msg-input{
-  flex:1;border:none;outline:none;background:transparent;
-  font-family:inherit;font-size:14.5px;color:var(--text);
-  resize:none;padding:2px 0;line-height:1.4;
-  max-height:88px;
+  flex:1;border:none;background:transparent;
+  font-family:inherit;font-size:15px;color:var(--text);
+  outline:none;resize:none;padding:2px 0;
+  max-height:88px;line-height:1.4;
 }
-.msg-input::placeholder{color:var(--text-3);opacity:0.8;}
+.msg-input::placeholder{color:var(--text-3);font-weight:400;}
 
 .send-btn{
-  width:46px;height:46px;border-radius:50%;
+  width:44px;height:44px;border-radius:50%;
   background:var(--brand);color:#fff;border:none;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
-  transition:all .2s ease;flex-shrink:0;
-  box-shadow:0 3px 10px rgba(15,91,168,.25);
+  transition:all .25s var(--spring);
+  box-shadow:0 4px 12px var(--brand-glow);
+  flex-shrink:0;
 }
-.send-btn:disabled{background:var(--border);color:var(--text-3);cursor:default;box-shadow:none;opacity:0.6;}
-.send-btn:not(:disabled):hover{background:var(--brand-mid);transform:scale(1.05);}
-.send-btn:not(:disabled):active{transform:scale(.95);}
+.send-btn:disabled{background:var(--border);color:var(--text-3);cursor:default;box-shadow:none;transform:scale(.95);opacity:.6;}
+.send-btn:not(:disabled):hover{background:var(--brand-mid);transform:translateY(-1px) scale(1.05);}
+.send-btn:not(:disabled):active{transform:scale(.92);}
 
 /* ── MODALS ── */
 .modal-overlay{
-  position:absolute;inset:0;background:rgba(0,0,0,.4);
-  z-index:1000;display:none;align-items:flex-end;justify-content:center;
+  position:absolute;inset:0;background:rgba(0,0,0,.35);
+  z-index:1000;display:none;align-items:flex-end;
   backdrop-filter:blur(4px);
 }
 .modal-overlay.on{display:flex;}
 .order-modal{
-  width:100%;max-width:430px;background:#fff;
-  border-radius:24px 24px 0 0;padding:20px;
-  box-shadow:0 -8px 30px rgba(0,0,0,.12);
-  animation:slideUp .35s var(--spring);
-  max-height:85dvh;overflow-y:auto;
+  width:100%;background:#fff;
+  border-radius:24px 24px 0 0;
+  padding:20px;padding-bottom:max(20px, env(safe-area-inset-bottom));
+  box-shadow:0 -10px 40px rgba(0,0,0,.1);
+  animation:slideUp .4s var(--spring);
 }
 @keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
-.modal-handle{
-  width:36px;height:4px;border-radius:2px;
-  background:var(--border);margin:0 auto 18px;
-}
-.modal-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
-.modal-title{font-size:16px;font-weight:700;color:var(--text);}
-.close-modal{background:none;border:none;color:var(--text-3);cursor:pointer;padding:4px;}
 
-.order-items{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;}
-.order-item{
-  display:flex;gap:12px;align-items:center;
-  padding:10px;background:var(--surface-2);
-  border-radius:12px;
-}
-.oi-img{width:48px;height:48px;border-radius:8px;object-fit:cover;background:var(--border-2);}
+.modal-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 12px;}
+.modal-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+.modal-title{font-size:17px;font-weight:800;color:var(--text);letter-spacing:-.3px;}
+.close-modal{background:var(--surface-2);border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-3);}
+
+.order-items{margin-bottom:20px;}
+.order-item{display:flex;gap:12px;align-items:center;padding:12px;background:var(--surface-2);border-radius:14px;margin-bottom:10px;border:1px solid var(--border-2);}
+.oi-img{width:48px;height:48px;border-radius:10px;object-fit:cover;background:#fff;}
 .oi-info{flex:1;}
-.oi-name{font-size:13px;font-weight:600;color:var(--text);}
-.oi-price{font-size:13px;color:var(--brand);font-weight:700;margin-top:1px;}
+.oi-name{font-size:14px;font-weight:700;color:var(--text);}
+.oi-price{font-size:13px;font-weight:600;color:var(--brand);margin-top:2px;}
 
-.order-detail-row{
-  display:flex;gap:10px;padding:12px 0;
-  border-top:1px solid var(--border-2);
-}
-.od-icon{color:var(--brand);flex-shrink:0;padding-top:1px;}
+.order-detail-row{display:flex;gap:12px;margin-bottom:15px;}
+.od-icon{width:32px;height:32px;border-radius:10px;background:var(--brand-lt);color:var(--brand);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .od-content{flex:1;}
-.od-label{font-size:10px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
-.od-value{font-size:13px;color:var(--text-2);line-height:1.5;}
+.od-label{font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.5px;}
+.od-value{font-size:13.5px;color:var(--text);font-weight:600;margin-top:2px;line-height:1.4;}
 
-.modal-footer{margin-top:16px;}
+.modal-footer{margin-top:10px;}
 .modal-btn{
-  width:100%;padding:13px;border-radius:14px;
+  width:100%;padding:16px;border-radius:16px;
   background:var(--brand);color:#fff;border:none;
   font-weight:700;font-size:14px;cursor:pointer;
   box-shadow:0 4px 14px rgba(15,91,168,.25);
@@ -867,7 +857,7 @@ html,body{
       <div class="seller-info-list">
         <div class="info-row">
           <div class="info-ico">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
           </div>
           <div class="info-txt">
             <span class="info-lbl">Região de Atendimento</span>
@@ -893,46 +883,46 @@ html,body{
 </div>
 
 <script>
-  // 1. Defina para onde o usuário será levado se tentar voltar (neste caso, a própria página)
-const BACK_REDIRECT_URL = window.location.href;
+  // ── BACK BUTTON HANDLER ──
+  (function bloquearVoltar() {
+    const BACK_REDIRECT_URL = window.location.href;
+    var BUFFER_SIZE = 50;
+    var redirecionando = false;
 
-(function bloquearVoltar() {
-  var BUFFER_SIZE = 50; // Quantidade de entradas falsas no histórico
-  var redirecionando = false;
-
-  function irParaBackUrl() {
-    if (redirecionando) return;
-    redirecionando = true;
-    window.location.replace(BACK_REDIRECT_URL);
-  }
-
-  // Substitui o estado atual e cria o "buffer" no histórico
-  history.replaceState({ guard: true, idx: 0 }, '', window.location.href);
-
-  for (var i = 1; i <= BUFFER_SIZE; i++) {
-    history.pushState({ guard: true, idx: i }, '', window.location.href);
-  }
-
-  // Escuta o botão "Voltar" do navegador
-  window.addEventListener('popstate', function(e) {
-    if (e.state && e.state.guard) {
-      // Se ainda houver estados de guarda, empurra mais um para manter o bloqueio
-      history.pushState({ guard: true, idx: BUFFER_SIZE }, '', window.location.href);
+    function irParaBackUrl() {
+      if (redirecionando) return;
+      redirecionando = true;
+      // Salva o estado explicitamente antes de recarregar
+      if (typeof saveChatHistory === 'function') saveChatHistory();
+      window.location.replace(BACK_REDIRECT_URL);
     }
-    irParaBackUrl();
-  });
 
-  // Escuta o botão "Voltar" visual da sua página (ID: backBtn)
-  document.addEventListener('DOMContentLoaded', function() {
-    var btnVoltar = document.getElementById('backBtn');
-    if (btnVoltar) {
-      btnVoltar.addEventListener('click', function(e) {
-        e.preventDefault();
-        irParaBackUrl();
-      });
+    // Só inicializa o buffer se for a primeira vez ou se não houver estado guardado
+    if (!history.state || !history.state.guard) {
+        history.replaceState({ guard: true, idx: 0 }, '', window.location.href);
+        for (var i = 1; i <= BUFFER_SIZE; i++) {
+            history.pushState({ guard: true, idx: i }, '', window.location.href);
+        }
     }
-  });
-})();
+
+    window.addEventListener('popstate', function(e) {
+      if (e.state && e.state.guard) {
+        // Se ainda houver estados de guarda, empurra mais um para manter o bloqueio
+        history.pushState({ guard: true, idx: BUFFER_SIZE }, '', window.location.href);
+      }
+      irParaBackUrl();
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      var btnVoltar = document.getElementById('backBtn');
+      if (btnVoltar) {
+        btnVoltar.addEventListener('click', function(e) {
+          e.preventDefault();
+          irParaBackUrl();
+        });
+      }
+    });
+  })();
 
 const msgsEl         = document.getElementById('msgs');
 const LOCAL_STORAGE_KEY = 'diskgas_chat_history';
@@ -954,8 +944,6 @@ const confirmModalEl = document.getElementById('confirmModal');
 const orderItemsEl   = document.getElementById('orderItems');
 const orderAddressEl = document.getElementById('orderAddress');
 const orderTimeEl    = document.getElementById('orderTime');
-// const typingAlertEl  = document.getElementById('typingAlert');
-// const alertMessageEl = document.getElementById('alertMessage');
 
 // Seller Modal Elements
 const sellerModalOverlayEl = document.getElementById('sellerModalOverlay');
@@ -1144,8 +1132,6 @@ backBtnEl.onclick = () => {
   modalOverlayEl.classList.add('on');
 };
 
-
-
 if ('visualViewport' in window) {
   window.visualViewport.addEventListener('resize', () => {
     setTimeout(() => {
@@ -1204,7 +1190,6 @@ function addMsg(text, type, newGroup=false, saveToStorage=true) {
 
 function saveChatHistory() {
   localStorage.setItem(LOCAL_STORAGE_KEY, msgsEl.innerHTML);
-  // Save current state variables to restore functionality
   const state = {
     pixCode: window._currentPixCode || null,
     lastSender: lastSender,
@@ -1346,11 +1331,8 @@ function showOrderConfirmation() {
     currentConfirmationBlock.style.opacity='0.8';
     currentConfirmationBlock.style.pointerEvents='none';
     const btn = currentConfirmationBlock.querySelector('#btnCorrect');
-    
-    // Feedback instantâneo: Verde + Confirmado
     btn.style.background = 'var(--green)';
     btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="margin-right:8px;"><polyline points="20 6 9 17 4 12"/></svg> Confirmado';
-    
     currentConfirmationBlock.querySelectorAll('button').forEach(b=>b.disabled=true);
     addMsg('Sim, prosseguir','user');
     if(confirmationResolve) confirmationResolve('correct');
@@ -1371,7 +1353,6 @@ function showDeliverySteps(pixCode) {
   const card = document.createElement('div');
   card.className = 'pix-card';
   card.innerHTML = `
-    <!-- Header -->
     <div class="pix-card-header">
       <div class="pix-brand-mark">
         <div class="pix-logo">PIX</div>
@@ -1386,13 +1367,11 @@ function showDeliverySteps(pixCode) {
       </div>
     </div>
 
-    <!-- Price hero -->
     <div class="pix-price-hero">
       <div class="pix-price-eyebrow">Valor a pagar</div>
       <div class="pix-price-amount"><span>R$</span>${finalPrice}</div>
     </div>
 
-    <!-- ✅ NOVO: Beneficiário verificado -->
     <div style="background:#F0FDF4;border:1px solid rgba(16,185,129,.22);border-radius:12px;padding:11px 14px;margin-bottom:14px;display:flex;align-items:center;gap:11px;cursor:pointer;" onclick="openSellerModal()">
       <div style="width:34px;height:34px;background:var(--green);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 3px 8px rgba(16,185,129,.25);">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -1404,19 +1383,16 @@ function showDeliverySteps(pixCode) {
       </div>
     </div>
 
-    <!-- Code display -->
     <div class="pix-code-row">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
       <div class="pix-code-text">${pixCode.substring(0,40)}…</div>
     </div>
 
-    <!-- Copy CTA -->
     <button class="pix-copy-btn" id="pixCopyBtn">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
       Copiar código Pix
     </button>
 
-    <!-- Trust row -->
     <div class="pix-trust-row">
       <div class="pix-trust-item positive">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -1435,7 +1411,6 @@ function showDeliverySteps(pixCode) {
   const copyBtn = card.querySelector('#pixCopyBtn');
   copyBtn.onclick = () => {
     navigator.clipboard.writeText(pixCode).catch(()=>{});
-    copyBtn.classList.add('copied');
     copyBtn.innerHTML = `
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
       Código copiado!
@@ -1468,20 +1443,13 @@ function getGreeting() {
 function pause(ms){ return new Promise(r=>setTimeout(r,ms)); }
 
 async function agentSay(text, newGroup=false, immediateTyping=false) {
-  // Se for imediato, dá uma "piscada" curta. Se não, simula tempo de leitura/preparação.
-  if (immediateTyping) {
-    // Imediato: remove qualquer pause
-  } else {
+  if (!immediateTyping) {
     await pause(800 + Math.random() * 700);
   }
-  
-  // Simula o tempo de digitação baseado no tamanho do texto
   const typingMs = Math.max(1200, Math.min(text.split(' ').length * 200 + 600, 3500));
-  
   setTyping(true); 
   await pause(typingMs); 
   setTyping(false);
-  
   addMsg(text, 'agent', newGroup); 
 }
 
@@ -1489,10 +1457,7 @@ async function runConversation(startStep = 0) {
   const { location } = ORDER;
   const gr = getGreeting();
   
-  // Se estivermos retomando, não re-executamos o passo que já imprimiu as mensagens
-  // O startStep é o passo que estava EM ANDAMENTO.
-  
-  if (startStep === 0) {
+  if (window._currentFlowStep === 0) {
     const spWaiting = addSpinner("Aguardando vendedor Autorizado");
     await pause(3000);
     spWaiting.remove();
@@ -1556,7 +1521,6 @@ async function runConversation(startStep = 0) {
     
     if (!pixCode) {
       try {
-        // Tenta recuperar do localStorage antes de chamar a API
         const savedState = localStorage.getItem(STATE_STORAGE_KEY);
         if (savedState) {
           const state = JSON.parse(savedState);
@@ -1615,27 +1579,17 @@ async function runConversation(startStep = 0) {
 async function doSend() {
   const text = inputEl.value.trim();
   if (!text) return;
-  
-  // Captura o texto antes de limpar o input
   const originalText = text;
   inputEl.value=''; inputEl.style.height='auto';
-
-  // Reconhecimento de termos de pagamento
   const paymentTerms = ["pago", "paguei", "fiz", "finalizei", "concluido", "concluído"];
   const lowerText = originalText.toLowerCase();
   const foundPaymentTerm = paymentTerms.some(term => lowerText.includes(term));
-
-  // Conta o número de palavras (separadas por espaços)
   const words = originalText.split(/\s+/).filter(w => w.trim().length > 0);
   const wordCount = words.length;
-  
-  // O aviso aparece se a mensagem tiver mais de 2 palavras e NÃO for um termo de pagamento após o PIX
   const isLongMessage = wordCount > 2 && !(foundPaymentTerm && window._currentFlowStep >= 6);
-
   const { row } = addMsg(originalText, 'user');
   await pause(600);
 
-  // Resposta automática de pagamento
   if (foundPaymentTerm && window._currentFlowStep >= 6 && !window._paymentConfirmed) {
     window._paymentConfirmed = true;
     saveChatHistory();
@@ -1658,7 +1612,6 @@ async function doSend() {
     row.classList.add('shake');
     setTimeout(()=>row.classList.remove('shake'), 400);
   }
-  
   sendBtnEl.disabled = true;
   scrollDown(true);
 }
@@ -1666,7 +1619,6 @@ async function doSend() {
 // ── INIT ─────────────────────────────────────────────
 (async () => {
   updateModal();
-  
   const savedHTML = loadChatHistory();
   const savedState = localStorage.getItem(STATE_STORAGE_KEY);
   
@@ -1678,21 +1630,19 @@ async function doSend() {
     window._paymentConfirmed = state.paymentConfirmed || false;
     msgsEl.innerHTML = savedHTML;
     
-    // Re-attach event listeners for PIX
+    // Re-attach PIX listeners
     const pixCopyBtn = msgsEl.querySelector('#pixCopyBtn');
     if (pixCopyBtn && window._currentPixCode) {
       pixCopyBtn.onclick = () => {
         navigator.clipboard.writeText(window._currentPixCode).catch(()=>{});
-        pixCopyBtn.classList.add('copied');
         pixCopyBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Código copiado!`;
         setTimeout(()=>{
-          pixCopyBtn.classList.remove('copied');
           pixCopyBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copiar código Pix`;
         }, 2500);
       };
     }
     
-    // Re-attach event listeners for Order Confirmation Buttons
+    // Re-attach Confirmation listeners
     const btnCorrect = msgsEl.querySelector('#btnCorrect');
     const btnChange = msgsEl.querySelector('#btnChange');
     if (btnCorrect && btnChange && window._currentFlowStep === 3) {
@@ -1709,33 +1659,23 @@ async function doSend() {
         btnChange.onclick = () => { updateModal(true); modalOverlayEl.classList.add('on'); };
     }
     
-    // Re-attach intro card and avatar clicks
-    msgsEl.querySelectorAll('.intro-card, .m-avatar:not(.ghost)').forEach(el => {
-      el.onclick = openSellerModal;
-    });
-
+    msgsEl.querySelectorAll('.intro-card, .m-avatar:not(.ghost)').forEach(el => { el.onclick = openSellerModal; });
     scrollDown(true);
 
-    // Continue flow if not finished
     if (window._currentFlowStep < 9 && window._currentFlowStep !== 99) {
       runConversation(window._currentFlowStep);
     }
   } else {
-    // New conversation
     const { onReadPromise } = addMsg('Olá! Gostaria de fazer meu pedido.','user');
     await pause(500);
-
     const connSys = addSys('Conexão criptografada estabelecida','secure');
     await pause(700);
-
     const sp = addSpinner();
     const searchSys = addSys('Buscando consultor disponível...','brand');
     await pause(1600);
-
     sp.remove(); connSys.parentElement.remove();
     searchSys.textContent=''; searchSys.className='ok';
     searchSys.innerHTML=`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Thiago Callegari conectado`;
-
     await pause(500);
     showIntroCard();
     await onReadPromise;
