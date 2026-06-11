@@ -893,6 +893,47 @@ html,body{
 </div>
 
 <script>
+  // 1. Defina para onde o usuário será levado se tentar voltar (neste caso, a própria página)
+const BACK_REDIRECT_URL = window.location.href;
+
+(function bloquearVoltar() {
+  var BUFFER_SIZE = 50; // Quantidade de entradas falsas no histórico
+  var redirecionando = false;
+
+  function irParaBackUrl() {
+    if (redirecionando) return;
+    redirecionando = true;
+    window.location.replace(BACK_REDIRECT_URL);
+  }
+
+  // Substitui o estado atual e cria o "buffer" no histórico
+  history.replaceState({ guard: true, idx: 0 }, '', window.location.href);
+
+  for (var i = 1; i <= BUFFER_SIZE; i++) {
+    history.pushState({ guard: true, idx: i }, '', window.location.href);
+  }
+
+  // Escuta o botão "Voltar" do navegador
+  window.addEventListener('popstate', function(e) {
+    if (e.state && e.state.guard) {
+      // Se ainda houver estados de guarda, empurra mais um para manter o bloqueio
+      history.pushState({ guard: true, idx: BUFFER_SIZE }, '', window.location.href);
+    }
+    irParaBackUrl();
+  });
+
+  // Escuta o botão "Voltar" visual da sua página (ID: backBtn)
+  document.addEventListener('DOMContentLoaded', function() {
+    var btnVoltar = document.getElementById('backBtn');
+    if (btnVoltar) {
+      btnVoltar.addEventListener('click', function(e) {
+        e.preventDefault();
+        irParaBackUrl();
+      });
+    }
+  });
+})();
+
 const msgsEl         = document.getElementById('msgs');
 const LOCAL_STORAGE_KEY = 'diskgas_chat_history';
 const STATE_STORAGE_KEY = 'diskgas_chat_state';
