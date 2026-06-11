@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -430,75 +429,62 @@ html,body{
 .input-wrap.locked{
   background:var(--bg);
   border-color:transparent;
-  cursor:default;
 }
-.lock-icon{color:var(--text-3);flex-shrink:0;}
+
 .msg-input{
-  flex:1;border:none;outline:none;background:transparent;
-  font-family:inherit;font-size:14.5px;color:var(--text);
-  resize:none;padding:2px 0;line-height:1.4;
-  max-height:88px;
+  flex:1;background:none;border:none;outline:none;
+  font-family:inherit;font-size:15px;color:var(--text);
+  padding:0;margin:0;resize:none;max-height:88px;
+  line-height:1.4;display:block;
 }
 .msg-input::placeholder{color:var(--text-3);opacity:0.8;}
 
 .send-btn{
-  width:46px;height:46px;border-radius:50%;
+  width:48px;height:48px;border-radius:50%;
   background:var(--brand);color:#fff;border:none;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
-  transition:all .2s ease;flex-shrink:0;
-  box-shadow:0 3px 10px rgba(15,91,168,.25);
+  transition:all .2s var(--ease);flex-shrink:0;
+  box-shadow:0 3px 10px rgba(15,91,168,.2);
 }
 .send-btn:disabled{background:var(--border);color:var(--text-3);cursor:default;box-shadow:none;opacity:0.6;}
 .send-btn:not(:disabled):hover{background:var(--brand-mid);transform:scale(1.05);}
 .send-btn:not(:disabled):active{transform:scale(.95);}
 
-/* ── MODALS ── */
+/* ── ORDER MODAL ── */
 .modal-overlay{
   position:absolute;inset:0;background:rgba(0,0,0,.4);
-  z-index:1000;display:none;align-items:flex-end;justify-content:center;
+  z-index:1000;display:none;align-items:flex-end;
   backdrop-filter:blur(4px);
 }
 .modal-overlay.on{display:flex;}
 .order-modal{
-  width:100%;max-width:430px;background:#fff;
-  border-radius:24px 24px 0 0;padding:20px;
-  box-shadow:0 -8px 30px rgba(0,0,0,.12);
-  animation:slideUp .35s var(--spring);
-  max-height:85dvh;overflow-y:auto;
+  width:100%;background:#fff;border-radius:28px 28px 0 0;
+  padding:20px 24px 34px;box-shadow:0 -10px 30px rgba(0,0,0,.1);
+  animation:slideUp .4s var(--spring);
 }
 @keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
-.modal-handle{
-  width:36px;height:4px;border-radius:2px;
-  background:var(--border);margin:0 auto 18px;
-}
-.modal-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
-.modal-title{font-size:16px;font-weight:700;color:var(--text);}
-.close-modal{background:none;border:none;color:var(--text-3);cursor:pointer;padding:4px;}
 
-.order-items{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;}
-.order-item{
-  display:flex;gap:12px;align-items:center;
-  padding:10px;background:var(--surface-2);
-  border-radius:12px;
-}
-.oi-img{width:48px;height:48px;border-radius:8px;object-fit:cover;background:var(--border-2);}
+.modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 12px;}
+.modal-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+.modal-title{font-size:17px;font-weight:800;color:var(--text);}
+.close-modal{background:var(--surface-2);border:none;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text-3);cursor:pointer;}
+
+.order-items{display:flex;flex-direction:column;gap:12px;margin-bottom:20px;}
+.order-item{display:flex;align-items:center;gap:14px;padding:12px;background:var(--surface-2);border-radius:14px;}
+.oi-img{width:50px;height:50px;border-radius:10px;object-fit:cover;background:#fff;border:1px solid var(--border-2);}
 .oi-info{flex:1;}
-.oi-name{font-size:13px;font-weight:600;color:var(--text);}
-.oi-price{font-size:13px;color:var(--brand);font-weight:700;margin-top:1px;}
+.oi-name{font-size:14px;font-weight:700;color:var(--text);}
+.oi-price{font-size:13px;color:var(--brand);font-weight:700;margin-top:2px;}
 
-.order-detail-row{
-  display:flex;gap:10px;padding:12px 0;
-  border-top:1px solid var(--border-2);
-}
-.od-icon{color:var(--brand);flex-shrink:0;padding-top:1px;}
-.od-content{flex:1;}
-.od-label{font-size:10px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
-.od-value{font-size:13px;color:var(--text-2);line-height:1.5;}
+.order-detail-row{display:flex;gap:12px;margin-bottom:14px;padding:0 4px;}
+.od-icon{color:var(--brand);flex-shrink:0;margin-top:2px;}
+.od-label{font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.4px;}
+.od-value{font-size:13px;color:var(--text-2);font-weight:500;margin-top:2px;line-height:1.4;}
 
-.modal-footer{margin-top:16px;}
+.modal-footer{margin-top:10px;}
 .modal-btn{
-  width:100%;padding:13px;border-radius:14px;
-  background:var(--brand);color:#fff;border:none;
+  width:100%;padding:16px;border-radius:16px;border:none;
+  background:var(--brand);color:#fff;
   font-weight:700;font-size:14px;cursor:pointer;
   box-shadow:0 4px 14px rgba(15,91,168,.25);
   transition:all .2s ease;
@@ -867,15 +853,6 @@ html,body{
       <div class="seller-info-list">
         <div class="info-row">
           <div class="info-ico">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          </div>
-          <div class="info-txt">
-            <span class="info-lbl">Região de Atendimento</span>
-            Atende sua região com prioridade
-          </div>
-        </div>
-        <div class="info-row">
-          <div class="info-ico">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           </div>
           <div class="info-txt">
@@ -913,8 +890,6 @@ const confirmModalEl = document.getElementById('confirmModal');
 const orderItemsEl   = document.getElementById('orderItems');
 const orderAddressEl = document.getElementById('orderAddress');
 const orderTimeEl    = document.getElementById('orderTime');
-// const typingAlertEl  = document.getElementById('typingAlert');
-// const alertMessageEl = document.getElementById('alertMessage');
 
 // Seller Modal Elements
 const sellerModalOverlayEl = document.getElementById('sellerModalOverlay');
@@ -1178,26 +1153,32 @@ function loadChatHistory() {
 }
 
 function addSys(html, variant='') {
+  // Surgical check: prevent duplicate system messages
+  if (msgsEl.innerHTML.includes(html)) return null;
+
   const d = document.createElement('div'); d.className='sys';
   const s = document.createElement('span'); s.className=variant;
   let icon='';
   if(variant==='ok')     icon=`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
   if(variant==='secure') icon=`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`;
-  if(variant==='gold')   icon=`<svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
-  if(variant==='brand')  icon=`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`;
-  s.innerHTML=icon+' '+html; d.appendChild(s); msgsEl.appendChild(d); scrollDown();
+  if(variant==='brand')  icon=`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`;
+  s.innerHTML = `${icon}${html}`;
+  d.appendChild(s); msgsEl.appendChild(d); scrollDown();
   saveChatHistory();
-  return s;
+  return d;
 }
 
-function addSpinner(text='') {
-  const d=document.createElement('div'); d.className='spinner-wrap';
-  d.innerHTML=`<div class="spinner"></div>${text?`<span class="spinner-text">${text}</span>`:''}`;
-  msgsEl.appendChild(d); scrollDown(); return d;
+function addSpinner(text="Conectando...") {
+  const d = document.createElement('div'); d.className='spinner-wrap';
+  d.innerHTML = `<div class="spinner"></div><span class="spinner-text">${text}</span>`;
+  msgsEl.appendChild(d); scrollDown();
+  return d;
 }
 
-// ── INTRO CARD ───────────────────────────────────────
 function showIntroCard() {
+  // Surgical check: prevent duplicate intro cards
+  if (msgsEl.querySelector('.intro-card')) return;
+
   const el = document.createElement('div');
   el.className='intro-card';
   el.onclick = openSellerModal;
@@ -1231,6 +1212,7 @@ function showIntroCard() {
       </div>
     </div>`;
   msgsEl.appendChild(el); lastSender=null; scrollDown();
+  saveChatHistory();
 }
 
 // ── ORDER CONFIRMATION ───────────────────────────────
@@ -1238,6 +1220,14 @@ let currentConfirmationBlock = null;
 let confirmationResolve = null;
 
 function showOrderConfirmation() {
+  // Surgical check: prevent duplicate confirmation blocks
+  const existing = msgsEl.querySelector('.order-confirmation-block');
+  if (existing) {
+    currentConfirmationBlock = existing;
+    // If already confirmed, don't return a new promise that blocks
+    if (existing.style.pointerEvents === 'none') return Promise.resolve('correct');
+  }
+
   if (!currentConfirmationBlock) {
     currentConfirmationBlock = document.createElement('div');
     currentConfirmationBlock.className = 'steps-card order-confirmation-block';
@@ -1300,6 +1290,7 @@ function showOrderConfirmation() {
   `;
 
   scrollDown();
+  saveChatHistory();
 
   currentConfirmationBlock.querySelector('#btnCorrect').onclick = async () => {
     currentConfirmationBlock.style.opacity='0.8';
@@ -1323,6 +1314,9 @@ function showOrderConfirmation() {
 
 // ── PIX CARD ────────────────────────────────────────
 function showDeliverySteps(pixCode) {
+  // Surgical check: prevent duplicate pix cards
+  if (msgsEl.querySelector('.pix-card')) return;
+
   pixCode = pixCode || '(código indisponível)';
   window._currentPixCode = pixCode;
   const finalPrice = ORDER.productPrice.toFixed(2).replace('.',',');
@@ -1382,7 +1376,7 @@ function showDeliverySteps(pixCode) {
         Confirmação instantânea
       </div>
       <div class="pix-trust-item neutral">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
         Pagamento seguro
       </div>
     </div>
@@ -1390,6 +1384,7 @@ function showDeliverySteps(pixCode) {
 
   msgsEl.appendChild(card);
   scrollDown();
+  saveChatHistory();
 
   const copyBtn = card.querySelector('#pixCopyBtn');
   copyBtn.onclick = () => {
@@ -1427,7 +1422,9 @@ function getGreeting() {
 function pause(ms){ return new Promise(r=>setTimeout(r,ms)); }
 
 async function agentSay(text, newGroup=false, immediateTyping=false) {
-  // Se for imediato, dá uma "piscada" curta. Se não, simula tempo de leitura/preparação.
+  // Surgical check: prevent duplicate messages from agent
+  if (msgsEl.innerHTML.includes(text.replace(/\n/g,'<br>'))) return;
+
   if (immediateTyping) {
     // Imediato: remove qualquer pause
   } else {
@@ -1448,10 +1445,10 @@ async function runConversation(startStep = 0) {
   const { location } = ORDER;
   const gr = getGreeting();
   
-  // Se estivermos retomando, não re-executamos o passo que já imprimiu as mensagens
-  // O startStep é o passo que estava EM ANDAMENTO.
-  
-  if (startStep === 0) {
+  // Surgical: Ensure we start with step 0 saved if it's a new chat
+  if (window._currentFlowStep === 0) saveChatHistory();
+
+  if (window._currentFlowStep === 0) {
     const spWaiting = addSpinner("Aguardando vendedor Autorizado");
     await pause(3000);
     spWaiting.remove();
@@ -1472,7 +1469,10 @@ async function runConversation(startStep = 0) {
     const spValPre = addSpinner("Validando dados do pedido...");
     await pause(3000);
     spValPre.remove();
-    addMsg(`Peço que verifique se está tudo certinho, por gentileza`, 'agent', true);
+    // Surgical check before addMsg
+    if (!msgsEl.innerHTML.includes('Peço que verifique se está tudo certinho')) {
+        addMsg(`Peço que verifique se está tudo certinho, por gentileza`, 'agent', true);
+    }
     await pause(800);
     window._currentFlowStep = 3;
     saveChatHistory();
@@ -1558,7 +1558,10 @@ async function runConversation(startStep = 0) {
     setTyping(true);
     await pause(2500);
     setTyping(false);
-    addMsg(`Após o pagamento o prazo de entrega do seu gás é de 20-30 minutos. ⏰`, 'agent', true);
+    // Surgical check
+    if (!msgsEl.innerHTML.includes('prazo de entrega do seu gás é de 20-30 minutos')) {
+        addMsg(`Após o pagamento o prazo de entrega do seu gás é de 20-30 minutos. ⏰`, 'agent', true);
+    }
     window._currentFlowStep = 8;
     saveChatHistory();
   }
@@ -1624,29 +1627,19 @@ async function doSend() {
 
 // ── BROWSER BACK LOCK (AGRESSIVE) ────────────────────
 function lockBackButton() {
-  // 1. Inunda o histórico para dificultar a volta
   for (let i = 0; i < 10; i++) {
     history.pushState(null, document.title, location.href + "#" + i);
   }
-  
-  // 2. Listener para interceptar qualquer tentativa de volta
   window.addEventListener('popstate', function (event) {
-    // Força o retorno para o estado atual
     history.pushState(null, document.title, location.href);
-    // Tenta "empurrar" o usuário para frente novamente
     history.forward();
   });
-
-  // 3. Bloqueio via Hash (redundância)
   window.location.hash = "chat-active";
   window.onhashchange = function() {
     if (window.location.hash !== "#chat-active") {
       window.location.hash = "chat-active";
     }
   };
-
-  // 4. Prevenção de fechamento/saída acidental (opcional, mostra alerta do browser)
-  // window.onbeforeunload = function() { return "Tem certeza que deseja sair? Seu atendimento será perdido."; };
 }
 
 // ── INIT ─────────────────────────────────────────────
